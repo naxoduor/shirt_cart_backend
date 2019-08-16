@@ -97,7 +97,9 @@ router.post('/add', (req, res) => {
 
 router.delete('/removeProduct/*', (req, res) => {
 
+  console.log(req.url)
   let parsedUrl = url.parse(req.url);
+  console.log(parsedUrl)
   let parsedQs = querystring.parse(parsedUrl.query)
   let inItemId = parsedQs.item_id
   console.log(inItemId)
