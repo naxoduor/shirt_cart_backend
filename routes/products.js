@@ -84,6 +84,30 @@ router.post('/inCategory/pagination/*', (request, response) => {
 
 })
 
+router.post('/inDepartment/pagination/*', (request, response) => {
+
+  console.log("department pagination")
+  console.log(request.body.params)
+  let inDepartmentId = parseInt(request.body.params.department_id)
+  let inProductsPerPage = parseInt(request.body.params.productsPerPage)
+  let inStartItem = parseInt(request.body.params.startItem)
+
+  Product.findAll({
+    include: [{
+      model: Category,
+      where: { department_id: inDepartmentId },
+    }],
+    offset: inStartItem,
+    limit: inProductsPerPage
+  })
+    .then(products => {
+      response.send(products)
+    })
+    .catch(console.error)
+
+})
+
+
 router.post('/search*', (request, response) => {
 
   let inSearchString = request.body.params.inSearchString
