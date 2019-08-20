@@ -7,8 +7,8 @@ const querystring = require('querystring');
 const ShippingRegion = require('../models').shipping_region
 const Shipping = require('../models').shipping
 
-router.get('/regions/regionid/:shipping_region_id', (req, res) => {
-    let inShippingRegionId = req.params.shipping_region_id
+router.get('/regions/regionId/:shipping_id', (req, res) => {
+    let inShippingRegionId = req.params.shipping_id
     Shipping.findAll({
         where: {
             shipping_region_id: inShippingRegionId
