@@ -16,10 +16,8 @@ router.get('/', (req, res) => {
         
 })
 
-router.get('/totalitems/*', (req, res) => {
-    let parsedUrl = url.parse(req.url);
-    let parsedQs = querystring.parse(parsedUrl.query)
-    let inDepartmentId = parsedQs.id
+router.get('/totalitems/:id', (req, res) => {
+    let inDepartmentId = req.params.id
 
     Product.count({
         include: [{
@@ -38,14 +36,8 @@ router.get('/totalitems/*', (req, res) => {
 
 })
 
-router.post('/products/*', (req, res) => {
-    console.log("departmentproducts")
-    console.log(request.body.params)
-    let parsedUrl = url.parse(request.url);
-    console.log(parsedUrl)
-    let parsedQs = querystring.parse(parsedUrl.query);
-    let inDepartmentId = parseInt(parsedQs.id)
-
+router.post('/products/:id', (req, res) => {
+    let inDepartmentId = req.params.id
     let inProductsPerPage = parseInt(request.body.params.productsPerPage)
     let inStartItem = parseInt(request.body.params.startItem)
 

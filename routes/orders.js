@@ -8,16 +8,11 @@ const Order = require('../models').order
 const OrderDetail = require('../models').order_detail
 
 router.post('/', (req, res) => {
-  console.log(req.body.order)
   let inCartId = req.body.order.cartId
   let inCustomerId = req.body.order.customerId
   let inShippingId = req.body.order.shippingId
   let inTaxId = req.body.order.taxId
-  console.log(inCartId)
-  console.log(inCustomerId)
-  console.log(inShippingId)
-  console.log(inTaxId)
-
+  
   let newOrder=Order.build({
     order_id: null,
     created_on: new Date(),
@@ -34,8 +29,6 @@ router.post('/', (req, res) => {
       },
       order: [ [ 'created_on', 'DESC' ]],
   }).then((currentOrder) => {
-    console.log("The order is as we print below")
-    console.log(currentOrder)
     let order_id = JSON.parse(JSON.stringify(currentOrder)).order_id
     ShoppingCart.findAll({
       attributes: ['quantity', 'attributes', 'product_id'],
@@ -54,7 +47,6 @@ router.post('/', (req, res) => {
         let good = JSON.parse(JSON.stringify(item))
         let attributes = good.attributes
         let obj = {}
-        //console.log(item.getProducts())
         let quantity = good.quantity
         Product.findByPk(good.product_id).then((product) => {
           let productItem = JSON.parse(JSON.stringify(product))
@@ -84,7 +76,6 @@ router.post('/', (req, res) => {
       })
     })
   })
-    //insert closing then ere
   })
 });
 

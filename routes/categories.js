@@ -14,12 +14,8 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/inDepartment/*', (req, res) => {
-    let parsedUrl = url.parse(req.url);
-    let parsedQs = querystring.parse(parsedUrl.query)
-    let inDepartmentId = parsedQs.id
-    console.log(inDepartmentId)
-
+router.get('/inDepartment/:id', (req, res) => {
+    let inDepartmentId = req.params.id
     Category.findAll({
         where: {
             department_id: inDepartmentId
@@ -29,12 +25,8 @@ router.get('/inDepartment/*', (req, res) => {
     });
 })
 
-router.get('/totalitems/*', (req, res) => {
-    let parsedUrl = url.parse(req.url);
-    let parsedQs = querystring.parse(parsedUrl.query)
-    let inCategoryId = parsedQs.id
-
-
+router.get('/totalitems/:id', (req, res) => {
+    let inCategoryId = req.params.id
     Product.count({
         include: [{
             model: Category,
@@ -46,7 +38,6 @@ router.get('/totalitems/*', (req, res) => {
         obj.categories_count = count
         list.push(obj)
         res.send(list)
-        //console.log(JSON.stringify(list))
         
     })
 

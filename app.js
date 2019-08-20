@@ -12,7 +12,7 @@ db.authenticate()
 .catch(err => console.log('Error ' + err))
 const app = express();
 app.use(cors({
-    origin: 'http://104.248.73.139',
+    origin: 'http://127.0.0.1',
     credentials: true,
   })
   )

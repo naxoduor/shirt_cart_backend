@@ -24,7 +24,6 @@ router.get('/', (req, res) => {
   let inCartId = parsedQs.cart_id
 
   let cartList = []
-  console.log("inside finding shopping cart")
   ShoppingCart.findAll({
     where: {
       cart_id: inCartId
@@ -57,7 +56,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/add', (req, res) => {
-  console.log(req.body.params)
   let inCartId = req.body.params.cartId
   let inProductId = parseInt(req.body.params.productId)
   let inAttributes = req.body.params.attributes
@@ -95,14 +93,8 @@ router.post('/add', (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.delete('/removeProduct/*', (req, res) => {
-
-  console.log(req.url)
-  let parsedUrl = url.parse(req.url);
-  console.log(parsedUrl)
-  let parsedQs = querystring.parse(parsedUrl.query)
-  let inItemId = parsedQs.item_id
-  console.log(inItemId)
+router.delete('/removeProduct/:item_id', (req, res) => {
+  let inItemId = req.params.item_id
   ShoppingCart.destroy({
     where: {
       item_id: inItemId
@@ -110,13 +102,8 @@ router.delete('/removeProduct/*', (req, res) => {
   })
 });
 
-router.get('/totalAmount/*', (req, res) => {
-
-  let parsedUrl = url.parse(req.url);
-  let parsedQs = querystring.parse(parsedUrl.query)
-  let inCartId = parsedQs.cart_id
-  console.log("get cart total amount")
-  console.log(inCartId)
+router.get('/totalAmount/:cart_id', (req, res) => {
+  let inCartId = req.params.cart_id
   ShoppingCart.findOne({
     where: {
       cart_id: inCartId

@@ -24,10 +24,9 @@ router.get('/', (req, res) => {
 
 })
 
-router.get('/inDepartment/*', (req, res) => {
-  let parsedUrl = url.parse(req.url);
-  let parsedQs = querystring.parse(parsedUrl.query)
-  let inDepartmentId = parsedQs.id
+router.get('/inDepartment/:id', (req, res) => {
+ 
+  let inDepartmentId = req.params.id
   let key = `/products/inDepartment/${inDepartmentId}`
 
   Product.findAll({
@@ -43,10 +42,8 @@ router.get('/inDepartment/*', (req, res) => {
 
 })
 
-router.get('/inCategory/*', (req, res) => {
-  let parsedUrl = url.parse(req.url);
-  let parsedQs = querystring.parse(parsedUrl.query)
-  let inCategorytId = parsedQs.id
+router.get('/inCategory/:id', (req, res) => {
+  let inCategorytId = req.params.id
   let key = `/products/inCategory/${inCategorytId}`
 
   Product.findAll({
@@ -63,8 +60,6 @@ router.get('/inCategory/*', (req, res) => {
 
 router.post('/inCategory/pagination/*', (request, response) => {
 
-  console.log("category pagination")
-  console.log(request.body.params)
   let inCategorytId = parseInt(request.body.params.category_id)
   let inProductsPerPage = parseInt(request.body.params.productsPerPage)
   let inStartItem = parseInt(request.body.params.startItem)
@@ -86,8 +81,6 @@ router.post('/inCategory/pagination/*', (request, response) => {
 
 router.post('/inDepartment/pagination/*', (request, response) => {
 
-  console.log("department pagination")
-  console.log(request.body.params)
   let inDepartmentId = parseInt(request.body.params.department_id)
   let inProductsPerPage = parseInt(request.body.params.productsPerPage)
   let inStartItem = parseInt(request.body.params.startItem)
