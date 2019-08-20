@@ -1,9 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const db = require('../config/database')
 //const cache = require('../config/cache')
-const url = require('url');
-const querystring = require('querystring');
 const Product = require('../models').product
 const Department = require('../models').department
 const Category = require('../models').category
@@ -37,17 +34,15 @@ router.get('/totalitems/:id', (req, res) => {
 })
 
 router.post('/products/:id', (req, res) => {
-    let inDepartmentId = req.params.id
-    let inProductsPerPage = parseInt(request.body.params.productsPerPage)
-    let inStartItem = parseInt(request.body.params.startItem)
-
+    
+    let { id, productsPerPage, startItem } = request.body.params
     Product.findAll({
         include: [{
             model: Category,
-            where: { department_id: inDepartmentId },
+            where: { department_id: id },
         }],
-        offset: inStartItem,
-        limit: inProductsPerPage
+        offset: startItem,
+        limit: productsPerPage
     }).then((products) => {
         res.send(products)
     })

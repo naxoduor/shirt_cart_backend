@@ -22,50 +22,39 @@ router.post('/login', (req, res) => {
 
 router.post('/', (req, res) => {
 
-    let inName = req.body.user.name
-    let inEmail = req.body.user.email
-    let inPassword = req.body.user.password
-    let inPassword2 = inPassword
-
+    let { name, email, password } = req.body.user
     let errors = []
-
-    if (!inName || !inEmail || !inPassword || !inPassword2) {
+    if (!name || !email || !password) {
         errors.push({ msg: "please fill in all fields" })
     }
-
-    if (inPassword !== inPassword2) {
-        errors.push({ msg: "password do not match" })
-    }
-
-    if (inPassword.length < 6) {
+    if (password.length < 6) {
         errors.push({ msg: "password should be atleast 6 characters" })
     }
-
     if (errors.length > 0) {
         res.status(404).send({
             errors,
-            name: inName,
-            email: inEmail,
-            password: inPassword
+            name: name,
+            email: email,
+            password: password
         })
     }
     else {
-        Customer.findOne({ where: { email: inEmail } })
+        Customer.findOne({ where: { email: email } })
             .then(user => {
                 if (user) {
                     errors.push({ msg: "Email is already registered" })
                     res.status(404).send({
                         errors,
-                        name: inName,
-                        email: inEmail,
-                        password: inPassword
+                        name: name,
+                        email: email,
+                        password: password
                     })
                 }
                 else {
                     const customer = new Customer({
-                        name: inName,
-                        email: inEmail,
-                        password: inPassword
+                        name: name,
+                        email: email,
+                        password: password
                     })
 
                     customer.save()

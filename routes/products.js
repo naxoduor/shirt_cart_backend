@@ -60,17 +60,15 @@ router.get('/inCategory/:id', (req, res) => {
 
 router.post('/inCategory/pagination/*', (request, response) => {
 
-  let inCategorytId = parseInt(request.body.params.category_id)
-  let inProductsPerPage = parseInt(request.body.params.productsPerPage)
-  let inStartItem = parseInt(request.body.params.startItem)
+  let { category_id, productsPerPage, startItem } = request.body.params
 
   Product.findAll({
     include: [{
       model: Category,
-      where: { category_id: inCategorytId },
+      where: { category_id: category_id },
     }],
-    offset: inStartItem,
-    limit: inProductsPerPage
+    offset: startItem,
+    limit: productsPerPage
   })
     .then(products => {
       response.send(products)
@@ -81,17 +79,15 @@ router.post('/inCategory/pagination/*', (request, response) => {
 
 router.post('/inDepartment/pagination/*', (request, response) => {
 
-  let inDepartmentId = parseInt(request.body.params.department_id)
-  let inProductsPerPage = parseInt(request.body.params.productsPerPage)
-  let inStartItem = parseInt(request.body.params.startItem)
+  let { department_id, productsPerPage, startItem } = request.body.params
 
   Product.findAll({
     include: [{
       model: Category,
-      where: { department_id: inDepartmentId },
+      where: { department_id: department_id },
     }],
-    offset: inStartItem,
-    limit: inProductsPerPage
+    offset: startItem,
+    limit: productsPerPage
   })
     .then(products => {
       response.send(products)
@@ -103,11 +99,8 @@ router.post('/inDepartment/pagination/*', (request, response) => {
 
 router.post('/search*', (request, response) => {
 
-  let inSearchString = request.body.params.inSearchString
-  let inAllWords = request.body.params.inAllWords
-  let inShortProductDescriptionLength = parseInt(request.body.params.inShortProductDescriptionLength)
-  let inProductsPerPage = parseInt(request.body.params.inProductsPerPage)
-  let inStartItem = parseInt(request.body.params.inStartItem)
+  
+  let { inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem } = request.body.params
   console.log(inSearchString)
 
 

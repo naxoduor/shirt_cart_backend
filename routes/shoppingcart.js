@@ -1,9 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const db = require('../config/database')
 //const cache = require('../config/cache')
-const url = require('url');
-const querystring = require('querystring');
 const ShoppingCart = require('../models').shopping_cart
 const Product = require('../models').product
 const uuidv1 = require('uuid/v1');
@@ -20,7 +17,6 @@ router.get('/generateUniqueId', (req, res) => {
 router.get('/:cart_id', (req, res) => {
 
   let inCartId = req.params.cart_id
-
   let cartList = []
   ShoppingCart.findAll({
     where: {
@@ -54,25 +50,22 @@ router.get('/:cart_id', (req, res) => {
 })
 
 router.post('/add', (req, res) => {
-  let inCartId = req.body.params.cartId
-  let inProductId = parseInt(req.body.params.productId)
-  let inAttributes = req.body.params.attributes
-  let inProductName = req.body.params.name
-  let inUnitCost = req.body.params.price
+  
+  let {cartId, productId, attributes } = req.body.params
 
   ShoppingCart.findOne({
     where: {
-      cart_id: inCartId,
-      product_id: inProductId,
-      attributes: inAttributes
+      cart_id: cartId,
+      product_id: productId,
+      attributes: attributes
     }
   }).then((entry) => {
     if (!entry) {
         ShoppingCart.create({
           item_id: uuidv1(),
-          cart_id: inCartId,
-          product_id: inProductId,
-          attributes: inAttributes,
+          cart_id: cartId,
+          product_id: productId,
+          attributes: attributes,
           quantity: 1,
           added_on: new Date()
         }).then((cart) => {
