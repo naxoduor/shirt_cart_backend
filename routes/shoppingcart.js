@@ -17,11 +17,9 @@ router.get('/generateUniqueId', (req, res) => {
 })
 
 
-router.get('/', (req, res) => {
+router.get('/:cart_id', (req, res) => {
 
-  let parsedUrl = url.parse(req.url);
-  let parsedQs = querystring.parse(parsedUrl.query)
-  let inCartId = parsedQs.cart_id
+  let inCartId = req.params.cart_id
 
   let cartList = []
   ShoppingCart.findAll({
@@ -78,7 +76,8 @@ router.post('/add', (req, res) => {
           quantity: 1,
           added_on: new Date()
         }).then((cart) => {
-          console.log(cart)
+          console.log("we added a product")
+          //console.log(cart)
         }).catch(console.error)
 
     }
@@ -86,6 +85,7 @@ router.post('/add', (req, res) => {
       entry.update({
         quantity: entry.quantity + 1
       }).then((cart) => {
+        console.log("we updated a product")
       }).catch(console.error)
 
     }
