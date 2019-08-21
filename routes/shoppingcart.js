@@ -51,8 +51,7 @@ router.get('/:cart_id', (req, res) => {
 
 router.post('/add', (req, res) => {
   
-  let {cartId, productId, attributes } = req.body.params
-
+  let {cartId, productId, attributes, quantity } = req.body.params
   ShoppingCart.findOne({
     where: {
       cart_id: cartId,
@@ -66,7 +65,7 @@ router.post('/add', (req, res) => {
           cart_id: cartId,
           product_id: productId,
           attributes: attributes,
-          quantity: 1,
+          quantity: quantity,
           added_on: new Date()
         }).then((cart) => {
           console.log("we added a product")
@@ -76,7 +75,7 @@ router.post('/add', (req, res) => {
     }
     else {
       entry.update({
-        quantity: entry.quantity + 1
+        quantity: entry.quantity+1
       }).then((cart) => {
         console.log("we updated a product")
       }).catch(console.error)
