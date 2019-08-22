@@ -68,22 +68,39 @@ router.post('/add', (req, res) => {
           quantity: quantity,
           added_on: new Date()
         }).then((cart) => {
-          console.log("we added a product")
-          //console.log(cart)
+          res.send(cart)
         }).catch(console.error)
 
     }
     else {
       entry.update({
-        quantity: entry.quantity+1
+        quantity: quantity
       }).then((cart) => {
-        console.log("we updated a product")
+        res.send(cart)
       }).catch(console.error)
 
     }
   }).catch(console.error)
     .catch(err => console.log(err));
 });
+
+router.put('/update/:item_id', (req, res) => {
+  
+  let inItemId = req.params.item_id
+  let quantity = req.body.params.quantity
+  ShoppingCart.findByPk(inItemId).then((entry) => {
+  
+      entry.update({
+        quantity: quantity
+      }).then((cart) => {
+      res.send(cart)  
+      }).catch(console.error)
+
+    
+  }).catch(console.error)
+    .catch(err => console.log(err));
+});
+
 
 router.delete('/removeProduct/:item_id', (req, res) => {
   let inItemId = req.params.item_id
