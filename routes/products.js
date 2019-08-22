@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../config/database')
-//const cache = require('../config/cache')
+const cache = require('../config/cache')
 const url = require('url');
 const querystring = require('querystring');
 const Product = require('../models').product
@@ -25,9 +25,15 @@ router.get('/', (req, res) => {
 })
 
 router.get('/inDepartment/:id', (req, res) => {
- 
+
   let inDepartmentId = req.params.id
   let key = `/products/inDepartment/${inDepartmentId}`
+
+  cache.get(key, (err, result) => {
+    if (result !== null) {
+      return res.send(result)
+    }
+  })
 
   Product.findAll({
     include: [{
@@ -37,7 +43,11 @@ router.get('/inDepartment/:id', (req, res) => {
     offset: 1,
     limit: 8
   })
-    .then(products => res.send(products))
+    .then(products => {
+      cache.set(key, products, () => {
+        res.send(products)
+      })
+    })
     .catch(console.error)
 
 })
@@ -45,6 +55,13 @@ router.get('/inDepartment/:id', (req, res) => {
 router.get('/inCategory/:id', (req, res) => {
   let inCategorytId = req.params.id
   let key = `/products/inCategory/${inCategorytId}`
+
+  cache.get(key, (err, result) => {
+    if (result !== null) {
+      return res.send(result)
+    }
+  })
+
 
   Product.findAll({
     include: [{
@@ -54,13 +71,25 @@ router.get('/inCategory/:id', (req, res) => {
     offset: 1,
     limit: 8
   })
-    .then(products => res.send(products))
+    .then(products => {
+      cache.set(key, products, () => {
+        res.send(products)
+      })
+    })
     .catch(console.error)
 })
 
 router.post('/inCategory/pagination/*', (request, response) => {
 
   let { category_id, productsPerPage, startItem } = request.body.params
+
+  let key = `/products/inCategory/pagination${inCategorytId}${startItem}`
+
+  cache.get(key, (err, result) => {
+    if (result !== null) {
+      return response.send(result)
+    }
+  })
 
   Product.findAll({
     include: [{
@@ -71,7 +100,9 @@ router.post('/inCategory/pagination/*', (request, response) => {
     limit: productsPerPage
   })
     .then(products => {
-      response.send(products)
+      cache.set(key, products, () => {
+        response.send(products)
+      })
     })
     .catch(console.error)
 
@@ -81,6 +112,12 @@ router.post('/inDepartment/pagination/*', (request, response) => {
 
   let { department_id, productsPerPage, startItem } = request.body.params
 
+  cache.get(key, (err, result) => {
+    if (result !== null) {
+      return response.send(result)
+    }
+  })
+  let key = `/products/inDepartment/pagination${inDepartmentId}${startItem}`
   Product.findAll({
     include: [{
       model: Category,
@@ -90,7 +127,9 @@ router.post('/inDepartment/pagination/*', (request, response) => {
     limit: productsPerPage
   })
     .then(products => {
-      response.send(products)
+      cache.set(key, products, () => {
+        response.send(products)
+      })
     })
     .catch(console.error)
 
@@ -99,10 +138,16 @@ router.post('/inDepartment/pagination/*', (request, response) => {
 
 router.post('/search*', (request, response) => {
 
-  
+
   let { inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem } = request.body.params
   console.log(inSearchString)
+  let key = `/products/search/${searchString}$`
 
+  cache.get(key, (err, result) => {
+    if (result !== null) {
+      return response.send(result)
+    }
+  })
 
   Product.findAll({
     where: Sequelize.literal('MATCH (name, description) AGAINST (:searchString)'),
@@ -110,8 +155,11 @@ router.post('/search*', (request, response) => {
       searchString: inSearchString
     }
   }).then(products => {
-    response.send(products)
+    cache.set(key, products, () => {
+      response.send(products)
+    })
   })
+  .catch(console.error)
 })
 
 
