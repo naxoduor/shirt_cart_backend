@@ -1,90 +1,81 @@
 const express = require('express')
 const router = express.Router()
+const passport = require('passport')
+const jwtSecret = require('../config/jwtConfig')
 //const cache = require('../config/cache')
 const jwt = require('jsonwebtoken')
 const Customer = require('../models').customer
 
-router.post('/login', (req, res) => {
-
-    let email = req.body.customer.email
-    Customer.findOne({ where: { email: email } })
-        .then((user) => {
-             jwt.sign({user:user}, 'secretkey', (err, token) =>{
-                res.send({
-                    token:token,
-                    user:user
-                })
+router.post('/login', (req, res, next) => {
+    passport.authenticate('login', (err, customers, info) => {
+        if (err) {
+            console.error(`error ${err}`);
+        }
+        if (info !== undefined) {
+            console.err(info.message);
+            if (info.message === 'bad username') {
+                res.status(401).send(info.message)
+            } else {
+                res.status(403).send(info.message)
+            }
+        } else {
+            req.logIn(customers, () => {
+                Customer.findOne({
+                    where: {
+                        email: req.body.customer.email 
+                    },
+                }).then(customer => {
+                    const token = jwt.sign({ id: customer.id}, jwtSecret.secret, {
+                        expiresIn: 60 * 60, 
+                    });
+                    res.status(200).send({
+                        auth: true,
+                        token,
+                        message: 'user found & loged in',
+                    });
+                });
             });
-        })
-        .catch(err => console.log(err))
-    })
+        }
+    })(req, res, next);
+});
 
 
-router.post('/', (req, res) => {
 
-    let { name, email, password } = req.body.user
-    let errors = []
-    if (!name || !email || !password) {
-        errors.push({ msg: "please fill in all fields" })
-    }
-    if (password.length < 6) {
-        errors.push({ msg: "password should be atleast 6 characters" })
-    }
-    if (errors.length > 0) {
-        res.status(404).send({
-            errors,
-            name: name,
-            email: email,
-            password: password
-        })
-    }
-    else {
-        Customer.findOne({ where: { email: email } })
-            .then(user => {
-                if (user) {
-                    errors.push({ msg: "Email is already registered" })
-                    res.status(404).send({
-                        errors,
-                        name: name,
-                        email: email,
-                        password: password
+router.post('/', (req, res, next) => {
+    passport.authenticate('register', (err, user, info) => {
+        if (err) {
+            console.log(err);
+        }
+        if (info !== undefined) {
+            console.error(info.message);
+            res.status(403).send(info.message)
+        } else {
+            req.logIn(user, error => {
+                console.log(user);
+                let { name, email } = req.body.user
+                const data = {
+                    name: name,
+                    email: email
+                };
+                console.log(data)
+                Customer.findOne({
+                    where: {
+                        name: data.name,
+                    },
+                }).then(customer => {
+                    console.log(customer)
+                    customer.update({
+                        name: data.name,
+                        email: data.email
+                    }).then(() => {
+                        console.log('customer created in db');
+                        //res.status(200).send({message: 'user created'})
+                        res.send(user)
                     })
-                }
-                else {
-                    const customer = new Customer({
-                        name: name,
-                        email: email,
-                        password: password
-                    })
-
-                    customer.save()
-                        .then(user => {
-                            const token = jwt.sign(user, 'secret', (err, token) =>{
-                                res.json({
-                                    token:token
-                                })
-                        
-                            });
-                        })
-                        .catch(err => console.log(err))
-                }
+                })
             })
-    }
-
+        }
+    })(req, res, next)
 })
-
-
-function verifyToken(req, res, next) {
-
-    const bearerHeader = req.headers['authorization']
-    if(typeof bearerHeader !== 'undefined') {
-        const bearer = bearerHeader.split(' ')
-        const bearerToken = bearer[1]
-        req.token = bearerToken
-        next()  
-    } else {
-        res.sendStatus(403)
-    }
-}
 
 module.exports = router

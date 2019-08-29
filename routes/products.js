@@ -30,6 +30,7 @@ router.get('/inDepartment/:id', (req, res) => {
   let key = `/products/inDepartment/${inDepartmentId}`
 
   cache.get(key, (err, result) => {
+    console.log("get from cache")
     if (result !== null) {
       return res.send(result)
     }
@@ -44,6 +45,7 @@ router.get('/inDepartment/:id', (req, res) => {
     limit: 8
   })
     .then(products => {
+      console.log("set cache")
       cache.set(key, products, () => {
         res.send(products)
       })

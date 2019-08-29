@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     }),
       category.belongsTo(models.department, {
+    
+    
+    
         foreignKey: "department_id"
       })
   };

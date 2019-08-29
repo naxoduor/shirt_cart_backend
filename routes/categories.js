@@ -34,8 +34,7 @@ router.get('/totalitems/:id', (req, res) => {
         let obj = {}
         obj.categories_count = count
         list.push(obj)
-        res.send(list)
-        
+        res.send(list)      
     })
 
     router.post('/products/*', (req, res) => {
