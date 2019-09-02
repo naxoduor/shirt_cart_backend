@@ -12,7 +12,7 @@ router.post('/login', (req, res, next) => {
             console.error(`error ${err}`);
         }
         if (info !== undefined) {
-            console.err(info.message);
+            console.log(info.message);
             if (info.message === 'bad username') {
                 res.status(401).send(info.message)
             } else {
@@ -22,7 +22,7 @@ router.post('/login', (req, res, next) => {
             req.logIn(customers, () => {
                 Customer.findOne({
                     where: {
-                        email: req.body.customer.email 
+                        email: req.body.email 
                     },
                 }).then(customer => {
                     const token = jwt.sign({ id: customer.id}, jwtSecret.secret, {
@@ -52,20 +52,21 @@ router.post('/', (req, res, next) => {
         } else {
             req.logIn(user, error => {
                 console.log(user);
-                let { name, email } = req.body.user
+                let { username, email } = req.body
                 const data = {
-                    name: name,
+                    username: username,
                     email: email
                 };
                 console.log(data)
                 Customer.findOne({
                     where: {
-                        name: data.name,
+                        name: data.username,
                     },
                 }).then(customer => {
+                    console.log("print the customer details")
                     console.log(customer)
                     customer.update({
-                        name: data.name,
+                        name: data.username,
                         email: data.email
                     }).then(() => {
                         console.log('customer created in db');
@@ -76,6 +77,12 @@ router.post('/', (req, res, next) => {
             })
         }
     })(req, res, next)
+})
+
+router.post('/testingroute', (req, res) => {
+    console.log("testing this route")
+    console.log(req.body.customer.password)
+    res.send("found the route")
 })
 
 module.exports = router

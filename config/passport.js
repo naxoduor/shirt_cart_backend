@@ -1,16 +1,13 @@
-import  bcrypt from 'bcrypt';
-import Sequelize from 'sequelize';
-import jwtSecret from './jwtConfig';
-import User from '../models/customer'
-
+const jwtSecret = require('./jwtConfig')
+const Customer = require('../models').customer
 const BCRYPT_SALT_ROUNDS = 12;
-
-const Op = Sequelize.Op;
-
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy;
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
+const bcrypt = require('bcrypt');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 passport.use(
     'register',
@@ -22,39 +19,38 @@ passport.use(
             session: false,
         },
         (req, username, password, done) => {
-            console.log(username)
-            console.log(req.body.email)
+            let name = username
 
             try {
-                User.findOne({
+                Customer.findOne({
                     where: {
                         [Op.or]: [
                             {
-                                username,
+                                name,
                             },
                             { email: req.body.email },
                         ],
                     },
-                }).then(user => {
-                    if (user != null) {
+                }).then(customer => {
+                    if (customer != null) {
                         console.log('username or rmail already taken');
                         return done(null, false, {
                             message: 'username or email already taken',
                         });
                     }
                     bcrypt.hash(password, BCRYPT_SALT_ROUNDS).then(hashedPassword => {
-                        User.create({
-                            username,
+                        Customer.create({
+                            name,
                             password: hashedPassword,
                             email: req.body.email,
-                        }).then(user =>{
+                        }).then(user => {
                             console.log('user created');
                             return done(null, user);
                         });
                     });
                 });
             }
-            catch(err){
+            catch (err) {
                 return done(err)
             }
         },
@@ -65,22 +61,22 @@ passport.use(
     'login',
     new LocalStrategy(
         {
-            usernameField: 'username',
+            usernameField: 'email',
             passwordField: 'password',
             session: false,
         },
-        (username, password, done) => {
+        (req, password, done) => {
             try {
-                User.findOne({
+                Customer.findOne({
                     where: {
-                        username,
+                        email: req.body.email
                     },
                 }).then(user => {
                     if (user === null) {
                         return done(null, false, { message: 'bad username' });
                     }
-                    bcrypt.compare(password, user.password).then(response =>{
-                        if(response !==true) {
+                    bcrypt.compare(password, user.password).then(response => {
+                        if (response !== true) {
                             console.log('passwords do not match');
                             return done(null, false, { message: 'passwords do not match' });
                         }
@@ -88,8 +84,8 @@ passport.use(
                         return done(null, user)
                     });
                 });
-            } catch(err){
-                done(err)
+            } catch (err) {
+                return done(err)
             }
         },
     ),
@@ -97,7 +93,7 @@ passport.use(
 
 const opts = {
     jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme('JWT'),
-    secretKey: jwtSecret.secret
+    secretOrKey: jwtSecret.secret
 };
 
 passport.use(
@@ -117,7 +113,7 @@ passport.use(
                     done(null, false)
                 }
             });
-        } catch(err){
+        } catch (err) {
             done(err);
         }
     }),
