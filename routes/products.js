@@ -21,7 +21,6 @@ router.get('/', (req, res) => {
   })
     .then(products => res.send(products))
     .catch(console.error)
-
 })
 
 router.get('/inDepartment/:id', (req, res) => {
@@ -51,7 +50,6 @@ router.get('/inDepartment/:id', (req, res) => {
       })
     })
     .catch(console.error)
-
 })
 
 router.get('/inCategory/:id', (req, res) => {
@@ -107,7 +105,6 @@ router.post('/inCategory/pagination/*', (request, response) => {
       })
     })
     .catch(console.error)
-
 })
 
 router.post('/inDepartment/pagination/*', (request, response) => {
@@ -134,12 +131,9 @@ router.post('/inDepartment/pagination/*', (request, response) => {
       })
     })
     .catch(console.error)
-
 })
 
-
 router.post('/search*', (request, response) => {
-
 
   let { inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem } = request.body.params
   console.log(inSearchString)

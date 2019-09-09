@@ -36,6 +36,7 @@ router.get('/totalitems/:id', (req, res) => {
         list.push(obj)
         res.send(list)      
     })
+})
 
     router.post('/products/*', (req, res) => {
     let { category_id, productsPerPage, startItem } = request.body.params
@@ -51,5 +52,4 @@ router.get('/totalitems/:id', (req, res) => {
             res.send(products)         
         })
     })
-})
 module.exports = router

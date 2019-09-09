@@ -32,6 +32,7 @@ router.post('/login', (req, res, next) => {
                         auth: true,
                         token,
                         message: 'user found & loged in',
+                        customer
                     });
                 });
             });

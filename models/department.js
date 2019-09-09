@@ -12,8 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     });
   department.associate = function (models) {
-    // associations can be defined here
-   
+    department.hasMany(models.category, { foreignKey: 'department_id'})
   };
   return department;
 };

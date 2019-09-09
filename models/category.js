@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
   });
   category.associate = function (models) {
-    // associations can be defined here
     category.belongsToMany(models.product, {
       foreignKey: "category_id",
       through: {
@@ -21,9 +20,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     }),
       category.belongsTo(models.department, {
-    
-    
-    
         foreignKey: "department_id"
       })
   };

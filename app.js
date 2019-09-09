@@ -22,7 +22,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
-
 app.get('/', (req,res) => res.send(`INDEX`));
 
 const PORT = process.env.PORT || 8080;
@@ -30,6 +29,7 @@ const PORT = process.env.PORT || 8080;
 app.use('/products', require('./routes/products'))
 app.use('/categories', require('./routes/categories'))
 app.use('/departments', require('./routes/departments'))
+app.use('/attributes', require('./routes/attributes'))
 app.use('/shoppingcart', require('./routes/shoppingcart'))
 app.use('/customers', require('./routes/customer'))
 app.use('/orders', require('./routes/orders'))
