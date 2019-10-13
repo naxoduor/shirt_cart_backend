@@ -158,6 +158,4 @@ router.post('/search*', (request, response) => {
   .catch(console.error)
 })
 
-
-
 module.exports = router

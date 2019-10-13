@@ -30,8 +30,11 @@ app.use('/products', require('./routes/products'))
 app.use('/categories', require('./routes/categories'))
 app.use('/departments', require('./routes/departments'))
 app.use('/attributes', require('./routes/attributes'))
+app.use('/chapaa', require('./routes/chapaa'))
 app.use('/shoppingcart', require('./routes/shoppingcart'))
 app.use('/customers', require('./routes/customer'))
 app.use('/orders', require('./routes/orders'))
 app.use('/shipping', require('./routes/shipping'))
-app.listen(PORT, console.log(`Server started on port ${PORT}`));
+app.use('/testing', require('./routes/testroute'))
+app.use('/protected', require('./routes/protected'))
+app.listen(PORT, console.log(`Server started on port ${PORT}`));  

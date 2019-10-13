@@ -38,7 +38,7 @@ router.get('/totalitems/:id', (req, res) => {
     })
 })
 
-    router.post('/products/*', (req, res) => {
+router.post('/products/*', (req, res) => {
     let { category_id, productsPerPage, startItem } = request.body.params
 
         Product.findAll({

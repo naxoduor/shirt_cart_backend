@@ -3,7 +3,6 @@ const router = express.Router()
 const db = require('../config/database')
 //const cache = require('../config/cache')
 const url = require('url');
-const querystring = require('querystring');
 const ShippingRegion = require('../models').shipping_region
 const Shipping = require('../models').shipping
 
@@ -19,7 +18,6 @@ router.get('/regions/regionId/:shipping_id', (req, res) => {
 })
 
 router.get('/regions', (req, res) => {
-
     ShippingRegion.findAll().then((shippingRegions) => {
         res.send(shippingRegions)
     })

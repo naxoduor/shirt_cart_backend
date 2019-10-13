@@ -2,12 +2,15 @@ const jwtSecret = require('./jwtConfig')
 const Customer = require('../models').customer
 const BCRYPT_SALT_ROUNDS = 12;
 const passport = require('passport')
+const passportJWT = require('passport-jwt')
 const LocalStrategy = require('passport-local').Strategy;
-const JWTstrategy = require('passport-jwt').Strategy;
-const ExtractJWT = require('passport-jwt').ExtractJwt;
+const BearerStrategy = require('passport-http-bearer')
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 const bcrypt = require('bcrypt');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const jwt= require('jsonwebtoken')
 
 passport.use(
     'register',
@@ -33,7 +36,7 @@ passport.use(
                     },
                 }).then(customer => {
                     if (customer != null) {
-                        console.log('username or rmail already taken');
+                        console.log('username or email already taken');
                         return done(null, false, {
                             message: 'username or email already taken',
                         });
@@ -65,14 +68,17 @@ passport.use(
             passwordField: 'password',
             session: false,
         },
-        (req, password, done) => {
+        (email, password, done) => {
+            
             try {
                 Customer.findOne({
                     where: {
-                        email: req.body.email
+                        email: email
                     },
                 }).then(user => {
+                    console.log("found email")
                     if (user === null) {
+                        console.log("user  is null")
                         return done(null, false, { message: 'bad username' });
                     }
                     bcrypt.compare(password, user.password).then(response => {
@@ -91,30 +97,16 @@ passport.use(
     ),
 );
 
-const opts = {
-    jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme('JWT'),
-    secretOrKey: jwtSecret.secret
-};
-
-passport.use(
-    'jwt',
-    new JWTstrategy(opts, (jwt_payload, done) => {
-        try {
-            User.findOne({
-                where: {
-                    id: jwt_payload.id,
-                },
-            }).then(user => {
-                if (user) {
-                    console.log('user found in db in passport');
-                    done(null, user)
-                } else {
-                    console.log('user not found in db');
-                    done(null, false)
-                }
-            });
-        } catch (err) {
-            done(err);
-        }
-    }),
-);
+passport.use(new BearerStrategy(
+    function(token, done){
+        console.log(token)
+        jwt.verify(token, "jwt-secret", function(err, user){
+            if(err) {
+                console.log(err)
+                return done(err)
+            }
+            console.log(user)
+            return done(null, user ? user : false);
+        })
+    }
+))

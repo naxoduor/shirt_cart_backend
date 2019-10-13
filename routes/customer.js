@@ -8,12 +8,13 @@ const Customer = require('../models').customer
 
 router.post('/login', (req, res, next) => {
     passport.authenticate('login', (err, customers, info) => {
+        console.log("top request")
         if (err) {
             console.error(`error ${err}`);
         }
         if (info !== undefined) {
-            console.log(info.message);
             if (info.message === 'bad username') {
+                console.log("bad username")
                 res.status(401).send(info.message)
             } else {
                 res.status(403).send(info.message)
@@ -25,22 +26,16 @@ router.post('/login', (req, res, next) => {
                         email: req.body.email 
                     },
                 }).then(customer => {
-                    const token = jwt.sign({ id: customer.id}, jwtSecret.secret, {
+                    const token = jwt.sign({ customer: customer}, jwtSecret.secret, {
                         expiresIn: 60 * 60, 
                     });
-                    res.status(200).send({
-                        auth: true,
-                        token,
-                        message: 'user found & loged in',
-                        customer
-                    });
+                    console.log(token)
+                    res.status(200).json({token});
                 });
             });
         }
     })(req, res, next);
 });
-
-
 
 router.post('/', (req, res, next) => {
     passport.authenticate('register', (err, user, info) => {
@@ -80,10 +75,16 @@ router.post('/', (req, res, next) => {
     })(req, res, next)
 })
 
-router.post('/testingroute', (req, res) => {
+router.get('/logout', (req, res) => {
+    console.log("log out the user")
+   // console.log(req.body.customer.password)
+    res.send("The user has been logge out")
+})
+
+router.get('/testingroute', (req, res) => {
     console.log("testing this route")
-    console.log(req.body.customer.password)
-    res.send("found the route")
+   // console.log(req.body.customer.password)
+    res.status(400).send(new Error("found an error"))
 })
 
 module.exports = router
