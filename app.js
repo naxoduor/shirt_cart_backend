@@ -36,5 +36,6 @@ app.use('/customers', require('./routes/customer'))
 app.use('/orders', require('./routes/orders'))
 app.use('/shipping', require('./routes/shipping'))
 app.use('/testing', require('./routes/testroute'))
+app.use('/chapaa', require('./routes/chapaa'))
 app.use('/protected', require('./routes/protected'))
 app.listen(PORT, console.log(`Server started on port ${PORT}`));  

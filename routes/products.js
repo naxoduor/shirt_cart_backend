@@ -79,11 +79,11 @@ router.get('/inCategory/:id', (req, res) => {
     .catch(console.error)
 })
 
-router.post('/inCategory/pagination/*', (request, response) => {
+router.post('/inCategory/pagination/:id', (request, response) => {
 
   let { category_id, productsPerPage, startItem } = request.body.params
 
-  let key = `/products/inCategory/pagination${inCategorytId}${startItem}`
+  let key = `/products/inCategory/pagination${category_id}${startItem}`
 
   cache.get(key, (err, result) => {
     if (result !== null) {
@@ -107,16 +107,16 @@ router.post('/inCategory/pagination/*', (request, response) => {
     .catch(console.error)
 })
 
-router.post('/inDepartment/pagination/*', (request, response) => {
+router.post('/inDepartment/pagination/:id', (request, response) => {
 
   let { department_id, productsPerPage, startItem } = request.body.params
-
+  
+  let key = `/products/inDepartment/pagination${department_id}${startItem}`
   cache.get(key, (err, result) => {
     if (result !== null) {
       return response.send(result)
     }
   })
-  let key = `/products/inDepartment/pagination${inDepartmentId}${startItem}`
   Product.findAll({
     include: [{
       model: Category,

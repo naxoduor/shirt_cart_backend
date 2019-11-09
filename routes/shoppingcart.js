@@ -15,8 +15,9 @@ router.get('/generateUniqueId', (req, res) => {
 
 
 router.get('/:cart_id', (req, res) => {
-
+  console.log("get cart items")
   let inCartId = req.params.cart_id
+  console.log(inCartId)
   let cartList = []
   ShoppingCart.findAll({
     where: {
@@ -41,6 +42,7 @@ router.get('/:cart_id', (req, res) => {
           obj.image = product.image
           cartList.push(obj)
           if (!cart[index + 1]) {
+            console.log(cartList)
             res.send(cartList)
           }
         })

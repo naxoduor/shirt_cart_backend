@@ -59,13 +59,10 @@ router.post('/', (req, res, next) => {
                         name: data.username,
                     },
                 }).then(customer => {
-                    console.log("print the customer details")
-                    console.log(customer)
                     customer.update({
                         name: data.username,
                         email: data.email
                     }).then(() => {
-                        console.log('customer created in db');
                         //res.status(200).send({message: 'user created'})
                         res.send(user)
                     })
@@ -76,7 +73,6 @@ router.post('/', (req, res, next) => {
 })
 
 router.get('/logout', (req, res) => {
-    console.log("log out the user")
    // console.log(req.body.customer.password)
     res.send("The user has been logge out")
 })

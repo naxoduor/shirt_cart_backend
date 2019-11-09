@@ -46,6 +46,7 @@ passport.use(
                             name,
                             password: hashedPassword,
                             email: req.body.email,
+                            mob_phone: req.body.mobile
                         }).then(user => {
                             console.log('user created');
                             return done(null, user);
@@ -71,6 +72,7 @@ passport.use(
         (email, password, done) => {
             
             try {
+                console.log("loooooooooooooooooooooooooooooogin")
                 Customer.findOne({
                     where: {
                         email: email
@@ -97,16 +99,20 @@ passport.use(
     ),
 );
 
-passport.use(new BearerStrategy(
+passport.use(
+    'bearer',
+    new BearerStrategy(
     function(token, done){
         console.log(token)
-        jwt.verify(token, "jwt-secret", function(err, user){
+        console.log("verify the token given")
+        jwt.verify(token, "jwt-secret", function(err, customer){
             if(err) {
                 console.log(err)
                 return done(err)
             }
-            console.log(user)
-            return done(null, user ? user : false);
+            console.log("print the user")
+            console.log(customer)
+            return done(null, customer ? customer : false);
         })
     }
 ))
