@@ -103,11 +103,12 @@ passport.use(
     'bearer',
     new BearerStrategy(
     function(token, done){
+        console.log("the request is")
         console.log(token)
         console.log("verify the token given")
         jwt.verify(token, "jwt-secret", function(err, customer){
             if(err) {
-                console.log(err)
+                //console.log(err)
                 return done(err)
             }
             console.log("print the user")
