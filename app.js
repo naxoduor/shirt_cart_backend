@@ -13,12 +13,22 @@ db.authenticate()
 .then(() => console.log('Database connected...'))
 .catch(err => console.log('Error ' + err))
 const app = express();
+
+app.use(function(req, res, next) {
+  var allowedOrigins = ['http://127.0.0.1', 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', 'https://sandbox.safaricom.co.ke'];
+  var origin = req.headers.origin;
+  if(allowedOrigins.indexOf(origin) > -1){
+       res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  return next();
+})
+/*
 app.use(cors({
     origin: 'http://127.0.0.1',
     credentials: true,
   })
   )
-  
+  */
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
