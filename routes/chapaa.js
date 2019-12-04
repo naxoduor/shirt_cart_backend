@@ -4,7 +4,7 @@ const router = express.Router()
 
 router.get('/', (req, res)=>{
     console.log("validate get request")
-    consolee.log(req.body)
+    console.log(req.body)
     res.status(200).json({
         "ResultCode": 0,
         "ResultDesc": "Success",
@@ -22,12 +22,37 @@ router.post('/', (req, res)=>{
     })
 })
 
+router.get('/validate', (req, res)=>{
+	console.log("validate the get request")
+	res.status(200).json({
+	"ResultCode": 0,
+	"ResultDesc": "Success",
+	"ThirdPartyTransID": 0
+})
+})
+
+router.post('/validate', (req, res)=>{
+	console.log("Validate te request")
+	res.status(200).json({
+	"ResultCode": 0,
+	"ResultDesc": "Success",
+	"ThirdPartyDesc": 0
+})
+})
+
 router.post('/receive', (req, res) => {
     console.log("receive the payment")
     console.log(req.body)
     res.status(200).json({
         "C2BPaymentConfirmationResult":"Success"
     })
+})
+
+router.get('/receive', (req, res) => {
+	console.log("receive the payment")
+	res.status(200).json({
+	"C2BPaymentConfirmationResult":"Success"
+})
 })
 
 router.post('/checking', (req, res) => {
