@@ -68,6 +68,7 @@ router.post('/', (req, res) => {
                 currentOrder.update({
                   total_amount: total
                 }).then(() => {
+                  res.send(total_amount);
 
                 })
               })

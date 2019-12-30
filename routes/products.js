@@ -7,6 +7,7 @@ const querystring = require('querystring');
 const Product = require('../models').product
 const Category = require('../models').category
 const Sequelize = require('sequelize')
+var amqp = require('amqplib/callback_api');
 
 router.get('/', (req, res) => {
 
@@ -156,6 +157,47 @@ router.post('/search*', (request, response) => {
     })
   })
   .catch(console.error)
+})
+
+router.get('/rabbit', (req, res) => {
+
+  let inDepartmentId = 1
+  Product.findAll({
+    include: [{// Notice `include` takes an ARRAY
+      model: Category,
+      where: { department_id: inDepartmentId },
+    }],
+    offset: 1,
+    limit: 8
+  })
+    .then(products => 
+      {
+        amqp.connect('amqp://localhost', function(error0, connection){
+    if(error0){
+        throw error0;
+    }
+    connection.createChannel(function(error1, channel){
+        if(error1){
+            throw error1;
+        }
+        console.log("This are the products")
+        console.log(products)
+        var queue = 'hello';
+        var msg = JSON.stringify(products);
+
+        channel.assertQueue(queue, {
+            durable: false
+        });
+        channel.sendToQueue(queue, Buffer.from(msg));
+        console.log(" [x] Sent %s", msg)
+    })
+    setTimeout(function() {
+        connection.close();
+        process.exit(0);
+    }, 500);
+})
+      })
+    .catch(console.error)
 })
 
 module.exports = router

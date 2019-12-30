@@ -13,7 +13,6 @@ router.get('/generateUniqueId', (req, res) => {
   res.send(cart_id)
 })
 
-
 router.get('/:cart_id', (req, res) => {
   console.log("get cart items")
   let inCartId = req.params.cart_id
@@ -54,6 +53,7 @@ router.get('/:cart_id', (req, res) => {
 router.post('/add', (req, res) => {
   
   let {cartId, productId, attributes, quantity } = req.body.params
+  let cartList = []
   ShoppingCart.findOne({
     where: {
       cart_id: cartId,
@@ -70,7 +70,35 @@ router.post('/add', (req, res) => {
           quantity: quantity,
           added_on: new Date()
         }).then((cart) => {
-          res.send(cart)
+          ShoppingCart.findAll({
+            where: {
+              cart_id: cartId
+            },
+            include: [{
+              model: Product,
+              attributes: ['name', 'price', 'description', 'image']
+            }]
+          })
+            .then((cart) => {
+              cart.forEach((item,index) => {
+                let cartItem = JSON.parse(JSON.stringify(item))
+                Product.findByPk(cartItem.product_id).then((product) => {
+                  let obj = {}
+                  obj.item_id = cartItem.item_id
+                  obj.attributes = cartItem.attributes
+                  obj.quantity = cartItem.quantity
+                  obj.name = product.name
+                  obj.price = product.price
+                  obj.description = product.description
+                  obj.image = product.image
+                  cartList.push(obj)
+                  if (!cart[index + 1]) {
+                    console.log(cartList)
+                    res.send(cartList)
+                  }
+                })
+              })
+            }).catch(err=>console.log(err))
         }).catch(console.error)
 
     }
@@ -80,7 +108,6 @@ router.post('/add', (req, res) => {
       }).then((cart) => {
         res.send(cart)
       }).catch(console.error)
-
     }
   }).catch(console.error)
     .catch(err => console.log(err));
@@ -96,21 +123,55 @@ router.put('/update/:item_id', (req, res) => {
         quantity: quantity
       }).then((cart) => {
       res.send(cart)  
-      }).catch(console.error)
-
-    
+      }).catch(console.error)    
   }).catch(console.error)
     .catch(err => console.log(err));
 });
 
+router.delete('/removeProduct/:joined_ids', (req, res) => {
+  let joined_ids = req.params.joined_ids
+  let arrc=joined_ids.split('&')
+  let inItemId = arrc[0]
+  let cartId = arrc[arrc.length-1]
 
-router.delete('/removeProduct/:item_id', (req, res) => {
-  let inItemId = req.params.item_id
+  let cartList = []
   ShoppingCart.destroy({
     where: {
       item_id: inItemId
     }
-  })
+  }).then(()=>{
+
+    ShoppingCart.findAll({
+      where: {
+        cart_id: cartId
+      },
+      include: [{
+        model: Product,
+        attributes: ['name', 'price', 'description', 'image']
+      }]
+    })
+      .then((cart) => {
+        cart.forEach((item,index) => {
+          let cartItem = JSON.parse(JSON.stringify(item))
+          Product.findByPk(cartItem.product_id).then((product) => {
+            let obj = {}
+            obj.item_id = cartItem.item_id
+            obj.attributes = cartItem.attributes
+            obj.quantity = cartItem.quantity
+            obj.name = product.name
+            obj.price = product.price
+            obj.description = product.description
+            obj.image = product.image
+            cartList.push(obj)
+            if (!cart[index + 1]) {
+              console.log(cartList)
+              res.send(cartList)
+            }
+          })
+        })
+      }).catch(err=>console.log(err))
+  }).catch(console.error)
+
 });
 
 router.get('/totalAmount/:cart_id', (req, res) => {
@@ -123,6 +184,5 @@ router.get('/totalAmount/:cart_id', (req, res) => {
     console.log(cart.getProducts())
   })
 });
-
 
 module.exports = router
