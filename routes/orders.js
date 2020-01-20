@@ -1,19 +1,33 @@
 const express = require('express')
 const router = express.Router()
 //const cache = require('../config/cache')
-
 const ShoppingCart = require('../models').shopping_cart
 const Product = require('../models').product
 const Order = require('../models').order
 const OrderDetail = require('../models').order_detail
+const nodemailer = require('nodemailer')
+
+let transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    type: '',
+    user: '',
+    clientId: '',
+    clientSecret: '',
+    refreshToken: '',
+  }
+});
+
 
 router.post('/', (req, res) => {
   let inCartId = req.body.order.cartId
   let inCustomerId = req.body.order.customerId
-  let inShippingId = req.body.order.shippingId
+  let inShippingId = req.body.order.shipping_region_id
   let inTaxId = req.body.order.taxId
-  
-  let newOrder=Order.build({
+
+  let newOrder = Order.build({
     order_id: null,
     created_on: new Date(),
     customer_id: inCustomerId,
@@ -21,62 +35,78 @@ router.post('/', (req, res) => {
     tax_id: inTaxId
   })
   newOrder.save().then((orderItem) => {
-
-
     Order.findOne({
       where: {
-          customer_id: inCustomerId,
+        customer_id: inCustomerId,
       },
-      order: [ [ 'created_on', 'DESC' ]],
-  }).then((currentOrder) => {
-    let order_id = JSON.parse(JSON.stringify(currentOrder)).order_id
-    ShoppingCart.findAll({
-      attributes: ['quantity', 'attributes', 'product_id'],
-      include: [{// Notice `include` takes an ARRAY
-        model: Product,
-        as: "products",
-        attributes: ['name', 'price']
-      }],
-      where: {
-        cart_id: inCartId
-      }
-    }).then((cart) => {
-      let total = 0;
-      let itemsList = []
-      cart.forEach((item, index) => {
-        let good = JSON.parse(JSON.stringify(item))
-        let attributes = good.attributes
-        let obj = {}
-        let quantity = good.quantity
-        Product.findByPk(good.product_id).then((product) => {
-          let productItem = JSON.parse(JSON.stringify(product))
-          let unit_cost = productItem.price
-          let subtotal = quantity * unit_cost
-          total = total + subtotal
-          obj.order_id = order_id
-          obj.product_id = productItem.product_id
-          obj.attributes = attributes
-          obj.product_name = productItem.name
-          obj.quantity = quantity
-          obj.unit_cost = unit_cost
-          itemsList.push(obj)
-          if (!cart[index + 1]) {
-            console.log(itemsList)
-            //bulk create orders details
-            OrderDetail.bulkCreate(itemsList)
-              .then(() => {
-                currentOrder.update({
-                  total_amount: total
-                }).then(() => {
-                  res.send(total_amount);
-
+      order: [['created_on', 'DESC']],
+    }).then((currentOrder) => {
+      let order_id = JSON.parse(JSON.stringify(currentOrder)).order_id
+      ShoppingCart.findAll({
+        attributes: ['quantity', 'attributes', 'product_id'],
+        include: [{// Notice `include` takes an ARRAY
+          model: Product,
+          as: "products",
+          attributes: ['name', 'price']
+        }],
+        where: {
+          cart_id: inCartId
+        }
+      }).then((cart) => {
+        let total = 0;
+        let itemsList = []
+        cart.forEach((item, index) => {
+          let good = JSON.parse(JSON.stringify(item))
+          let attributes = good.attributes
+          let obj = {}
+          let quantity = good.quantity
+          Product.findByPk(good.product_id).then((product) => {
+            let productItem = JSON.parse(JSON.stringify(product))
+            let unit_cost = productItem.price
+            let subtotal = quantity * unit_cost
+            total = total + subtotal
+            obj.order_id = order_id
+            obj.product_id = productItem.product_id
+            obj.attributes = attributes
+            obj.product_name = productItem.name
+            obj.quantity = quantity
+            obj.unit_cost = unit_cost
+            itemsList.push(obj)
+            if (!cart[index + 1]) {
+              console.log("list the items list")
+              //console.log(itemsList)
+              //bulk create orders details
+              OrderDetail.bulkCreate(itemsList)
+                .then((returneddetails) => {
+                  console.log("list the details")
+                  console.log(returneddetails)
+                  currentOrder.update({
+                    total_amount: total
+                  }).then(() => {
+                    transporter.sendMail({
+                      from: '"Nax Oduor 👻" <naxoduor7@gmail.com>',
+                      to: "naxochieng86@gmail.com",
+                      subject: "Hello ✔",
+                      text: "Hello world?",
+                      html: `<h1>Order Details!</h1></br><p>${JSON.stringify(returneddetails)}">Click here to change password</a></p>`
+                    }, function(err, info){
+                  if(err){
+                  console.log("encountered error")
+                  res.status(404).json("email not in db")
+                  }
+                  else{
+                  console.log("email sent")
+                  res.send("recovery email sent")
+                  }
+                  });
+                    res.send(returneddetails);
+                  })
                 })
-              })
-          }
+            }
+          })
         })
       })
     })
-  })
   })
 });
 

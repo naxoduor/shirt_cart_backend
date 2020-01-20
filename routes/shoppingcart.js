@@ -47,7 +47,10 @@ router.get('/:cart_id', (req, res) => {
         })
       })
     })
-    .catch(console.error)
+    .catch(error=>{
+      console.log("found the error")
+      res.send(error);
+    })
 })
 
 router.post('/add', (req, res) => {
@@ -106,26 +109,91 @@ router.post('/add', (req, res) => {
       entry.update({
         quantity: quantity
       }).then((cart) => {
-        res.send(cart)
+        ShoppingCart.findAll({
+          where: {
+            cart_id: cartId
+          },
+          include: [{
+            model: Product,
+            attributes: ['name', 'price', 'description', 'image']
+          }]
+        })
+          .then((cart) => {
+            cart.forEach((item,index) => {
+              let cartItem = JSON.parse(JSON.stringify(item))
+              Product.findByPk(cartItem.product_id).then((product) => {
+                let obj = {}
+                obj.item_id = cartItem.item_id
+                obj.attributes = cartItem.attributes
+                obj.quantity = cartItem.quantity
+                obj.name = product.name
+                obj.price = product.price
+                obj.description = product.description
+                obj.image = product.image
+                cartList.push(obj)
+                if (!cart[index + 1]) {
+                  console.log(cartList)
+                  res.send(cartList)
+                }
+              })
+            })
+          }).catch(err=>console.log(err))
+        
       }).catch(console.error)
     }
   }).catch(console.error)
     .catch(err => console.log(err));
 });
 
-router.put('/update/:item_id', (req, res) => {
+router.put('/update/:joined_ids', (req, res) => {
+  console.log("update the item")
   
-  let inItemId = req.params.item_id
-  let quantity = req.body.params.quantity
+  let joined_ids = req.params.joined_ids
+  let arrc=joined_ids.split('&')
+  let inItemId = arrc[0]
+  let cartId = arrc[arrc.length-1]
+  let cartList = []
+  let { quantity } = req.body.params
+
   ShoppingCart.findByPk(inItemId).then((entry) => {
-  
+    console.log("found an entry")
       entry.update({
         quantity: quantity
       }).then((cart) => {
-      res.send(cart)  
-      }).catch(console.error)    
+        ShoppingCart.findAll({
+          where: {
+            cart_id: cartId
+          },
+          include: [{
+            model: Product,
+            attributes: ['name', 'price', 'description', 'image']
+          }]
+        })
+          .then((cart) => {
+            cart.forEach((item,index) => {
+              let cartItem = JSON.parse(JSON.stringify(item))
+              Product.findByPk(cartItem.product_id).then((product) => {
+                let obj = {}
+                obj.item_id = cartItem.item_id
+                obj.attributes = cartItem.attributes
+                obj.quantity = cartItem.quantity
+                obj.name = product.name
+                obj.price = product.price
+                obj.description = product.description
+                obj.image = product.image
+                cartList.push(obj)
+                if (!cart[index + 1]) {
+                  console.log("return the list")
+                  console.log(cartList)
+                  res.send(cartList)
+                }
+              })
+            })
+          }).catch(err=>console.log(err))
+      }).catch(err=>{
+        console.log(err)
+      })  
   }).catch(console.error)
-    .catch(err => console.log(err));
 });
 
 router.delete('/removeProduct/:joined_ids', (req, res) => {
@@ -151,6 +219,13 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
       }]
     })
       .then((cart) => {
+        console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+        console.log(cart)
+        if(cart === null || cart.length < 1 || cart == undefined){
+          console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+          res.status(404).json(cartList)
+        }
+        else{
         cart.forEach((item,index) => {
           let cartItem = JSON.parse(JSON.stringify(item))
           Product.findByPk(cartItem.product_id).then((product) => {
@@ -169,20 +244,37 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
             }
           })
         })
-      }).catch(err=>console.log(err))
-  }).catch(console.error)
-
-});
-
-router.get('/totalAmount/:cart_id', (req, res) => {
-  let inCartId = req.params.cart_id
-  ShoppingCart.findOne({
-    where: {
-      cart_id: inCartId
-    }
-  }).then((cart) => {
-    console.log(cart.getProducts())
+      }
+      }).catch(err=>{
+        res.send(err)
+      })
+  }).catch(error=>{
+    res.send(error)
   })
 });
 
+/*router.get('/totalAmount/:cart_id', (req, res) => {
+  let inCartId = req.params.cart_id
+  console.log("find total amount")
+  ShoppingCart.findAll({
+      attributes: ['cart_id', [ShoppingCart.sequelize.fn('sum', ShoppingCart.sequelize.col('amount')), 'total']],
+      //attributes: [[db.sequelize.literal('SUM(col_a * col_b)'), 'result']],
+      group : ['cart_id'],
+      raw: true,
+    where: {
+      cart_id: "zoyooyACNJ6M1pJuKsysoApzsq6xF2Gy"
+    },
+  }).then((cart) => {
+    
+    if(cart === null || cart.length < 1 || cart == undefined){
+      let cartlist=[]
+      r
+    }
+    else{
+      console.log(cart)
+      res.send(cart)
+      }
+  })
+});
+*/
 module.exports = router

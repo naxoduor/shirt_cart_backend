@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 
-module.exports = new Sequelize('shirts7', 'root', 'naishiluj2', {
+module.exports = new Sequelize('test100', 'root', 'root', {
     host: 'localhost',
     dialect: 'mysql',
 
