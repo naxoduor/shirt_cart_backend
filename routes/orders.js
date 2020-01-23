@@ -12,11 +12,11 @@ let transporter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    type: 'oauth2',
-    user: 'naxoduor7@gmail.com',
-    clientId: '71771216898-1in4nraife9e3r832ju00vrsgr2mpgtf.apps.googleusercontent.com',
-    clientSecret: 'Dh8eEO0HrIfuWPyK_bozEdvD',
-    refreshToken: '1//04fZ_LhWGcY5KCgYIARAAGAQSNwF-L9IrNgsSMVWZGrJoe2zGxijLL3iaiPg6CmgQk5AdFsFXytIq_Oq4al56Xj96nIYpd47L-00',
+    type: '',
+    user: '',
+    clientId: '',
+    clientSecret: '',
+    refreshToken: '',
   }
 });
 
