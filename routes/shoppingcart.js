@@ -24,13 +24,15 @@ router.get('/:cart_id', (req, res) => {
     },
     include: [{
       model: Product,
-      attributes: ['name', 'price', 'description', 'image']
+      attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
     }]
   })
     .then((cart) => {
       cart.forEach((item,index) => {
         let cartItem = JSON.parse(JSON.stringify(item))
         Product.findByPk(cartItem.product_id).then((product) => {
+          console.log("print product")
+          console.log(product)
           let obj = {}
           obj.item_id = cartItem.item_id
           obj.attributes = cartItem.attributes
@@ -39,6 +41,7 @@ router.get('/:cart_id', (req, res) => {
           obj.price = product.price
           obj.description = product.description
           obj.image = product.image
+          obj.delivery_cost=product.delivery_cost
           cartList.push(obj)
           if (!cart[index + 1]) {
             console.log(cartList)
@@ -79,7 +82,7 @@ router.post('/add', (req, res) => {
             },
             include: [{
               model: Product,
-              attributes: ['name', 'price', 'description', 'image']
+              attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
             }]
           })
             .then((cart) => {
@@ -94,6 +97,7 @@ router.post('/add', (req, res) => {
                   obj.price = product.price
                   obj.description = product.description
                   obj.image = product.image
+                  obj.delivery_cost=product.delivery_cost
                   cartList.push(obj)
                   if (!cart[index + 1]) {
                     console.log(cartList)
@@ -115,7 +119,7 @@ router.post('/add', (req, res) => {
           },
           include: [{
             model: Product,
-            attributes: ['name', 'price', 'description', 'image']
+            attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
           }]
         })
           .then((cart) => {
@@ -130,6 +134,7 @@ router.post('/add', (req, res) => {
                 obj.price = product.price
                 obj.description = product.description
                 obj.image = product.image
+                obj.delivery_cost=product.delivery_cost
                 cartList.push(obj)
                 if (!cart[index + 1]) {
                   console.log(cartList)
@@ -166,7 +171,7 @@ router.put('/update/:joined_ids', (req, res) => {
           },
           include: [{
             model: Product,
-            attributes: ['name', 'price', 'description', 'image']
+            attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
           }]
         })
           .then((cart) => {
@@ -181,6 +186,7 @@ router.put('/update/:joined_ids', (req, res) => {
                 obj.price = product.price
                 obj.description = product.description
                 obj.image = product.image
+                obj.delivery_cost=product.delivery_cost
                 cartList.push(obj)
                 if (!cart[index + 1]) {
                   console.log("return the list")
@@ -215,14 +221,12 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
       },
       include: [{
         model: Product,
-        attributes: ['name', 'price', 'description', 'image']
+        attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
       }]
     })
       .then((cart) => {
-        console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
         console.log(cart)
         if(cart === null || cart.length < 1 || cart == undefined){
-          console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
           res.status(404).json(cartList)
         }
         else{
@@ -237,6 +241,7 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
             obj.price = product.price
             obj.description = product.description
             obj.image = product.image
+            obj.delivery_cost=product.delivery_cost
             cartList.push(obj)
             if (!cart[index + 1]) {
               console.log(cartList)

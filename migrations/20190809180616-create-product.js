@@ -23,6 +23,9 @@ module.exports = {
       discounted_price: {
         type: Sequelize.DECIMAL
       },
+      delivery_cost: {
+        type: Sequelize.DECIMAL
+      },
       image: {
         type: Sequelize.STRING
       },

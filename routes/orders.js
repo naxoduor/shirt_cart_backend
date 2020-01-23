@@ -12,11 +12,11 @@ let transporter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    type: '',
-    user: '',
-    clientId: '',
-    clientSecret: '',
-    refreshToken: '',
+    type: 'oauth2',
+    user: 'naxoduor7@gmail.com',
+    clientId: '71771216898-1in4nraife9e3r832ju00vrsgr2mpgtf.apps.googleusercontent.com',
+    clientSecret: 'Dh8eEO0HrIfuWPyK_bozEdvD',
+    refreshToken: '1//04fZ_LhWGcY5KCgYIARAAGAQSNwF-L9IrNgsSMVWZGrJoe2zGxijLL3iaiPg6CmgQk5AdFsFXytIq_Oq4al56Xj96nIYpd47L-00',
   }
 });
 
@@ -54,6 +54,7 @@ router.post('/', (req, res) => {
         }
       }).then((cart) => {
         let total = 0;
+        let totalDelivery=0;
         let itemsList = []
         cart.forEach((item, index) => {
           let good = JSON.parse(JSON.stringify(item))
@@ -64,13 +65,17 @@ router.post('/', (req, res) => {
             let productItem = JSON.parse(JSON.stringify(product))
             let unit_cost = productItem.price
             let subtotal = quantity * unit_cost
+            let delivery_cost = productItem.delivery_cost
+            let subtotalDelivery = quantity * delivery_cost
             total = total + subtotal
+            totalDelivery = totalDelivery + subtotalDelivery
             obj.order_id = order_id
             obj.product_id = productItem.product_id
             obj.attributes = attributes
             obj.product_name = productItem.name
             obj.quantity = quantity
             obj.unit_cost = unit_cost
+            obj.delivery_cost = delivery_cost
             itemsList.push(obj)
             if (!cart[index + 1]) {
               console.log("list the items list")
@@ -88,15 +93,16 @@ router.post('/', (req, res) => {
                       to: "naxochieng86@gmail.com",
                       subject: "Hello ✔",
                       text: "Hello world?",
-                      html: `<h1>Order Details!</h1></br><p>${JSON.stringify(returneddetails)}">Click here to change password</a></p>`
+                      html: `<h1>Order Details!</h1></br><p> The item details are ${JSON.stringify(returneddetails)}
+                       and the total amount is ${total + totalDelivery}</p>`
                     }, function(err, info){
                   if(err){
                   console.log("encountered error")
-                  res.status(404).json("email not in db")
+                  console.log(err)
                   }
                   else{
                   console.log("email sent")
-                  res.send("recovery email sent")
+                  console.log("we have succesfully sent the email")
                   }
                   });
                     res.send(returneddetails);

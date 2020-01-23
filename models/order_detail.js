@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     attributes: DataTypes.STRING,
     product_name: DataTypes.STRING,
     quantity: DataTypes.INTEGER,
-    unit_cost: DataTypes.DECIMAL
+    unit_cost: DataTypes.DECIMAL,
+    delivery_cost: DataTypes.DECIMAL
   }, {
       timestamps: false,
       freezeTableName: true,
