@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     customer_id: DataTypes.INTEGER,
     auth_code: DataTypes.STRING,
     reference: DataTypes.STRING,
-    shipping_id: DataTypes.INTEGER,
+    shipping_region_id: DataTypes.INTEGER,
     tax_id: DataTypes.INTEGER
   }, {
     timestamps: false,
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "customer_id"
     }),
     order.belongsTo(models.shipping, {
-      foreignKey: "shipping_id"
+      foreignKey: "shipping_region_id"
     }),
     order.belongsTo(models.tax, {
       foreignKey: "tax_id"

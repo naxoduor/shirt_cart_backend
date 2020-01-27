@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
     order_id: null,
     created_on: new Date(),
     customer_id: inCustomerId,
-    shipping_id: inShippingId,
+    shipping_region_id: inShippingId,
     tax_id: inTaxId
   })
   newOrder.save().then((orderItem) => {

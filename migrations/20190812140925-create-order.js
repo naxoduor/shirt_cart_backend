@@ -35,7 +35,7 @@ module.exports = {
       reference: {
         type: Sequelize.STRING
       },
-      shipping_id: {
+      shipping_region_id: {
         type: Sequelize.INTEGER
       },
       tax_id: {
