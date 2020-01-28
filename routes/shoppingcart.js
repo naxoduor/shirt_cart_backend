@@ -35,7 +35,6 @@ router.get('/:cart_id', (req, res) => {
           console.log(product)
           let obj = {}
           obj.item_id = cartItem.item_id
-          obj.attributes = cartItem.attributes
           obj.quantity = cartItem.quantity
           obj.name = product.name
           obj.price = product.price
@@ -58,13 +57,12 @@ router.get('/:cart_id', (req, res) => {
 
 router.post('/add', (req, res) => {
   
-  let {cartId, productId, attributes, quantity } = req.body.params
+  let {cartId, productId,quantity } = req.body.params
   let cartList = []
   ShoppingCart.findOne({
     where: {
       cart_id: cartId,
-      product_id: productId,
-      attributes: attributes
+      product_id: productId
     }
   }).then((entry) => {
     if (!entry) {
@@ -72,7 +70,6 @@ router.post('/add', (req, res) => {
           item_id: uuidv1(),
           cart_id: cartId,
           product_id: productId,
-          attributes: attributes,
           quantity: quantity,
           added_on: new Date()
         }).then((cart) => {
@@ -91,7 +88,6 @@ router.post('/add', (req, res) => {
                 Product.findByPk(cartItem.product_id).then((product) => {
                   let obj = {}
                   obj.item_id = cartItem.item_id
-                  obj.attributes = cartItem.attributes
                   obj.quantity = cartItem.quantity
                   obj.name = product.name
                   obj.price = product.price
@@ -128,7 +124,6 @@ router.post('/add', (req, res) => {
               Product.findByPk(cartItem.product_id).then((product) => {
                 let obj = {}
                 obj.item_id = cartItem.item_id
-                obj.attributes = cartItem.attributes
                 obj.quantity = cartItem.quantity
                 obj.name = product.name
                 obj.price = product.price
@@ -180,7 +175,6 @@ router.put('/update/:joined_ids', (req, res) => {
               Product.findByPk(cartItem.product_id).then((product) => {
                 let obj = {}
                 obj.item_id = cartItem.item_id
-                obj.attributes = cartItem.attributes
                 obj.quantity = cartItem.quantity
                 obj.name = product.name
                 obj.price = product.price
@@ -235,7 +229,6 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
           Product.findByPk(cartItem.product_id).then((product) => {
             let obj = {}
             obj.item_id = cartItem.item_id
-            obj.attributes = cartItem.attributes
             obj.quantity = cartItem.quantity
             obj.name = product.name
             obj.price = product.price
