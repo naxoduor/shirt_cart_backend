@@ -27,7 +27,7 @@ app.use(function(req, res, next) {
 })
 
 app.use(cors({
-    origin: 'http://104.248.73.139',
+    origin: 'http://www.powerafrica.co.ke',
     credentials: true,
   })
   )
