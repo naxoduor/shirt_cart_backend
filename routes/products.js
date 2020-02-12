@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
       model: Category,
       where: { department_id: inDepartmentId },
     }],
+    where: { display: 0 },
     offset: 1,
     limit: 8
   })
@@ -41,6 +42,7 @@ router.get('/inDepartment/:id', (req, res) => {
       model: Category,
       where: { department_id: inDepartmentId },
     }],
+    where: { display: 0 },
     offset: 1,
     limit: 8
   })
@@ -69,6 +71,7 @@ router.get('/inCategory/:id', (req, res) => {
       model: Category,
       where: { category_id: inCategorytId },
     }],
+    where: { display: 0 },
     offset: 1,
     limit: 8
   })
@@ -97,6 +100,7 @@ router.post('/inCategory/pagination/:id', (request, response) => {
       model: Category,
       where: { category_id: category_id },
     }],
+    where: { display: 0 },
     offset: startItem,
     limit: productsPerPage
   })
@@ -123,6 +127,7 @@ router.post('/inDepartment/pagination/:id', (request, response) => {
       model: Category,
       where: { department_id: department_id },
     }],
+    where: { display: 0 },
     offset: startItem,
     limit: productsPerPage
   })
