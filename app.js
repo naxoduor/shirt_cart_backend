@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.get('/', (req,res) => res.send(`INDEX`));
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 app.use('/products', require('./routes/products'))
 app.use('/categories', require('./routes/categories'))
