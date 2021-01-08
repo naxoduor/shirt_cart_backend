@@ -15,7 +15,7 @@ db.authenticate()
 const app = express();
 
 app.use(function(req, res, next) {
-  var allowedOrigins = ['http://104.248.73.139', 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', 'https://sandbox.safaricom.co.ke'];
+  var allowedOrigins = ['http://127.0.0.1', 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', 'https://sandbox.safaricom.co.ke'];
   var origin = req.headers.origin;
   if(allowedOrigins.indexOf(origin) > -1){
        res.setHeader('Access-Control-Allow-Origin', origin);
@@ -27,7 +27,7 @@ app.use(function(req, res, next) {
 })
 
 app.use(cors({
-    origin: 'http://www.powerafrica.co.ke',
+    origin: 'http://127.0.0.1',
     credentials: true,
   })
   )

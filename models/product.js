@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     });
   product.associate = function (models) {
-    // associations can be defined here
+    // associations can be defined heresss
     
     product.belongsToMany(models.category, {
       foreignKey:"product_id",
