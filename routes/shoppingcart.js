@@ -1,9 +1,16 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router()
 //const cache = require('../config/cache')
 const ShoppingCart = require('../models').shopping_cart
 const Product = require('../models').product
 const uuidv1 = require('uuid/v1');
+
+router.get('/', (req, res)=>{
+  console.log("add shopping cart")
+  console.log(req)
+  res.send("success")
+})
+
 
 router.get('/generateUniqueId', (req, res) => {
   let cart_id = ""
@@ -13,51 +20,18 @@ router.get('/generateUniqueId', (req, res) => {
   res.send(cart_id)
 })
 
-router.get('/:cart_id', (req, res) => {
-  console.log("get cart items")
-  let inCartId = req.params.cart_id
-  console.log(inCartId)
-  let cartList = []
-  ShoppingCart.findAll({
-    where: {
-      cart_id: inCartId
-    },
-    include: [{
-      model: Product,
-      attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
-    }]
-  })
-    .then((cart) => {
-      cart.forEach((item,index) => {
-        let cartItem = JSON.parse(JSON.stringify(item))
-        Product.findByPk(cartItem.product_id).then((product) => {
-          console.log("print product")
-          console.log(product)
-          let obj = {}
-          obj.item_id = cartItem.item_id
-          obj.quantity = cartItem.quantity
-          obj.name = product.name
-          obj.price = product.price
-          obj.description = product.description
-          obj.image = product.image
-          obj.delivery_cost=product.delivery_cost
-          cartList.push(obj)
-          if (!cart[index + 1]) {
-            console.log(cartList)
-            res.send(cartList)
-          }
-        })
-      })
-    })
-    .catch(error=>{
-      console.log("found the error")
-      res.send(error);
-    })
+router.get('/add', (req, res)=>{
+  console.log("add shopping cart")
+  console.log(req)
+  res.send("success")
 })
 
+
 router.post('/add', (req, res) => {
-  
+  console.log("add the product on post request")
   let {cartId, productId,quantity } = req.body.params
+  console.log(req.body.params)
+  console.log(cartId, productId, quantity)
   let cartList = []
   ShoppingCart.findOne({
     where: {
@@ -83,6 +57,7 @@ router.post('/add', (req, res) => {
             }]
           })
             .then((cart) => {
+              console.log("inserted")
               cart.forEach((item,index) => {
                 let cartItem = JSON.parse(JSON.stringify(item))
                 Product.findByPk(cartItem.product_id).then((product) => {
@@ -96,13 +71,18 @@ router.post('/add', (req, res) => {
                   obj.delivery_cost=product.delivery_cost
                   cartList.push(obj)
                   if (!cart[index + 1]) {
-                    console.log(cartList)
                     res.send(cartList)
                   }
                 })
               })
-            }).catch(err=>console.log(err))
-        }).catch(console.error)
+            }).catch(err=>{
+            console.log("error finding all ")
+            })
+              
+        }).catch(error=>{
+          console.log("error creating")
+          console.log(error)
+        })
 
     }
     else {
@@ -144,6 +124,98 @@ router.post('/add', (req, res) => {
   }).catch(console.error)
     .catch(err => console.log(err));
 });
+
+
+// router.get('/:cart_id', (req, res) => {
+//   console.log("get cart items")
+//   let inCartId = req.params.cart_id
+//   console.log(inCartId)
+//   let cartList = []
+//   ShoppingCart.findAll({
+//     where: {
+//       cart_id: inCartId
+//     },
+//     include: [{
+//       model: Product,
+//       attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
+//     }]
+//   })
+//     .then((cart) => {
+//       console.log("found the items")
+//       console.log(cart)
+//       cart.forEach((item,index) => {
+//         let cartItem = JSON.parse(JSON.stringify(item))
+//         Product.findByPk(cartItem.product_id).then((product) => {
+//           console.log("print product")
+//           console.log(product)
+//           let obj = {}
+//           obj.item_id = cartItem.item_id
+//           obj.quantity = cartItem.quantity
+//           obj.name = product.name
+//           obj.price = product.price
+//           obj.description = product.description
+//           obj.image = product.image
+//           obj.delivery_cost=product.delivery_cost
+//           cartList.push(obj)
+//           if (!cart[index + 1]) {
+//             console.log(cartList)
+//             res.send(cartList)
+//           }
+//         })
+//       })
+//     })
+//     .catch(error=>{
+//       console.log("found an error in fetching cart")
+//       console.log(error)
+//       res.send(error);
+//     })
+// })
+
+router.post('/:cart_id', (req, res) => {
+  console.log("get cart items in post request")
+  const {inCartId} = req.body.params
+  console.log(inCartId)
+  let cartList = []
+  ShoppingCart.findAll({
+    where: {
+      cart_id: inCartId
+    },
+    include: [{
+      model: Product,
+      attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
+    }]
+  })
+    .then((cart) => {
+      console.log("found the items")
+      console.log(cart)
+      cart.forEach((item,index) => {
+        let cartItem = JSON.parse(JSON.stringify(item))
+        Product.findByPk(cartItem.product_id).then((product) => {
+          let obj = {}
+          obj.item_id = cartItem.item_id
+          obj.quantity = cartItem.quantity
+          obj.name = product.name
+          obj.price = product.price
+          obj.description = product.description
+          obj.image = product.image
+          obj.delivery_cost=product.delivery_cost
+          cartList.push(obj)
+          console.log(cartList)
+          if (!cart[index + 1]) {
+            res.send(cartList)
+          }
+        })
+      })
+    })
+    .catch(error=>{
+      console.log("found an error in fetching cart")
+      console.log(error)
+      res.send(error);
+    })
+})
+
+
+
 
 router.put('/update/:joined_ids', (req, res) => {
   console.log("update the item")

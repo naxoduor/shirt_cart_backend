@@ -12,14 +12,18 @@ module.exports = {
         type: Sequelize.STRING
       },
       cart_id: {
-        type: Sequelize.CHAR
+        type: Sequelize.STRING
       },
       product_id: {
         type: Sequelize.INTEGER
       },
       attributes: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        defaultValue: "Large Size",
       },
+      // attributes: {
+      //   type: Sequelize.STRING
+      // },
       quantity: {
         type: Sequelize.INTEGER
       },

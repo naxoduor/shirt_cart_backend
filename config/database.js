@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 
-module.exports = new Sequelize('solareq2', 'root', 'admin', {
+module.exports = new Sequelize('energy', 'root', 'password', {
     host: 'localhost',
     dialect: 'mysql',
 

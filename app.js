@@ -14,24 +14,28 @@ db.authenticate()
 .catch(err => console.log('Error ' + err))
 const app = express();
 
-app.use(function(req, res, next) {
-  var allowedOrigins = ['http://127.0.0.1', 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', 'https://sandbox.safaricom.co.ke'];
-  var origin = req.headers.origin;
-  if(allowedOrigins.indexOf(origin) > -1){
-       res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', true);
-  return next();
-})
+// app.use(function(req, res, next) {
+//   var allowedOrigins = ['http://localhost:3000/', 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', 'https://sandbox.safaricom.co.ke'];
+//   var origin = req.headers.origin;
+//   if(allowedOrigins.indexOf(origin) > -1){
+//        res.setHeader('Access-Control-Allow-Origin', origin);
+//   }
+//   res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   res.header('Access-Control-Allow-Credentials', true);
+//   return next();
+// })
 
-app.use(cors({
-    origin: 'http://127.0.0.1',
-    credentials: true,
-  })
-  )
+// app.use(cors({
+//     origin: 'http://localhost:3000/',
+//     credentials: true,
+//   })
+//   )
   
+app.use(cors({
+  origin: '*'
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());

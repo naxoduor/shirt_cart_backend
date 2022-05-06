@@ -5,10 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     item_id: {
       type: DataTypes.STRING,
       primaryKey: true
-    },
-    cart_id: DataTypes.CHAR,
+    },                                                                
+    cart_id: DataTypes.STRING,
     product_id: DataTypes.INTEGER,
-    attributes: DataTypes.STRING,
+    attributes: {
+      type: DataTypes.STRING,
+      defaultValue: "Large Size",
+    },
+    // attributes: DataTypes.STRING,
     quantity: DataTypes.INTEGER,
     buy_now: DataTypes.BOOLEAN,
     added_on: DataTypes.DATE

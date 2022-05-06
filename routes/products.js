@@ -15,11 +15,11 @@ router.get('/', (req, res) => {
   Product.findAll({
     include: [{// Notice `include` takes an ARRAY
       model: Category,
-      where: { department_id: inDepartmentId },
+      //where: { department_id: inDepartmentId },
     }],
-    where: { display: 0 },
-    offset: 1,
-    limit: 8
+    // where: { display: 0 },
+    // offset: 1,
+    // limit: 8
   })
     .then(products => res.send(products))
     .catch(console.error)
@@ -203,6 +203,25 @@ router.get('/rabbit', (req, res) => {
 })
       })
     .catch(console.error)
+})
+
+router.post('/addproduct',(req,res)=>{
+  let {name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display} = req.body.params
+  Product.create({
+    name:name,
+    description:description,
+    price:price,
+    discounted_price:discounted_price,
+    delivery_cost:delivery_cost,
+    image:image,
+    image2:image2,
+    thumbnail:thumbnail,
+    display:display
+  }).then((product)=>{
+    res.send(product)
+  }).catch((error)=>{
+    console.log(error)
+  })
 })
 
 module.exports = router
