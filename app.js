@@ -1,17 +1,12 @@
 const express = require('express');
 var cors = require('cors');
 const passport = require('passport')
-const Product = require('./models').product
-const Category = require('./models').category
-const ShoppingCart = require('./models').shopping_cart
-const Order = require('./models').order
-const OrderDetail = require('./models').order_detail
 
 const db = require('./config/database')
 require('./config/passport')
 db.authenticate()
-.then(() => console.log('Database connected...'))
-.catch(err => console.log('Error ' + err))
+.then(() => console.log('Database connected Sucessfully........................'))
+.catch(err => console.log('Error Connecting to database......................................' + err))
 const app = express();
 
 // app.use(function(req, res, next) {

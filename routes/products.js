@@ -10,7 +10,10 @@ const Sequelize = require('sequelize')
 var amqp = require('amqplib/callback_api');
 
 router.get('/', (req, res) => {
-
+console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+db.authenticate()
+.then(() => console.log('Database connected Sucessfully........................'))
+.catch(err => console.log('Error Connecting to database......................................' + err))
   let inDepartmentId = 1
   Product.findAll({
     include: [{// Notice `include` takes an ARRAY
@@ -186,7 +189,6 @@ router.get('/rabbit', (req, res) => {
             throw error1;
         }
         console.log("This are the products")
-        console.log(products)
         var queue = 'hello';
         var msg = JSON.stringify(products);
 

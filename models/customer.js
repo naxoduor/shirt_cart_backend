@@ -1,4 +1,8 @@
 'use strict';
+const Role={
+  MEMBER:'MEMBER',
+  ADMIN:'ADMIN'
+}
 module.exports = (sequelize, DataTypes) => {
   const customer = sequelize.define('customer', {
     customer_id: {
@@ -18,7 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     shipping_region_id: DataTypes.INTEGER,
     day_phone: DataTypes.STRING,
     eve_phone: DataTypes.STRING,
-    mob_phone: DataTypes.STRING
+    mob_phone: DataTypes.STRING,
+    role: {
+      type:DataTypes.STRING,
+      defaultValue:Role.MEMBER
+    }
   }, {
       timestamps: false,
       freezeTableName: true,

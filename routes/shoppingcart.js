@@ -6,8 +6,6 @@ const Product = require('../models').product
 const uuidv1 = require('uuid/v1');
 
 router.get('/', (req, res)=>{
-  console.log("add shopping cart")
-  console.log(req)
   res.send("success")
 })
 
@@ -21,8 +19,6 @@ router.get('/generateUniqueId', (req, res) => {
 })
 
 router.get('/add', (req, res)=>{
-  console.log("add shopping cart")
-  console.log(req)
   res.send("success")
 })
 
@@ -30,8 +26,6 @@ router.get('/add', (req, res)=>{
 router.post('/add', (req, res) => {
   console.log("add the product on post request")
   let {cartId, productId,quantity } = req.body.params
-  console.log(req.body.params)
-  console.log(cartId, productId, quantity)
   let cartList = []
   ShoppingCart.findOne({
     where: {
@@ -53,11 +47,10 @@ router.post('/add', (req, res) => {
             },
             include: [{
               model: Product,
-              attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
+              attributes: ['name', 'price', 'description', 'image']
             }]
           })
             .then((cart) => {
-              console.log("inserted")
               cart.forEach((item,index) => {
                 let cartItem = JSON.parse(JSON.stringify(item))
                 Product.findByPk(cartItem.product_id).then((product) => {
@@ -68,7 +61,6 @@ router.post('/add', (req, res) => {
                   obj.price = product.price
                   obj.description = product.description
                   obj.image = product.image
-                  obj.delivery_cost=product.delivery_cost
                   cartList.push(obj)
                   if (!cart[index + 1]) {
                     res.send(cartList)
@@ -95,7 +87,7 @@ router.post('/add', (req, res) => {
           },
           include: [{
             model: Product,
-            attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
+            attributes: ['name', 'price', 'description', 'image']
           }]
         })
           .then((cart) => {
@@ -109,10 +101,8 @@ router.post('/add', (req, res) => {
                 obj.price = product.price
                 obj.description = product.description
                 obj.image = product.image
-                obj.delivery_cost=product.delivery_cost
                 cartList.push(obj)
                 if (!cart[index + 1]) {
-                  console.log(cartList)
                   res.send(cartList)
                 }
               })
@@ -174,7 +164,6 @@ router.post('/add', (req, res) => {
 router.post('/:cart_id', (req, res) => {
   console.log("get cart items in post request")
   const {inCartId} = req.body.params
-  console.log(inCartId)
   let cartList = []
   ShoppingCart.findAll({
     where: {
@@ -182,12 +171,10 @@ router.post('/:cart_id', (req, res) => {
     },
     include: [{
       model: Product,
-      attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
+      attributes: ['name', 'price', 'description', 'image']
     }]
   })
     .then((cart) => {
-      console.log("found the items")
-      console.log(cart)
       cart.forEach((item,index) => {
         let cartItem = JSON.parse(JSON.stringify(item))
         Product.findByPk(cartItem.product_id).then((product) => {
@@ -198,9 +185,7 @@ router.post('/:cart_id', (req, res) => {
           obj.price = product.price
           obj.description = product.description
           obj.image = product.image
-          obj.delivery_cost=product.delivery_cost
           cartList.push(obj)
-          console.log(cartList)
           if (!cart[index + 1]) {
             res.send(cartList)
           }
@@ -209,7 +194,6 @@ router.post('/:cart_id', (req, res) => {
     })
     .catch(error=>{
       console.log("found an error in fetching cart")
-      console.log(error)
       res.send(error);
     })
 })
@@ -218,7 +202,6 @@ router.post('/:cart_id', (req, res) => {
 
 
 router.put('/update/:joined_ids', (req, res) => {
-  console.log("update the item")
   
   let joined_ids = req.params.joined_ids
   let arrc=joined_ids.split('&')
@@ -238,7 +221,7 @@ router.put('/update/:joined_ids', (req, res) => {
           },
           include: [{
             model: Product,
-            attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
+            attributes: ['name', 'price', 'description', 'image']
           }]
         })
           .then((cart) => {
@@ -252,11 +235,9 @@ router.put('/update/:joined_ids', (req, res) => {
                 obj.price = product.price
                 obj.description = product.description
                 obj.image = product.image
-                obj.delivery_cost=product.delivery_cost
                 cartList.push(obj)
                 if (!cart[index + 1]) {
                   console.log("return the list")
-                  console.log(cartList)
                   res.send(cartList)
                 }
               })
@@ -287,11 +268,10 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
       },
       include: [{
         model: Product,
-        attributes: ['name', 'price', 'description', 'image', 'delivery_cost']
+        attributes: ['name', 'price', 'description', 'image']
       }]
     })
       .then((cart) => {
-        console.log(cart)
         if(cart === null || cart.length < 1 || cart == undefined){
           res.status(404).json(cartList)
         }
@@ -306,7 +286,6 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
             obj.price = product.price
             obj.description = product.description
             obj.image = product.image
-            obj.delivery_cost=product.delivery_cost
             cartList.push(obj)
             if (!cart[index + 1]) {
               console.log(cartList)

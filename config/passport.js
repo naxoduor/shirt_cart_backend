@@ -7,7 +7,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const BearerStrategy = require('passport-http-bearer')
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const jwt= require('jsonwebtoken')
@@ -36,7 +36,6 @@ passport.use(
                     },
                 }).then(customer => {
                     if (customer != null) {
-                        console.log('username or email already taken');
                         return done(null, false, {
                             message: 'username or email already taken',
                         });
@@ -48,7 +47,6 @@ passport.use(
                             email: req.body.email,
                             mob_phone: req.body.mobile
                         }).then(user => {
-                            console.log('user created');
                             return done(null, user);
                         });
                     });
@@ -72,7 +70,6 @@ passport.use(
         (email, password, done) => {
             
             try {
-                console.log("loooooooooooooooooooooooooooooogin")
                 Customer.findOne({
                     where: {
                         email: email
@@ -88,7 +85,6 @@ passport.use(
                             console.log('passwords do not match');
                             return done(null, false, { message: 'passwords do not match' });
                         }
-                        console.log('user found and authenticated');
                         return done(null, user)
                     });
                 });
@@ -103,16 +99,12 @@ passport.use(
     'bearer',
     new BearerStrategy(
     function(token, done){
-        console.log("the request is")
-        console.log(token)
         console.log("verify the token given")
         jwt.verify(token, "jwt-secret", function(err, customer){
             if(err) {
                 //console.log(err)
                 return done(err)
             }
-            console.log("print the user")
-            console.log(customer)
             return done(null, customer ? customer : false);
         })
     }

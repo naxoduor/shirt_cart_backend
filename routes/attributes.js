@@ -10,10 +10,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/inAttribute/:id', (req, res) => {
-  console.log(req.url)
-  console.log("get attributes afresh")
   let inProductId = req.params.id
-  console.log(inProductId)
   Promise.all([
   AttributeValue.findAll({
     include: [{
@@ -30,8 +27,6 @@ router.get('/inAttribute/:id', (req, res) => {
     where: { attribute_id: 2}
   })
 ]).spread((sizeAttributes, colorAttributes)=> {
-        console.log(JSON.stringify(sizeAttributes))
-        console.log(JSON.stringify(colorAttributes))
         res.send({
           "sizeAttributes": sizeAttributes,
           "colorAttributes": colorAttributes

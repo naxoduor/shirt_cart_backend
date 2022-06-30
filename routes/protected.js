@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
         let result ={}
         result.mob_phone=customer.customer.mob_phone
         result.customer_id=customer.customer.customer_id
-        console.log(customer.customer.customer_id)
+        result.role=customer.customer.role
         console.log(result)
         res.send(result)        
     })(req, res, next);

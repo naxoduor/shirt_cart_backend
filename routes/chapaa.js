@@ -3,8 +3,6 @@ const router = express.Router()
 //const cache = require('../config/cache')
 
 router.get('/', (req, res)=>{
-    console.log("validate get request")
-    console.log(req.body)
     res.status(200).json({
         "ResultCode": 0,
         "ResultDesc": "Success",
@@ -13,8 +11,6 @@ router.get('/', (req, res)=>{
 })
 
 router.post('/', (req, res)=>{
-    console.log("validate get request")
-    console.log(req.body)
     res.status(200).json({
         "ResultCode": 0,
         "ResultDesc": "Success",
@@ -32,7 +28,6 @@ router.get('/validate', (req, res)=>{
 })
 
 router.post('/validate', (req, res)=>{
-	console.log("Validate te request")
 	res.status(200).json({
 	"ResultCode": 0,
 	"ResultDesc": "Success",
@@ -41,15 +36,12 @@ router.post('/validate', (req, res)=>{
 })
 
 router.post('/receive', (req, res) => {
-    console.log("receive the payment")
-    console.log(req.body)
     res.status(200).json({
         "C2BPaymentConfirmationResult":"Success"
     })
 })
 
 router.get('/receive', (req, res) => {
-	console.log("receive the payment")
 	res.status(200).json({
 	"C2BPaymentConfirmationResult":"Success"
 })

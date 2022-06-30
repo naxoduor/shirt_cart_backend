@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer')
 //const cache = require('../config/cache')
 const jwt = require('jsonwebtoken')
 const Customer = require('../models').customer
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const BCRYPT_SALT_ROUNDS = 12;
 
 let transporter = nodemailer.createTransport({
@@ -24,13 +24,12 @@ let transporter = nodemailer.createTransport({
 
 router.post('/login', (req, res, next) => {
     passport.authenticate('login', (err, customers, info) => {
-        console.log("top request")
+        console.log("login new customer")
         if (err) {
             console.error(`error ${err}`);
         }
         if (info !== undefined) {
             if (info.message === 'bad username') {
-                console.log("bad username")
                 res.status(401).send(info.message)
             } else {
                 res.status(403).send(info.message)
@@ -45,8 +44,7 @@ router.post('/login', (req, res, next) => {
                     const token = jwt.sign({ customer: customer}, jwtSecret.secret, {
                         expiresIn: 60 * 60, 
                     });
-                    console.log(token)
-                    res.status(200).json({token});
+                    res.status(200).json(token);
                 });
             });
         }
@@ -63,13 +61,11 @@ router.post('/', (req, res, next) => {
             res.status(403).send(info.message)
         } else {
             req.logIn(user, error => {
-                console.log(user);
                 let { username, email } = req.body
                 const data = {
                     username: username,
                     email: email
                 };
-                console.log(data)
                 Customer.findOne({
                     where: {
                         name: data.username,
@@ -93,9 +89,7 @@ router.get('/logout', (req, res) => {
     res.send("The user has been logge out")
 })
 
-router.post('/passwordreset', (req, res, next) => {
-        console.log("top request")
-        
+router.post('/passwordreset', (req, res, next) => {        
                 Customer.findOne({
                     where: {
                         email: req.body.email 
@@ -104,7 +98,6 @@ router.post('/passwordreset', (req, res, next) => {
                     const token = jwt.sign({ customer: customer}, jwtSecret.secret, {
                         expiresIn: 60 * 60, 
                     });
-                    console.log(token)
                     res.status(200).json({token});
                 });
 });
@@ -134,13 +127,11 @@ router.post('/forgotpassword', (req, res) =>{
         res.status(404).json("email not in db")
         }
         else{
-        console.log("email sent")
         res.send("recovery email sent")
         }
         });
     }
     else{
-        console.log("no customer found")
         res.status(404).json("email not in db")
     }
     }).catch(err =>{
@@ -183,7 +174,6 @@ router.post('/resetpassword', (req, res, next) => {
 });
 
 router.get('/reset', (req, res, next)=> {
-    console.log("we are inside the reser route... call bearer token aauthentication");
     passport.authenticate('bearer', (err, customer, info)=>{
         if(err)
         res.status(401).send(err)
@@ -192,7 +182,6 @@ router.get('/reset', (req, res, next)=> {
 })
 
 router.put('/updatePasswordViaEmail', (req, res, next)=>{
-    console.log("found the route")
       passport.authenticate('bearer', (err, customer, info) => {
         if(err)
         res.status(401).send(err)

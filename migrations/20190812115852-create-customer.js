@@ -60,6 +60,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      role: {
+        type: Sequelize.STRING,
+        defaultValue:'MEMBER'
       }
     });
   },

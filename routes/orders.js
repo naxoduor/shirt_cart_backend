@@ -79,7 +79,7 @@ router.post('/', (req, res) => {
             itemsList.push(obj)
             if (!cart[index + 1]) {
               console.log("list the items list")
-              //console.log(itemsList)
+              console.log(itemsList)
               //bulk create orders details
               OrderDetail.bulkCreate(itemsList)
                 .then((returneddetails) => {

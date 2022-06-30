@@ -20,9 +20,6 @@ module.exports = {
       price: {
         type: Sequelize.DECIMAL
       },
-      discounted_price: {
-        type: Sequelize.DECIMAL
-      },
       delivery_cost: {
         type: Sequelize.DECIMAL
       },
