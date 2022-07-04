@@ -78,13 +78,9 @@ router.post('/', (req, res) => {
             obj.delivery_cost = delivery_cost
             itemsList.push(obj)
             if (!cart[index + 1]) {
-              console.log("list the items list")
-              console.log(itemsList)
               //bulk create orders details
               OrderDetail.bulkCreate(itemsList)
                 .then((returneddetails) => {
-                  console.log("list the details")
-                  console.log(returneddetails)
                   currentOrder.update({
                     total_amount: total
                   }).then(() => {
@@ -97,11 +93,9 @@ router.post('/', (req, res) => {
                        and the total amount is ${total + totalDelivery}</p>`
                     }, function(err, info){
                   if(err){
-                  console.log("encountered error")
                   console.log(err)
                   }
                   else{
-                  console.log("email sent")
                   console.log("we have succesfully sent the email")
                   }
                   });

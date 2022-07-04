@@ -24,7 +24,6 @@ let transporter = nodemailer.createTransport({
 
 router.post('/login', (req, res, next) => {
     passport.authenticate('login', (err, customers, info) => {
-        console.log("login new customer")
         if (err) {
             console.error(`error ${err}`);
         }
@@ -85,7 +84,6 @@ router.post('/', (req, res, next) => {
 })
 
 router.get('/logout', (req, res) => {
-   // console.log(req.body.customer.password)
     res.send("The user has been logge out")
 })
 
@@ -123,7 +121,6 @@ router.post('/forgotpassword', (req, res) =>{
             html: `<h1>Please click the below link to reset password!</h1></br><p><a href="http://127.0.0.1/resetpassword/${token}">Click here to change password</a></p>`
           }, function(err, info){
         if(err){
-        console.log("encountered error")
         res.status(404).json("email not in db")
         }
         else{
@@ -135,7 +132,6 @@ router.post('/forgotpassword', (req, res) =>{
         res.status(404).json("email not in db")
     }
     }).catch(err =>{
-        console.log("no customer found")
         console.log(err)
         res.status(404).json(err)
     })
@@ -190,7 +186,6 @@ router.put('/updatePasswordViaEmail', (req, res, next)=>{
         name: username,
         password: hashedPassword
         }).then(customer=>{
-            console.log("password successfully updated")
             res.send(customer);
         })
     })

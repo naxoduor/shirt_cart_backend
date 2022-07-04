@@ -19,7 +19,6 @@ router.post('/', (req, res)=>{
 })
 
 router.get('/validate', (req, res)=>{
-	console.log("validate the get request")
 	res.status(200).json({
 	"ResultCode": 0,
 	"ResultDesc": "Success",
@@ -48,7 +47,6 @@ router.get('/receive', (req, res) => {
 })
 
 router.post('/checking', (req, res) => {
-    console.log(req.body)
     res.status(200).json({
         "message":"testing the route",
         "message2": "A second message"

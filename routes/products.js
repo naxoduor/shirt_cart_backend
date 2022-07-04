@@ -10,7 +10,6 @@ const Sequelize = require('sequelize')
 var amqp = require('amqplib/callback_api');
 
 router.get('/', (req, res) => {
-console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 db.authenticate()
 .then(() => console.log('Database connected Sucessfully........................'))
 .catch(err => console.log('Error Connecting to database......................................' + err))
@@ -34,7 +33,6 @@ router.get('/inDepartment/:id', (req, res) => {
   let key = `/products/inDepartment/${inDepartmentId}`
 
   /*cache.get(key, (err, result) => {
-    console.log("get from cache")
     if (result !== null) {
       return res.send(result)
     }
@@ -50,7 +48,6 @@ router.get('/inDepartment/:id', (req, res) => {
     limit: 8
   })
     .then(products => {
-      console.log("set cache")
       res.send(products)
       //cache.set(key, products, () => {
       //})
@@ -145,7 +142,6 @@ router.post('/inDepartment/pagination/:id', (request, response) => {
 router.post('/search*', (request, response) => {
 
   let { inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem } = request.body.params
-  console.log(inSearchString)
   let key = `/products/search/${searchString}$`
 
   /*cache.get(key, (err, result) => {
@@ -188,7 +184,6 @@ router.get('/rabbit', (req, res) => {
         if(error1){
             throw error1;
         }
-        console.log("This are the products")
         var queue = 'hello';
         var msg = JSON.stringify(products);
 

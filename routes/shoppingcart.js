@@ -24,7 +24,6 @@ router.get('/add', (req, res)=>{
 
 
 router.post('/add', (req, res) => {
-  console.log("add the product on post request")
   let {cartId, productId,quantity } = req.body.params
   let cartList = []
   ShoppingCart.findOne({
@@ -68,11 +67,10 @@ router.post('/add', (req, res) => {
                 })
               })
             }).catch(err=>{
-            console.log("error finding all ")
+            console.log(err)
             })
               
         }).catch(error=>{
-          console.log("error creating")
           console.log(error)
         })
 
@@ -119,7 +117,6 @@ router.post('/add', (req, res) => {
 // router.get('/:cart_id', (req, res) => {
 //   console.log("get cart items")
 //   let inCartId = req.params.cart_id
-//   console.log(inCartId)
 //   let cartList = []
 //   ShoppingCart.findAll({
 //     where: {
@@ -131,13 +128,9 @@ router.post('/add', (req, res) => {
 //     }]
 //   })
 //     .then((cart) => {
-//       console.log("found the items")
-//       console.log(cart)
 //       cart.forEach((item,index) => {
 //         let cartItem = JSON.parse(JSON.stringify(item))
 //         Product.findByPk(cartItem.product_id).then((product) => {
-//           console.log("print product")
-//           console.log(product)
 //           let obj = {}
 //           obj.item_id = cartItem.item_id
 //           obj.quantity = cartItem.quantity
@@ -148,21 +141,18 @@ router.post('/add', (req, res) => {
 //           obj.delivery_cost=product.delivery_cost
 //           cartList.push(obj)
 //           if (!cart[index + 1]) {
-//             console.log(cartList)
 //             res.send(cartList)
 //           }
 //         })
 //       })
 //     })
 //     .catch(error=>{
-//       console.log("found an error in fetching cart")
 //       console.log(error)
 //       res.send(error);
 //     })
 // })
 
 router.post('/:cart_id', (req, res) => {
-  console.log("get cart items in post request")
   const {inCartId} = req.body.params
   let cartList = []
   ShoppingCart.findAll({
@@ -193,7 +183,6 @@ router.post('/:cart_id', (req, res) => {
       })
     })
     .catch(error=>{
-      console.log("found an error in fetching cart")
       res.send(error);
     })
 })
@@ -211,7 +200,6 @@ router.put('/update/:joined_ids', (req, res) => {
   let { quantity } = req.body.params
 
   ShoppingCart.findByPk(inItemId).then((entry) => {
-    console.log("found an entry")
       entry.update({
         quantity: quantity
       }).then((cart) => {
@@ -237,7 +225,6 @@ router.put('/update/:joined_ids', (req, res) => {
                 obj.image = product.image
                 cartList.push(obj)
                 if (!cart[index + 1]) {
-                  console.log("return the list")
                   res.send(cartList)
                 }
               })
@@ -288,7 +275,6 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
             obj.image = product.image
             cartList.push(obj)
             if (!cart[index + 1]) {
-              console.log(cartList)
               res.send(cartList)
             }
           })
@@ -304,7 +290,6 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
 
 /*router.get('/totalAmount/:cart_id', (req, res) => {
   let inCartId = req.params.cart_id
-  console.log("find total amount")
   ShoppingCart.findAll({
       attributes: ['cart_id', [ShoppingCart.sequelize.fn('sum', ShoppingCart.sequelize.col('amount')), 'total']],
       //attributes: [[db.sequelize.literal('SUM(col_a * col_b)'), 'result']],
@@ -320,7 +305,6 @@ router.delete('/removeProduct/:joined_ids', (req, res) => {
       r
     }
     else{
-      console.log(cart)
       res.send(cart)
       }
   })

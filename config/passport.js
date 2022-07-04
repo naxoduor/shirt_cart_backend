@@ -75,14 +75,11 @@ passport.use(
                         email: email
                     },
                 }).then(user => {
-                    console.log("found email")
                     if (user === null) {
-                        console.log("user  is null")
                         return done(null, false, { message: 'bad username' });
                     }
                     bcrypt.compare(password, user.password).then(response => {
                         if (response !== true) {
-                            console.log('passwords do not match');
                             return done(null, false, { message: 'passwords do not match' });
                         }
                         return done(null, user)
@@ -102,7 +99,6 @@ passport.use(
         console.log("verify the token given")
         jwt.verify(token, "jwt-secret", function(err, customer){
             if(err) {
-                //console.log(err)
                 return done(err)
             }
             return done(null, customer ? customer : false);
