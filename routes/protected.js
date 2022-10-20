@@ -10,6 +10,7 @@ router.get('/', (req, res, next) => {
         result.mob_phone=customer.customer.mob_phone
         result.customer_id=customer.customer.customer_id
         result.role=customer.customer.role
+        result.name=customer.customer.name
         res.send(result)        
     })(req, res, next);
 });

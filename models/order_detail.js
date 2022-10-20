@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     product_name: DataTypes.STRING,
     quantity: DataTypes.INTEGER,
     unit_cost: DataTypes.DECIMAL,
-    delivery_cost: DataTypes.DECIMAL
+    // delivery_cost: DataTypes.DECIMAL
   }, {
       timestamps: false,
       freezeTableName: true,
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     order_detail.hasMany(models.product, {
       foreignKey: "product_id",
     }),
-      order_detail.belongsTo(models.department, {
+      order_detail.belongsTo(models.order, {
         foreignKey: "order_id"
       })
   };

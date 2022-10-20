@@ -9,36 +9,29 @@ const Category = require('../models').category
 const Sequelize = require('sequelize')
 var amqp = require('amqplib/callback_api');
 
-router.get('/', (req, res) => {
-db.authenticate()
-.then(() => console.log('Database connected Sucessfully........................'))
-.catch(err => console.log('Error Connecting to database......................................' + err))
-  let inDepartmentId = 1
-  Product.findAll({
-    include: [{// Notice `include` takes an ARRAY
-      model: Category,
-      //where: { department_id: inDepartmentId },
-    }],
-    // where: { display: 0 },
-    // offset: 1,
-    // limit: 8
-  })
-    .then(products => res.send(products))
-    .catch(console.error)
+router.get('/', async (req, res) => {
+  try {
+    const products=await Product.findAll({
+      include: [{// Notice `include` takes an ARRAY
+        model: Category,
+      }],
+      // where: { display: 0 },
+      // offset: 1,
+      // limit: 8
+    })
+    res.send(products)
+  }
+  catch(error){
+    console.log(error)
+    res.send(error)
+  }
 })
 
-router.get('/inDepartment/:id', (req, res) => {
-
+router.get('/inDepartment/:id', async (req, res) => {
   let inDepartmentId = req.params.id
   let key = `/products/inDepartment/${inDepartmentId}`
-
-  /*cache.get(key, (err, result) => {
-    if (result !== null) {
-      return res.send(result)
-    }
-  })
-*/
-  Product.findAll({
+  try {
+  const products= await Product.findAll({
     include: [{
       model: Category,
       where: { department_id: inDepartmentId },
@@ -47,15 +40,18 @@ router.get('/inDepartment/:id', (req, res) => {
     offset: 1,
     limit: 8
   })
-    .then(products => {
-      res.send(products)
-      //cache.set(key, products, () => {
-      //})
-    })
-    .catch(console.error)
+  res.send(products)
+  }
+
+  catch(error){
+    console.log(error)
+    res.send(error)
+}
 })
 
-router.get('/inCategory/:id', (req, res) => {
+
+
+router.get('/inCategory/:id', async (req, res) => {
   let inCategorytId = req.params.id
   let key = `/products/inCategory/${inCategorytId}`
 
@@ -64,9 +60,8 @@ router.get('/inCategory/:id', (req, res) => {
       return res.send(result)
     }
   })*/
-
-
-  Product.findAll({
+try {
+  const products = await Product.findAll({
     include: [{
       model: Category,
       where: { category_id: inCategorytId },
@@ -75,111 +70,103 @@ router.get('/inCategory/:id', (req, res) => {
     offset: 1,
     limit: 8
   })
-    .then(products => {
-      res.send(products)
-      //cache.set(key, products, () => {
-      //})
-    })
-    .catch(console.error)
+}
+
+catch(error){
+  console.log(error)
+  res.send(error)
+}
 })
 
-router.post('/inCategory/pagination/:id', (request, response) => {
-
+router.post('/inCategory/pagination/:id', async (request, response) => {
   let { category_id, productsPerPage, startItem } = request.body.params
-
   let key = `/products/inCategory/pagination${category_id}${startItem}`
 
-  /*cache.get(key, (err, result) => {
-    if (result !== null) {
-      return response.send(result)
-    }
-  })*/
-
-  Product.findAll({
-    include: [{
-      model: Category,
-      where: { category_id: category_id },
-    }],
-    where: { display: 0 },
-    offset: startItem,
-    limit: productsPerPage
-  })
-    .then(products => {
-      response.send(products)
-      //cache.set(key, products, () => {
-      //})
+  try {
+    const products = await Product.findAll({
+      include: [{
+        model: Category,
+        where: { category_id: category_id },
+      }],
+      where: { display: 0 },
+      offset: startItem,
+      limit: productsPerPage
     })
-    .catch(console.error)
+    res.send(products)
+  }
+  catch(error){
+    console.log(error)
+    res.send(error)
+  }
 })
 
-router.post('/inDepartment/pagination/:id', (request, response) => {
-
+router.post('/inDepartment/pagination/:id', async (request, response) => {
   let { department_id, productsPerPage, startItem } = request.body.params
-  
   let key = `/products/inDepartment/pagination${department_id}${startItem}`
-  /*cache.get(key, (err, result) => {
-    if (result !== null) {
-      return response.send(result)
-    }
-  })*/
-  Product.findAll({
-    include: [{
-      model: Category,
-      where: { department_id: department_id },
-    }],
-    where: { display: 0 },
-    offset: startItem,
-    limit: productsPerPage
-  })
-    .then(products => {
-      response.send(products)
-      //cache.set(key, products, () => {
-      //})
-    })
-    .catch(console.error)
-})
 
-router.post('/search*', (request, response) => {
+  try {
+    const products = await Product.findAll({
+      include: [{
+        model: Category,
+        where: { department_id: department_id },
+      }],
+      where: { display: 0 },
+      offset: startItem,
+      limit: productsPerPage
+    })
+    res.send(products)
+  }
+  catch(error){
+    console.log(error)
+    res.send(error)
+  }
+  })
+
+router.post('/search*', async (request, response) => {
 
   let { inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem } = request.body.params
   let key = `/products/search/${searchString}$`
 
+  try {
+    const products = await Product.findAll({
+      where: Sequelize.literal('MATCH (name, description) AGAINST (:searchString)'),
+      replacements: {
+        searchString: inSearchString
+      }
+    })
+    res.send(products)
+  }
+
+  catch(error){
+    console.log(error)
+    res.send(error)
+  }
   /*cache.get(key, (err, result) => {
     if (result !== null) {
       return response.send(result)
     }
   })*/
 
-  Product.findAll({
-    where: Sequelize.literal('MATCH (name, description) AGAINST (:searchString)'),
-    replacements: {
-      searchString: inSearchString
-    }
-  }).then(products => {
-    response.send(products)
-    //cache.set(key, products, () => {  
-    //})
-  })
-  .catch(console.error)
 })
 
-router.get('/rabbit', (req, res) => {
+router.get('/rabbit', async (req, res) => {
 
   let inDepartmentId = 1
-  Product.findAll({
-    include: [{// Notice `include` takes an ARRAY
-      model: Category,
-      where: { department_id: inDepartmentId },
-    }],
-    offset: 1,
-    limit: 8
-  })
-    .then(products => 
-      {
-        amqp.connect('amqp://localhost', function(error0, connection){
+  try {
+    const products = await Product.findAll({
+      include: [{// Notice `include` takes an ARRAY
+        model: Category,
+        where: { department_id: inDepartmentId },
+      }],
+      offset: 1,
+      limit: 8
+    })
+
+    amqp.connect('amqp://localhost', function(error0, connection){
     if(error0){
         throw error0;
     }
+
     connection.createChannel(function(error1, channel){
         if(error1){
             throw error1;
@@ -198,13 +185,19 @@ router.get('/rabbit', (req, res) => {
         process.exit(0);
     }, 500);
 })
-      })
-    .catch(console.error)
+}
+  catch(error){
+    console.log(error)
+    res.send(error)
+  }
+  
 })
 
-router.post('/addproduct',(req,res)=>{
-  let {name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display} = req.body.params
-  Product.create({
+router.post('/addproduct',async (req,res)=>{
+
+  try {
+    let {name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display} = req.body.params
+    const product = await Product.create({
     name:name,
     description:description,
     price:price,
@@ -214,11 +207,14 @@ router.post('/addproduct',(req,res)=>{
     image2:image2,
     thumbnail:thumbnail,
     display:display
-  }).then((product)=>{
-    res.send(product)
-  }).catch((error)=>{
-    console.log(error)
   })
+  res.send(product)
+  }
+
+  catch(error){
+    console.log(error)
+    res.send(error)
+  }
 })
 
 module.exports = router

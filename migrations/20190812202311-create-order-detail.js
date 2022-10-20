@@ -29,9 +29,9 @@ module.exports = {
       unit_cost: {
         type: Sequelize.DECIMAL
       },
-      delivery_cost: {
-        type: Sequelize.DECIMAL
-      },
+      // delivery_cost: {
+      //   type: Sequelize.DECIMAL
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -23,11 +23,14 @@ module.exports = (sequelize, DataTypes) => {
     order.belongsTo(models.customer, {
       foreignKey: "customer_id"
     }),
-    order.belongsTo(models.shipping, {
+    order.belongsTo(models.shipping_region, {
       foreignKey: "shipping_region_id"
     }),
     order.belongsTo(models.tax, {
       foreignKey: "tax_id"
+    })
+    order.hasMany(models.order_detail, {
+      foreignKey:"order_id",
     })
   };
   return order;

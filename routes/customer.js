@@ -7,6 +7,8 @@ const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
 const Customer = require('../models').customer
 const bcrypt = require('bcryptjs');
+// const customer = require('../models/customer')
+const order = require('../models').order
 const BCRYPT_SALT_ROUNDS = 12;
 
 let transporter = nodemailer.createTransport({
@@ -19,39 +21,65 @@ let transporter = nodemailer.createTransport({
         clientId: '',
         clientSecret: '',
         refreshToken: '',
-    }
+    }   
   });
 
-router.post('/login', (req, res, next) => {
+
+  router.get('/customer_orders', async (req, res)=>{
+    console.log("get orders")
+    try {
+        const customer_orders=await Customer.findAll({
+            include: {
+                model: order
+            }
+        })
+        res.send(customer_orders)
+    }
+    catch(err){
+        res.send(err)
+    }
+})
+
+router.post('/login', async (req, res, next) => {
+    console.log("login the given user")
     passport.authenticate('login', (err, customers, info) => {
         if (err) {
             console.error(`error ${err}`);
-        }
+        }   
         if (info !== undefined) {
+            console.log("error bad info")
             if (info.message === 'bad username') {
+                console.log("bad username", info.message)
                 res.status(401).send(info.message)
             } else {
+                console.log("error 403", info.message)
                 res.status(403).send(info.message)
             }
         } else {
-            req.logIn(customers, () => {
-                Customer.findOne({
-                    where: {
-                        email: req.body.email 
-                    },
-                }).then(customer => {
+            req.logIn(customers, async () => {
+                try {
+                    const customer =await Customer.findOne({
+                        where: {
+                            email: req.body.email 
+                        },
+                    })
                     const token = jwt.sign({ customer: customer}, jwtSecret.secret, {
                         expiresIn: 60 * 60, 
                     });
                     res.status(200).json(token);
-                });
-            });
+                }
+                catch(error){
+                    console.log(error)
+                    res.send(error)
+                }
+                
+                })
         }
     })(req, res, next);
 });
 
-router.post('/', (req, res, next) => {
-    passport.authenticate('register', (err, user, info) => {
+router.post('/', async (req, res, next) => {
+    passport.authenticate('register', async (err, user, info) => {
         if (err) {
             console.log(err);
         }
@@ -59,25 +87,33 @@ router.post('/', (req, res, next) => {
             console.error(info.message);
             res.status(403).send(info.message)
         } else {
-            req.logIn(user, error => {
-                let { username, email } = req.body
-                const data = {
-                    username: username,
-                    email: email
-                };
-                Customer.findOne({
-                    where: {
-                        name: data.username,
-                    },
-                }).then(customer => {
-                    customer.update({
+            console.log("login the user")
+            req.logIn(user, async () =>{
+                try {
+                    console.log("try statement")
+                    let { username, email } = req.body
+                    const data = {
+                        username: username,
+                        email: email
+                    };
+                    const customer = await Customer.findOne({
+                        where: {
+                            name: data.username,
+                        },
+                    })
+                    const userr = await customer.update({
                         name: data.username,
                         email: data.email
-                    }).then(() => {
-                        //res.status(200).send({message: 'user created'})
-                        res.send(user)
                     })
-                })
+                    res.send(userr)
+                    console.log("send the updated user")
+                    console.log(userr)
+                }
+                catch(error){
+                    console.log("catch statement, error during register and login")
+                    console.log(error)
+                    res.send(error)
+                }
             })
         }
     })(req, res, next)
@@ -87,27 +123,32 @@ router.get('/logout', (req, res) => {
     res.send("The user has been logge out")
 })
 
-router.post('/passwordreset', (req, res, next) => {        
-                Customer.findOne({
-                    where: {
-                        email: req.body.email 
-                    },
-                }).then(customer => {
-                    const token = jwt.sign({ customer: customer}, jwtSecret.secret, {
-                        expiresIn: 60 * 60, 
-                    });
-                    res.status(200).json({token});
-                });
+router.post('/passwordreset', async (req, res, next) => {    
+    try {
+        const customer=await Customer.findOne({
+            where: {
+                email: req.body.email 
+            },
+        })
+        const token = jwt.sign({ customer: customer}, jwtSecret.secret, {
+            expiresIn: 60 * 60, 
+        });
+        res.status(200).json({token})
+    }   
+    catch(err) {
+        console.log(err)
+        res.send(err)
+    }
 });
 
-router.post('/forgotpassword', (req, res) =>{
+router.post('/forgotpassword', async (req, res) =>{
     
     try {
-    Customer.findOne({
+    const customer  = await Customer.findOne({
         where:{
             email: req.body.email
         }
-    }).then(customer=>{
+    })
         if(customer){
         const token = jwt.sign({ customer: customer}, jwtSecret.secret, {
             expiresIn: 60 * 60, 
@@ -131,10 +172,7 @@ router.post('/forgotpassword', (req, res) =>{
     else{
         res.status(404).json("email not in db")
     }
-    }).catch(err =>{
-        console.log(err)
-        res.status(404).json(err)
-    })
+   
 }
 catch(err){
     res.send("email not in db")
@@ -142,30 +180,31 @@ catch(err){
 }
 })
 
-router.post('/resetpassword', (req, res, next) => {
-    passport.authenticate('bearer', (err, customer, info) => {
+router.post('/resetpassword', async (req, res, next) => {
+    passport.authenticate('bearer', async (err, customer, info) => {
         if(err)
         res.status(401).send(err)
-        let result ={}
-        let customer_id=customer.customer.customer_id
-        let password="password";
-        bcrypt.hash(password, BCRYPT_SALT_ROUNDS).then(hashedPassword => {
-        Customer.findOne({
+        try{
+            let customer_id=customer.customer.customer_id
+            let password="password";
+            const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
+            bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
+            const customerr = await Customer.findOne({
             where:{
                 customer_id:customer_id
             }
-        }).then(customer=>{
-            customer.update({
-                password: hashedPassword
-            }).then(customer=>{
-                res.send("The password was updated successfully")
-            }).catch(err=>{
-                res.send(err)
-            })
-        }).catch(err=>{
-            res.send(err)
         })
-    })        
+
+        const customer = await customerr.update({
+                password: hashedPassword
+            })
+        res.send("password has been reset")
+        }
+        catch(error){
+            console.log(error)
+            res.send(error)
+        }
+        
     })(req, res, next);
 });
 
@@ -177,21 +216,26 @@ router.get('/reset', (req, res, next)=> {
     })(req, res, next)
 })
 
-router.put('/updatePasswordViaEmail', (req, res, next)=>{
-      passport.authenticate('bearer', (err, customer, info) => {
+router.put('/updatePasswordViaEmail', async(req, res, next)=>{
+      passport.authenticate('bearer',  async(err, customer, info) => {
         if(err)
         res.status(401).send(err)
-        bcrypt.hash(password, BCRYPT_SALT_ROUNDS).then(hashedPassword => {
-        customer.update({
-        name: username,
-        password: hashedPassword
-        }).then(customer=>{
-            res.send(customer);
+        try {
+            const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
+            const customerr = await customer.update({
+            name: username,
+            password: hashedPassword
         })
-    })
-        res.send("password updated'`")        
-    })(req, res, next);
-    
+        res.send("password reset")
+        }
+        catch(error){
+            console.log(error)
+            res.send(error)
+        }
+    })(req, res, next)
 })
+
+
+
 
 module.exports = router

@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       attributes: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         defaultValue: "Large Size",
       },
       // attributes: {

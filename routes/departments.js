@@ -5,48 +5,58 @@ const Product = require('../models').product
 const Department = require('../models').department
 const Category = require('../models').category
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
 
-    Department.findAll().then((departments) =>{
-        res.send(departments)
-    })
-        
+    try {
+        const departments = await Department.findAll()
+            res.send(departments)
+    }
+    catch(error){
+        console.log(error)
+        res.send(error)
+    }
 })
 
-router.get('/totalitems/:id', (req, res) => {
+router.get('/totalitems/:id', async (req, res) => {
     let inDepartmentId = req.params.id
-
-    Product.count({
-        include: [{
-            model: Category,
-            where: { department_id: inDepartmentId },
-        }]
-    }).then((count) => {
+    try {
+        const count = await Product.count({
+            include: [{
+                model: Category,
+                where: { department_id: inDepartmentId },
+            }]
+        })
         let list = []
         let obj = {}
         obj.products_on_department_count = count
         list.push(obj)
         res.send(list)
-        //console.log(JSON.stringify(list))
-        
-    })
 
+    }
+    catch(error){
+        console.log(error)
+        res.send(error)
+    }
 })
 
-router.post('/products/:id', (req, res) => {
+router.post('/products/:id', async (req, res) => {
     
     let { id, productsPerPage, startItem } = request.body.params
-    Product.findAll({
-        include: [{
-            model: Category,
-            where: { department_id: id },
-        }],
-        offset: startItem,
-        limit: productsPerPage
-    }).then((products) => {
+    try {
+        const products = await Product.findAll({
+            include: [{
+                model: Category,
+                where: { department_id: id },
+            }],
+            offset: startItem,
+            limit: productsPerPage
+        })
         res.send(products)
-    })
-
+    }
+    catch(error){
+        console.log(error)
+        res.send(error)
+    }
 })
 
 

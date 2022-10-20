@@ -5,6 +5,7 @@ const ShoppingCart = require('../models').shopping_cart
 const Product = require('../models').product
 const Order = require('../models').order
 const OrderDetail = require('../models').order_detail
+const customer = require('../models').customer
 const nodemailer = require('nodemailer')
 
 let transporter = nodemailer.createTransport({
@@ -21,10 +22,34 @@ let transporter = nodemailer.createTransport({
 });
 
 
+router.get('/', async (req,res)=>{
+ const orders=await Order.findAll({
+  include: {
+    model:customer,
+    attributes: ['name', 'email']
+  }
+ })
+ res.send(orders)
+})
+
+router.get('/order_details/:id', async (req, res) => {
+  let orderId = req.params.id
+  const orderItems=await OrderDetail.findAll({
+    include: {
+      model:Order
+    },
+    where:{
+      order_id:orderId
+    }
+  })
+  res.send(orderItems)
+})
+
+
 router.post('/', (req, res) => {
   let inCartId = req.body.order.cartId
   let inCustomerId = req.body.order.customerId
-  let inShippingId = req.body.order.shipping_region_id
+  let inShippingId = req.body.order.shippingId
   let inTaxId = req.body.order.taxId
 
   let newOrder = Order.build({

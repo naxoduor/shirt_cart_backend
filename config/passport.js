@@ -70,11 +70,13 @@ passport.use(
         (email, password, done) => {
             
             try {
+                console.log("find user in passport middleware")
                 Customer.findOne({
                     where: {
                         email: email
                     },
                 }).then(user => {
+                    console.log("found the given user")
                     if (user === null) {
                         return done(null, false, { message: 'bad username' });
                     }
