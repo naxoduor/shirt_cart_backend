@@ -3,7 +3,7 @@
     "username": "root",
     "password": "password",
     "database": "energy",
-    "host": "mysql_db",
+    "host": "mysql",
     "dialect": "mysql",
     "port": 3306
   },
@@ -11,7 +11,7 @@
     "username": "root",
     "password": "password",
     "database": "energy",
-    "host": "mysql_db",
+    "host": "mysql",
     "dialect": "mysql",
     "port": 3306
   },
@@ -19,7 +19,7 @@
     "username": "root",
     "password": "password",
     "database": "energy",
-    "host": "mysql_db",
+    "host": "mysql",
     "dialect": "mysql",
     "port": 3306
   }
