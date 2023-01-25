@@ -26,7 +26,6 @@ let transporter = nodemailer.createTransport({
 
 
   router.get('/customer_orders', async (req, res)=>{
-    console.log("get orders")
     try {
         const customer_orders=await Customer.findAll({
             include: {
@@ -41,13 +40,11 @@ let transporter = nodemailer.createTransport({
 })
 
 router.post('/login', async (req, res, next) => {
-    console.log("login the given user")
     passport.authenticate('login', (err, customers, info) => {
         if (err) {
             console.error(`error ${err}`);
         }   
         if (info !== undefined) {
-            console.log("error bad info")
             if (info.message === 'bad username') {
                 console.log("bad username", info.message)
                 res.status(401).send(info.message)

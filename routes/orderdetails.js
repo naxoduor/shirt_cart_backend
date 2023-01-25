@@ -7,7 +7,6 @@ const customer= require('../models').customer
 
 router.get('/:id', async (req, res) => {
 const orderid=req.params.id
-console.log(orderid)
 try {
 const orderdetails = await Order.findOne({
     include: [
@@ -21,7 +20,6 @@ const orderdetails = await Order.findOne({
         order_id: orderid
     }
  })
-console.log(orderdetails)
 res.send(orderdetails)
 }
 catch(e){

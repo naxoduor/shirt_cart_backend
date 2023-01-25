@@ -152,8 +152,8 @@ router.post('/add', (req, res) => {
 //     })
 // })
 
-router.post('/:cart_id', (req, res) => {
-  const {inCartId} = req.body.params
+router.get('/:cart_id', (req, res) => {
+  let inCartId = req.params.cart_id
   let cartList = []
   ShoppingCart.findAll({
     where: {
@@ -177,6 +177,7 @@ router.post('/:cart_id', (req, res) => {
           obj.image = product.image
           cartList.push(obj)
           if (!cart[index + 1]) {
+            console.log("send cart list")
             res.send(cartList)
           }
         })

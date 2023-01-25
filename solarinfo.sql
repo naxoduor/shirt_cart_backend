@@ -68,15 +68,15 @@ CREATE TABLE `product_attribute` (
 
 -- Create shopping_cart table
 CREATE TABLE `shopping_cart` (
-  `item_id`     INT  NOT NULL,
-  `cart_id`     CHAR(32)      NOT NULL,
+  `item_id`     VARCHAR(1000) NOT NULL,
+  `cart_id`     VARCHAR(1000) NOT NULL,
   `product_id`  INT           NOT NULL,
   `attributes`  VARCHAR(1000) NOT NULL,
   `quantity`    INT           NOT NULL,
   `buy_now`     BOOL          NOT NULL  DEFAULT true,
-  `added_on`    DATETIME      NOT NULL,
-  PRIMARY KEY (`item_id`),
-  KEY `idx_shopping_cart_cart_id` (`cart_id`)
+  `added_on`    DATETIME      NOT NULL
+--   PRIMARY KEY (`cart_id`)
+--   KEY `idx_shopping_cart_cart_id` (`cart_id`)
 ) ENGINE=MyISAM;
 
 -- Create orders table
