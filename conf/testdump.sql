@@ -1290,7 +1290,7 @@ BEGIN
   WHERE  customer_id = inCustomerId;
 END$$
 
--- Create orders_get_most_recent_orders stored procedure
+-- Create orders_get_fmost_recent_orders stored procedure
 CREATE PROCEDURE orders_get_most_recent_orders(IN inHowMany INT)
 BEGIN
   PREPARE statement FROM

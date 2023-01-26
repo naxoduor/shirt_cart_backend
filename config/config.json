@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "admin",
+    "password": "password",
     "database": "energy",
     "host": "mysql_db",
     "dialect": "mysql",
@@ -9,7 +9,7 @@
   },
   "test": {
     "username": "root",
-    "password": "admin",
+    "password": "password",
     "database": "energy",
     "host": "mysql_db",
     "dialect": "mysql",
@@ -17,7 +17,7 @@
   },
   "production": {
     "username": "root",
-    "password": "admin",
+    "password": "password",
     "database": "energy",
     "host": "mysql_db",
     "dialect": "mysql",
