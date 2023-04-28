@@ -1,138 +1,27 @@
-const express = require('express')
-const router = express.Router()
+import express from "express";
+const router = express.Router();
 //const cache = require('../config/cache')
-const ShoppingCart = require('../models').shopping_cart
-const Product = require('../models').product
-const Order = require('../models').order
-const OrderDetail = require('../models').order_detail
-const customer = require('../models').customer
-const nodemailer = require('nodemailer')
+import { findAllOrders, findOrderDetailById, createOrder } from "../db/orders.js";
 
-let transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    type: '',
-    user: '',
-    clientId: '',
-    clientSecret: '',
-    refreshToken: '',
-  }
+
+
+router.get("/", async (req, res) => {
+  const orders = await findAllOrders();
+  res.send(orders);
 });
 
-
-router.get('/', async (req,res)=>{
- const orders=await Order.findAll({
-  include: {
-    model:customer,
-    attributes: ['name', 'email']
-  }
- })
- res.send(orders)
-})
-
-router.get('/order_details/:id', async (req, res) => {
-  let orderId = req.params.id
-  const orderItems=await OrderDetail.findAll({
-    include: {
-      model:Order
-    },
-    where:{
-      order_id:orderId
-    }
-  })
-  res.send(orderItems)
-})
-
-
-router.post('/', (req, res) => {
-  let inCartId = req.body.order.cartId
-  let inCustomerId = req.body.order.customerId
-  let inShippingId = req.body.order.shippingId
-  let inTaxId = req.body.order.taxId
-
-  let newOrder = Order.build({
-    order_id: null,
-    created_on: new Date(),
-    customer_id: inCustomerId,
-    shipping_region_id: inShippingId,
-    tax_id: inTaxId
-  })
-  newOrder.save().then((orderItem) => {
-    Order.findOne({
-      where: {
-        customer_id: inCustomerId,
-      },
-      order: [['created_on', 'DESC']],
-    }).then((currentOrder) => {
-      let order_id = JSON.parse(JSON.stringify(currentOrder)).order_id
-      ShoppingCart.findAll({
-        attributes: ['quantity', 'attributes', 'product_id'],
-        include: [{// Notice `include` takes an ARRAY
-          model: Product,
-          as: "products",
-          attributes: ['name', 'price']
-        }],
-        where: {
-          cart_id: inCartId
-        }
-      }).then((cart) => {
-        let total = 0;
-        let totalDelivery=0;
-        let itemsList = []
-        cart.forEach((item, index) => {
-          let good = JSON.parse(JSON.stringify(item))
-          let attributes = good.attributes
-          let obj = {}
-          let quantity = good.quantity
-          Product.findByPk(good.product_id).then((product) => {
-            let productItem = JSON.parse(JSON.stringify(product))
-            let unit_cost = productItem.price
-            let subtotal = quantity * unit_cost
-            let delivery_cost = productItem.delivery_cost
-            let subtotalDelivery = quantity * delivery_cost
-            total = total + subtotal
-            totalDelivery = totalDelivery + subtotalDelivery
-            obj.order_id = order_id
-            obj.product_id = productItem.product_id
-            obj.attributes = attributes
-            obj.product_name = productItem.name
-            obj.quantity = quantity
-            obj.unit_cost = unit_cost
-            obj.delivery_cost = delivery_cost
-            itemsList.push(obj)
-            if (!cart[index + 1]) {
-              //bulk create orders details
-              OrderDetail.bulkCreate(itemsList)
-                .then((returneddetails) => {
-                  currentOrder.update({
-                    total_amount: total
-                  }).then(() => {
-                    transporter.sendMail({
-                      from: '"Nax Oduor 👻" <naxoduor7@gmail.com>',
-                      to: "naxochieng86@gmail.com",
-                      subject: "Hello ✔",
-                      text: "Hello world?",
-                      html: `<h1>Order Details!</h1></br><p> The item details are ${JSON.stringify(returneddetails)}
-                       and the total amount is ${total + totalDelivery}</p>`
-                    }, function(err, info){
-                  if(err){
-                  console.log(err)
-                  }
-                  else{
-                  console.log("we have succesfully sent the email")
-                  }
-                  });
-                    res.send(returneddetails);
-                  })
-                })
-            }
-          })
-        })
-      })
-    })
-  })
+router.get("/order_details/:id", async (req, res) => {
+  let orderId = req.params.id;
+  res.send(await findOrderDetailById(orderId))
+ 
 });
 
-module.exports = router;
+router.post("/", async (req, res) => {
+  let inCartId = req.body.order.cartId;
+  let inCustomerId = req.body.order.customerId;
+  let inShippingId = req.body.order.shippingId;
+  let inTaxId = req.body.order.taxId;
+  res.send(await createOrder(inCartId, inCustomerId, inShippingId, inTaxId))
+});
+
+export default router;

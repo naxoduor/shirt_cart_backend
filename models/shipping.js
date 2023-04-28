@@ -1,22 +1,18 @@
+import Sequelize from 'sequelize';
+import sequelize from '../config/database.js'
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const shipping = sequelize.define('shipping', {
+  const Shipping = sequelize.define('shipping', {
     shipping_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       primaryKey: true
     },
-    shipping_type: DataTypes.STRING,
-    shipping_cost: DataTypes.STRING,
-    shipping_region_id: DataTypes.INTEGER
+    shipping_type: Sequelize.STRING,
+    shipping_cost: Sequelize.STRING,
+    shipping_region_id: Sequelize.INTEGER
   }, {
       timestamps: false,
       freezeTableName: true,
     });
-  shipping.associate = function (models) {
-    // associations can be defined here
-    shipping.belongsTo(models.shipping_region, {
-      foreignKey: "shipping_region_id"
-    })
-  };
-  return shipping;
-};
+  
+  export default Shipping;
+

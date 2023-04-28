@@ -1,18 +1,16 @@
+import Sequelize from 'sequelize';
+import sequelize from '../config/database.js'
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const department = sequelize.define('department', {
+  const Department = sequelize.define('department', {
     department_id: {
-      type:DataTypes.INTEGER,
+      type:Sequelize.INTEGER,
       primaryKey:true
     },
-    name: DataTypes.STRING,
-    description: DataTypes.STRING
+    name: Sequelize.STRING,
+    description: Sequelize.STRING
   }, {
       timestamps: false,
       freezeTableName: true,
     });
-  department.associate = function (models) {
-    department.hasMany(models.category, { foreignKey: 'department_id'})
-  };
-  return department;
-};
+  
+export default Department

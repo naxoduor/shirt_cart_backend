@@ -1,18 +1,19 @@
 import Sequelize from 'sequelize';
 import sequelize from '../config/database.js'
 'use strict';
-  const ShippingRegion = sequelize.define('shipping_region', {
-    shipping_region_id: {
+  const ProductCart = sequelize.define('product_cart', {
+    product_id: {
       type: Sequelize.INTEGER,
       primaryKey: true
     },
-    shipping_region: Sequelize.STRING
+    cart_id: Sequelize.STRING,
+    item_id: Sequelize.STRING
   }, {
       timestamps: false,
       freezeTableName: true,
     });
-  // shipping_region.associate = function (models) {
+  // product_category.associate = function (models) {
   //   // associations can be defined here
   // };
-  export default ShippingRegion;
+  export default ProductCart;
 

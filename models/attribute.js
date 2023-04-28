@@ -1,17 +1,18 @@
+import Sequelize from 'sequelize';
+import sequelize from '../config/database.js'
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const attribute = sequelize.define('attribute', {
+  const Attribute = sequelize.define('attribute', {
     attribute_id: {
-      type:DataTypes.INTEGER,
+      type:Sequelize.INTEGER,
       primaryKey:true
     },
-    name: DataTypes.STRING
+    name: Sequelize.STRING
   }, {
       timestamps: false,
       freezeTableName: true
     });
-  attribute.associate = function (models) {
-    attribute.hasMany(models.attribute_value, { foreignKey: 'attribute_id' })
-  };
-  return attribute;
-};
+  // attribute.associate = function (models) {
+  //   attribute.hasMany(models.attribute_value, { foreignKey: 'attribute_id' })
+  // };
+  export default Attribute;
+

@@ -79,6 +79,13 @@ CREATE TABLE `shopping_cart` (
 --   KEY `idx_shopping_cart_cart_id` (`cart_id`)
 ) ENGINE=MyISAM;
 
+CREATE TABLE `product_cart` (
+  `product_id`  INT NOT NULL,
+  `cart_id` INT NOT NULL,
+  PRIMARY KEY (`product_id`, `cart_id`)
+) ENGINE=MyISAM;
+
+
 -- Create orders table
 CREATE TABLE `orders` (
   `order_id`     INT           NOT NULL  AUTO_INCREMENT,

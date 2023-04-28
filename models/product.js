@@ -1,38 +1,65 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const product = sequelize.define('product', {
-    product_id:{
-      type:DataTypes.INTEGER,
-      primaryKey:true
-    },
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    price: DataTypes.DECIMAL,
-    discounted_price: DataTypes.DECIMAL,
-    image: DataTypes.STRING,
-    image_2: DataTypes.STRING,
-    thumbnail: DataTypes.STRING,
-    display: DataTypes.INTEGER
-  }, {
-      timestamps: false,
-      freezeTableName: true,
-    });
-  product.associate = function (models) {
-    // associations can be defined heresss
-    
-    product.belongsToMany(models.category, {
-      foreignKey:"product_id",
-      through: {
-        model: models.product_category
-      }
-    }),
-    product.belongsToMany(models.attribute_value, {
-      foreignKey:"product_id",
-      through: {
-        model: models.product_attribute
-      }
-    })
+import sequelize from "../config/database.js";
+import Sequelize from "sequelize";
 
-  };
-  return product;
-};
+import ShoppingCart from "./shopping_cart.js";
+("use strict");
+const Product = sequelize.define(
+  "product",
+  {
+    product_id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+    },
+    name: Sequelize.STRING,
+    description: Sequelize.STRING,
+    price: Sequelize.DECIMAL,
+    discounted_price: Sequelize.DECIMAL,
+    image: Sequelize.STRING,
+    image_2: Sequelize.STRING,
+    thumbnail: Sequelize.STRING,
+    display: Sequelize.INTEGER,
+  },
+  {
+    timestamps: false,
+    freezeTableName: true,
+  }
+);
+
+export default Product;
+// const Product = {
+
+// };
+
+// const product = sequelize.define('product', {
+//   product_id:{
+//     type:Sequelize.INTEGER,
+//     primaryKey:true
+//   },
+//   name: Sequelize.STRING,
+//   description: Sequelize.STRING,
+//   price: Sequelize.DECIMAL,
+//   discounted_price: Sequelize.DECIMAL,
+//   image: Sequelize.STRING,
+//   image_2: Sequelize.STRING,
+//   thumbnail: Sequelize.STRING,
+//   display: Sequelize.INTEGER
+// },
+// product.associate = function (models) {
+//   // associations can be defined heresss
+
+//   product.belongsToMany(models.category, {
+//     foreignKey:"product_id",
+//     through: {
+//       model: models.product_category
+//     }
+//   }),
+//   product.belongsToMany(models.attribute_value, {
+//     foreignKey:"product_id",
+//     through: {
+//       model: models.product_attribute
+//     }
+//   })
+
+// };
+
+// export default product

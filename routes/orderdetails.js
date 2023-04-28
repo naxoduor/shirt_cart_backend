@@ -1,30 +1,17 @@
-const express = require('express')
-const { route } = require('./orders')
+import express from 'express'
 const router = express.Router()
-const order_detail = require('../models').order_detail
-const Order = require('../models').order
-const customer= require('../models').customer
+import { findOrderById } from '../db/orderdetails.js'
+
 
 router.get('/:id', async (req, res) => {
 const orderid=req.params.id
 try {
-const orderdetails = await Order.findOne({
-    include: [
-        {
-        model:customer
-      },
-    {
-        model:order_detail
-    }],
-    where:{
-        order_id: orderid
-    }
- })
-res.send(orderdetails)
+    const order = await findOrderById(orderid)
+    return order
 }
 catch(e){
     console.log(e)
 }
 })
-module.exports = router
 
+export default router

@@ -1,38 +1,15 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
 //const cache = require('../config/cache')
-const AttributeValue = require('../models').attribute_value
-const Product = require('../models').product
-const Promise = require('bluebird');
+import { findAttributeById } from '../db/attributes.js'
 
 router.get('/', (req, res) => {
   res.send("found the attributes route")
 })
 
-router.get('/inAttribute/:id', (req, res) => {
+router.get('/inAttribute/:id', async (req, res) => {
   let inProductId = req.params.id
-  Promise.all([
-  AttributeValue.findAll({
-    include: [{
-      model: Product,
-      where: { product_id: inProductId }
-    }],
-    where: { attribute_id: 1}
-  }),
-  AttributeValue.findAll({
-    include: [{
-      model: Product,
-      where: { product_id: inProductId }
-    }],
-    where: { attribute_id: 2}
-  })
-]).spread((sizeAttributes, colorAttributes)=> {
-        res.send({
-          "sizeAttributes": sizeAttributes,
-          "colorAttributes": colorAttributes
-        })
-    })
-    .catch(console.error)
+  res.send( await findAttributeById(inProductId))
 })
 
-module.exports = router
+export default router

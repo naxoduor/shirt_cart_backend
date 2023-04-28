@@ -1,37 +1,23 @@
+import Sequelize from 'sequelize';
+import sequelize from '../config/database.js'
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const order = sequelize.define('order', {
+  const Order = sequelize.define('order', {
     order_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       primaryKey: true
     },
-    total_amount: DataTypes.DECIMAL,
-    created_on: DataTypes.DATE,
-    shipped_on: DataTypes.DATE,
-    status: DataTypes.INTEGER,
-    comments: DataTypes.STRING,
-    customer_id: DataTypes.INTEGER,
-    auth_code: DataTypes.STRING,
-    reference: DataTypes.STRING,
-    shipping_region_id: DataTypes.INTEGER,
-    tax_id: DataTypes.INTEGER
+    total_amount: Sequelize.DECIMAL,
+    created_on: Sequelize.DATE,
+    shipped_on: Sequelize.DATE,
+    status: Sequelize.INTEGER,
+    comments: Sequelize.STRING,
+    customer_id: Sequelize.INTEGER,
+    auth_code: Sequelize.STRING,
+    reference: Sequelize.STRING,
+    shipping_region_id: Sequelize.INTEGER,
+    tax_id: Sequelize.INTEGER
   }, {
     timestamps: false,
   });
-  order.associate = function (models) {
-    // associations can be defined here
-    order.belongsTo(models.customer, {
-      foreignKey: "customer_id"
-    }),
-    order.belongsTo(models.shipping_region, {
-      foreignKey: "shipping_region_id"
-    }),
-    order.belongsTo(models.tax, {
-      foreignKey: "tax_id"
-    })
-    order.hasMany(models.order_detail, {
-      foreignKey:"order_id",
-    })
-  };
-  return order;
-};
+  
+  export default Order

@@ -1,5 +1,5 @@
 'use strict';
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('shopping_cart', {
       id: {
@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       product_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       attributes: {
         type: Sequelize.STRING,

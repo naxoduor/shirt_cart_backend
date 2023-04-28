@@ -1,29 +1,22 @@
+import Sequelize from 'sequelize';
+import sequelize from '../config/database.js'
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const order_detail = sequelize.define('order_detail', {
+  const OrderDetail = sequelize.define('order_detail', {
     item_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       primaryKey: true
     },
-    order_id: DataTypes.INTEGER,
-    product_id: DataTypes.INTEGER,
-    attributes: DataTypes.STRING,
-    product_name: DataTypes.STRING,
-    quantity: DataTypes.INTEGER,
-    unit_cost: DataTypes.DECIMAL,
+    order_id: Sequelize.INTEGER,
+    product_id: Sequelize.INTEGER,
+    attributes: Sequelize.STRING,
+    product_name: Sequelize.STRING,
+    quantity: Sequelize.INTEGER,
+    unit_cost: Sequelize.DECIMAL,
     // delivery_cost: DataTypes.DECIMAL
   }, {
       timestamps: false,
       freezeTableName: true,
     });
-  order_detail.associate = function (models) {
-    // associations can be defined here
-    order_detail.hasMany(models.product, {
-      foreignKey: "product_id",
-    }),
-      order_detail.belongsTo(models.order, {
-        foreignKey: "order_id"
-      })
-  };
-  return order_detail;
-};
+  
+  export default OrderDetail;
+

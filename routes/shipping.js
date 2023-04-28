@@ -1,26 +1,20 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const db = require('../config/database')
+import db from '../config/database.js'
 //const cache = require('../config/cache')
-const url = require('url');
-const ShippingRegion = require('../models').shipping_region
-const Shipping = require('../models').shipping
+import url from 'url';
+import { findShippingRegionById, findAllShippingRegions} from '../db/shipping.js'
 
-router.get('/regions/regionId/:shipping_id', (req, res) => {
+router.get('/regions/regionId/:shipping_id', async (req, res) => {
     let inShippingRegionId = req.params.shipping_id
-    Shipping.findAll({
-        where: {
-            shipping_region_id: inShippingRegionId
-        }
-    }).then((shippingInfo) => {
-        res.send(shippingInfo)
-    })
+    res.send(await findShippingRegionById(inShippingRegionId))
+   
+
 })
 
-router.get('/regions', (req, res) => {
-    ShippingRegion.findAll().then((shippingRegions) => {
-        res.send(shippingRegions)
-    })
+router.get('/regions', async (req, res) => {
+    res.send(await findAllShippingRegions())
+    
 });
 
-module.exports = router
+export default router

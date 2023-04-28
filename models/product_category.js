@@ -1,17 +1,18 @@
+import Sequelize from 'sequelize';
+import sequelize from '../config/database.js'
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const product_category = sequelize.define('product_category', {
+  const ProductCategory = sequelize.define('product_category', {
     product_id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       primaryKey: true
     },
-    category_id: DataTypes.INTEGER
+    category_id: Sequelize.INTEGER
   }, {
       timestamps: false,
       freezeTableName: true,
     });
-  product_category.associate = function (models) {
-    // associations can be defined here
-  };
-  return product_category;
-};
+  // product_category.associate = function (models) {
+  //   // associations can be defined here
+  // };
+  export default ProductCategory;
+

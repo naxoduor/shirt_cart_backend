@@ -1,5 +1,5 @@
-const express = require('express')
-const passport = require('passport')
+import express from 'express'
+import passport from 'passport'
 const router = express.Router()
 
 router.get('/', (req, res, next) => {
@@ -10,4 +10,4 @@ router.get('/', (req, res, next) => {
     })(req, res, next);
 });
 
-module.exports = router
+export default router
