@@ -1,25 +1,25 @@
 {
   "development": {
     "username": "root",
-    "password": "rootadmin",
+    "password": "password",
     "database": "energy",
-    "host": "localhost",
+    "host": "mysql_db",
     "dialect": "mysql",
     "port": 3306
   },
   "test": {
     "username": "root",
-    "password": "rootadmin",
+    "password": "password",
     "database": "energy",
-    "host": "localhost",
+    "host": "mysql_db",
     "dialect": "mysql",
     "port": 3306
   },
   "production": {
     "username": "root",
-    "password": "rootadmin",
+    "password": "password",
     "database": "energy",
-    "host": "localhost",
+    "host": "mysql_db",
     "dialect": "mysql",
     "port": 3306
   }
