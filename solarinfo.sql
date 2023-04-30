@@ -79,12 +79,6 @@ CREATE TABLE `shopping_cart` (
 --   KEY `idx_shopping_cart_cart_id` (`cart_id`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `product_cart` (
-  `product_id`  INT NOT NULL,
-  `cart_id` INT NOT NULL,
-  PRIMARY KEY (`product_id`, `cart_id`)
-) ENGINE=MyISAM;
-
 
 -- Create orders table
 CREATE TABLE `orders` (
@@ -142,6 +136,7 @@ CREATE TABLE `customer` (
   `day_phone`          varchar(100),
   `eve_phone`          varchar(100),
   `mob_phone`          varchar(100),
+  `role`               VARCHAR(100),
   PRIMARY KEY  (`customer_id`),
   UNIQUE KEY `idx_customer_email` (`email`),
   KEY `idx_customer_shipping_region_id` (`shipping_region_id`)

@@ -82,7 +82,8 @@ ProductCart.belongsTo(Product, {
 });
 
 ProductCart.belongsTo(ShoppingCart, {
-  foreignKey: 'item_id'
+  foreignKey: 'item_id',
+  onDelete: 'CASCADE'
 })
 
 export {

@@ -78,11 +78,12 @@ export async function findCartById(inCartId) {
       },
       {
         model: ShoppingCart,
-        where: {
-          cart_id: inCartId,
-        },
+       
       },
      ],
+     where: {
+      cart_id: inCartId,
+    },
   });
   return cart;
 }
@@ -93,41 +94,49 @@ export async function updateCartById(inItemId, cartId, cartList, quantity) {
     quantity: quantity,
   });
 
-  const cart = await Product.findAll({
+  const cart = await ProductCart.findAll({
     include: [
       {
-        model: ProductCart,
-        include: [
-          {
-            ShoppingCart,
-            where: {
-              cart_id: cartId,
-            },
-          },
-        ],
+        model: ShoppingCart,
+        
       },
+      {
+        model: Product
+      }
     ],
+    where: {
+      cart_id: cartId,
+    },
   });
   return cart;
 }
 
 export async function removeProductFromCart(inItemId, cartId) {
   let cartList = [];
-  const shopping_cart = await ShoppingCart.destroy({
+  const product_cart = await ProductCart.destroy({
     where: {
       item_id: inItemId,
     },
   });
 
-  const cart = await Product.findAll({
+  const scart= await ShoppingCart.destroy({
+    where: {
+      item_id: inItemId
+    }
+  })
+
+  const cart = await ProductCart.findAll({
     include: [
       {
         model: ShoppingCart,
-        where: {
-          cart_id: cartId,
-        },
       },
+      {
+        model: Product
+      }
     ],
+    where: {
+      cart_id: cartId,
+    },
   });
 
   if (cart === null || cart.length < 1 || cart == undefined) {

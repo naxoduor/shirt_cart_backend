@@ -112,7 +112,17 @@ export async function createOrder(
             total_amount: total,
           })
 
-            return returneddetails;
+            // return returneddetails;
     }
   });
+
+  const result = ProductCart.destroy({
+    where: {
+      cart_id: inCartId
+    }
+  })
+
+  return []
+
+
 }

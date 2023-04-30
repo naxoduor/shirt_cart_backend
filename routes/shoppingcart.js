@@ -23,6 +23,7 @@ router.get("/add", (req, res) => {
 
 router.post("/add", async (req, res) => {
   let { cartId, productId, quantity } = req.body.params;
+  console.log("add item to cart")
   try{
     const shopping_cart = await addItemToCart(cartId, productId, quantity);
     res.send(shopping_cart);
