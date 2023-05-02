@@ -185,6 +185,13 @@ CREATE TABLE `review` (
   KEY `idx_review_product_id` (`product_id`)
 ) ENGINE=MyISAM;
 
+CREATE TABLE `product_cart` (
+  `product_id`         INT NOT NULL,
+  `cart_id` VARCHAR(1000),
+  `item_id`     VARCHAR(1000) NOT NULL
+) ENGINE=MyISAM;
+
+
 -- Populate department table
 INSERT INTO `department` (`department_id`, `name`, `description`) VALUES
        (1, 'Solar', 'Solar Panels');
