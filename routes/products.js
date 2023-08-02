@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   getAllProducts,
+  getAllProductsAsAdmin,
   getByDepartmentId,
   getByCategoryId,
   getProductsByCategoryByPagination,
@@ -22,6 +23,17 @@ router.get("/", async (req, res) => {
     res.send(error);
   }
 });
+
+router.get("/productsAsAdmin", async (req, res) => {
+  try {
+    const result = await getAllProductsAsAdmin();
+    res.send(result);
+  } catch (error) {
+    console.log("Experienced this error", error);
+    res.send(error);
+  }
+});
+
 
 router.get("/inDepartment/:id", async (req, res) => {
   let inDepartmentId = req.params.id;

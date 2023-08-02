@@ -4,17 +4,20 @@ import {Product} from '../models/index.js';
 export async function getAllProducts()  {
     // const products = await Product.findAll()
     const products=await Product.findAll({
-      // include: [{// Notice `include` takes an ARRAY
-      //   model: Category,
-      // }],
-      // where: { display: 0 },
-      // offset: 1,
-      // limit: 8
+      where: { display: 0 },
     })
-
-    // console.log("The products are", products)
     return products
   }
+
+
+  export async function getAllProductsAsAdmin()  {
+    // const products = await Product.findAll()
+    const products=await Product.findAll({
+      where: { display: 1 },
+    })
+    return products
+  }
+
 
 export async function getByDepartmentId(inDepartmentId) {
   const products= await Product.findAll({
