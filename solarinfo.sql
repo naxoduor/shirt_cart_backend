@@ -22,8 +22,8 @@ CREATE TABLE `category` (
 CREATE TABLE `product` (
   `product_id`       INT           NOT NULL  AUTO_INCREMENT,
   `name`             VARCHAR(100)  NOT NULL,
-  `description`      VARCHAR(5000) NOT NULL,
-  `specification`    VARCHAR(1000) NOT NULL,
+  `description`      VARCHAR(10000) NOT NULL,
+  `specification`    VARCHAR(10000) NOT NULL,
   `price`            DECIMAL(10,2) NOT NULL,
   `discounted_price` DECIMAL(10,2) NOT NULL  DEFAULT '0.00',
   `image`            VARCHAR(150) NOT NULL DEFAULT 'image',
