@@ -9,7 +9,8 @@ import {
   getProductsByDepartmentByPagination,
   getSearchProducts,
   setRabbitQueues,
-  addProduct
+  addProduct,
+  updateProduct
 } from "../db/products.js";
 
 const router = express.Router();
@@ -108,7 +109,7 @@ router.get('/rabbit', async (req, res) => {
   try {
    const result = await setRabbitQueues()
    res.send(result)
-}
+}     
   catch(error){
     console.log(error)
     res.send(error)
@@ -126,6 +127,22 @@ router.post('/addproduct',async (req,res)=>{
     res.send(error)
   }
 })
+
+router.put('/updateproduct',async (req,res)=>{
+  try {
+  const {product_id, name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display}=req.body.product
+  console.log(product_id, name, description, price)
+  console.log(product_id, name)
+  const product = await updateProduct(product_id, name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display)
+  res.send(product)
+  }
+
+  catch(error){
+    console.log(error)
+    res.send(error)
+  }
+})
+
 
 // module.exports = router
 

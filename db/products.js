@@ -122,16 +122,33 @@ export async function f() {
 }
 export async function addProduct(name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display)
  {
-  const product = await Product.create({
+  const product = await   console.log(req.body)
+  Product.create({
     name:name,
     description:description,
     price:price,
     discounted_price:discounted_price,
     delivery_cost:delivery_cost,
     image:image,
-    image2:image2,
+    image_2:image2,
     thumbnail:thumbnail,
     display:display
   })
+  return product
+}
+
+export async function updateProduct(product_id, name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display) {
+  const entry = await Product.findByPk(product_id)
+  const product = await entry.update({
+    name: name,
+    description:description,
+    price:price,
+    discounted_price: discounted_price,
+    delivery_cost:delivery_cost,
+    image:image,
+    image_2:image2,
+    thumbnail:thumbnail,
+    display: display,
+  });
   return product
 }
