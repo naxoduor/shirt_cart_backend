@@ -22,8 +22,8 @@ CREATE TABLE `category` (
 CREATE TABLE `product` (
   `product_id`       INT           NOT NULL  AUTO_INCREMENT,
   `name`             VARCHAR(100)  NOT NULL,
-  `description`      VARCHAR(10000) NOT NULL,
-  `specification`    VARCHAR(10000) NOT NULL,
+  `description`      VARCHAR(5000) NOT NULL,
+  `specification`    VARCHAR(5000) NOT NULL,
   `price`            DECIMAL(10,2) NOT NULL,
   `discounted_price` DECIMAL(10,2) NOT NULL  DEFAULT '0.00',
   `image`            VARCHAR(150) NOT NULL DEFAULT 'image',
@@ -79,6 +79,7 @@ CREATE TABLE `shopping_cart` (
 --   KEY `idx_shopping_cart_cart_id` (`cart_id`)
 ) ENGINE=MyISAM;
 
+
 -- Create orders table
 CREATE TABLE `orders` (
   `order_id`     INT           NOT NULL  AUTO_INCREMENT,
@@ -90,11 +91,11 @@ CREATE TABLE `orders` (
   `customer_id`  INT,
   `auth_code`    VARCHAR(50),
   `reference`    VARCHAR(50),
-  `shipping_region_id`  INT,
+  `shipping_id`  INT,
   `tax_id`       INT,
   PRIMARY KEY  (`order_id`),
   KEY `idx_orders_customer_id` (`customer_id`),
-  KEY `idx_orders_shipping_region_id` (`shipping_region_id`),
+  KEY `idx_orders_shipping_id` (`shipping_id`),
   KEY `idx_orders_tax_id` (`tax_id`)
 ) ENGINE=MyISAM;
 
@@ -135,7 +136,7 @@ CREATE TABLE `customer` (
   `day_phone`          varchar(100),
   `eve_phone`          varchar(100),
   `mob_phone`          varchar(100),
-  `role`               varchar(100)           NOT NULL default 'MEMBER',
+  `role`               VARCHAR(100),
   PRIMARY KEY  (`customer_id`),
   UNIQUE KEY `idx_customer_email` (`email`),
   KEY `idx_customer_shipping_region_id` (`shipping_region_id`)
@@ -184,13 +185,6 @@ CREATE TABLE `review` (
   KEY `idx_review_customer_id` (`customer_id`),
   KEY `idx_review_product_id` (`product_id`)
 ) ENGINE=MyISAM;
-
-CREATE TABLE `product_cart` (
-  `product_id`         INT NOT NULL,
-  `cart_id` VARCHAR(1000),
-  `item_id`     VARCHAR(1000) NOT NULL
-) ENGINE=MyISAM;
-
 
 -- Populate department table
 INSERT INTO `department` (`department_id`, `name`, `description`) VALUES
@@ -343,7 +337,95 @@ Key FeaturesMax Power at STC (Pmax) = 50 wattOpen Circuit Voltage (Voc) = 22.7 V
 'solarmax8.jpg',
 'solarmax8.jpg',
 'solarmax8.jpg',
+0),
+(9, 'solarmax 200W Mono Crystalline Solar Panel,High Efficiency Cells
+', 'roduct detailsMono-crystalline High efficiency Solar panel and 12 Volts output. The panel comes with a warranty of 25 years and are entirely made from high quality materials. This panel is ideal for home inverters, battery charging, street lighting and other applicationsKEY FEATURESType: mono crystalineUse: Inverter ChargingDurability: HighCell Efficiency: HighInstallation: Use Expert like usSolar panels trap the free energy of the sun for your use. It can be integrated into your existing installation of Inverter and Batteries', 'pecificationsKey FeaturesType: mono crystalineUse: Inverter ChargingDurability: HighCell Efficiency: HighInstallation: Use Expert like usSolar panels trap the free energy of the sun for your use. It can be integrated into your existing installation of Inverter and Batteries.What’s in the boxSolar PanelSpecificationsSKU: SO830HL0SJ0OQNAFAMZCapacity (L): 1Wattage: 200wattsMain Material: Metal and glassSize (L x W x H cm): 11.5 x 7 x 2.5Weight (kg): 15Customer FeedbackThis product has no ratings yet.Product detailsSpecificationsCustomer Feedbacksolarmax 200W Mono Crystalline Solar Panel,High Efficiency CellsKSh 20,999KSh 25,999-19%Add to cart
+found row when checking
+Key FeaturesType: mono crystalineUse: Inverter ChargingDurability: HighCell Efficiency: HighInstallation: Use Expert like usSolar panels trap the free energy of the sun for your use. It can be integrated into your existing installation of Inverter and Batteries.What’s in the boxSolar PanelSpecificationsSKU: SO830HL0SJ0OQNAFAMZCapacity (L): 1Wattage: 200wattsMain Material: Metal and glassSize (L x W x H cm): 11.5 x 7 x 2.5W',
+20999.00,
+25999.00,
+'solarmax9.jpg',
+'solarmax9.jpg',
+'solarmax9.jpg',
+0),
+(10,
+'solarmax 200Watts 18Volts Solar Panel',
+' Product detailsUnder optimum conditions this panel will produce up to 10-11A of electrical current. This is at a cell temperature of 25°C, measured with a thermocouple from the back of the panel.  Its possible to generate more than 12 amps if at 0°Celsius, i.e. in snow and bright sunlight.High solar cell efficiency Monocrystalline 18.4%Bypass diodes minimize power drop caused by shade and ensure excellent performance in low-light environmentEL tested solar modules; no hot-spot heating guaranteedCorrosion-resistant aluminum frame for extended outdoor use, allowing the panels to last for decadesTPT back sheet ensures smooth performance over a long period of timeIP65 rated junction box provides complete protection against environmental particles and low pressure water jets', 'pecificationsKey FeaturesHigh solar cell efficiency Monocrystalline 18.4%Bypass diodes minimize power drop caused by shade and ensure excellent performance in low-light environmentEL tested solar modules; no hot-spot heating guaranteedCorrosion-resistant aluminum frame for extended outdoor use, allowing the panels to last for decadesTPT back sheet ensures smooth performance over a long period of timeIP65 rated junction box provides complete protection against environmental particles and low pressure water jetsWhat’s in the box1 x solar panelSpecificationsSKU: SO830HL1AFCN6NAFAMZCare Label: fragileMain Material: Steel and crystalline plasticSize (L x W x H cm): 158*80.8*0.35Weight (kg): 14.2Customer FeedbackThis product has no ratings yet.Product detailsSpecificationsCustomer Feedbacksolarmax 200Watts 18Volts Solar PanelKSh 19,199KSh 29,199-34%Add to cart
+found row when checking
+Key FeaturesHigh solar cell efficiency Monocrystalline 18.4%Bypass diodes minimize power drop caused by shade and ensure excellent performance in low-light environmentEL tested solar modules; no hot-spot heating guaranteedCorrosion-resistant aluminum frame for extended outdoor use, allowing the panels to last for decadesTPT back sheet ensures smooth performance over a long period of timeIP65 rated junction box provides complete protection against environmental particles and low pressure water jetsWhat’s in the box1 x solar panelSpecificationsSKU: SO830HL1AFCN6NAFAMZCare Label: fragileMain Material: Steel and crystalline plasticSize (L x W x H cm): 158*80.8*0.35Weight (kg)',
+19199.00, 
+29199.00, 
+'solarmax10.jpg', 
+'solarmax10.jpg', 
+'solarmax10.jpg', 
+0),
+(11, 
+'24v 275w suntech solar panel', 
+'24V 275W Solar Panel with 25 Year out Warranty
+60 cell formation
+Excellent Low Light Performance
+High Efficiency with High Transparency Low Iron Tempered Glass
+Rugged Extruded and Anodized Aluminum Frame, Fully Sealed
+41" Cable with MC4 Connector', 
+'NEW', 
+15273.00, 
+15273.00, 
+'suntech11.jpg', 
+'suntech11.jpg', 
+'suntech11.jpg', 
+0),
+(12, 
+'Suntech Solar Module, 270W, PolyCrystalline, 60-cell, 25yrs Warranty, EIC, TUV, CE STP-270-20/Wfw', 
+'DESCRIPTION:
+This module is perfect for both residential and industrial roofs and has been tested in many climates. The 25 year warranty is also included with this module. Remember that the 250w – 290w range are almost always 60 cell modules, which are not suitable for battery charging except with a MPPT controller. In battery language, they are nominal 18v modules. If you use a PWM charge controller with these modules, you will harvest approximately half of the rated power.', 'Electrical Characteristics
+Maximum Power at STC (Pmax) 275 W 270 W 265 W
+Optimum Operating Voltage (Vmp) 31.2 V 31.1 V 31.0 V
+Optimum Operating Current (Imp) 8.82 A 8.69 A 8.56 A
+Open Circuit Voltage (Voc) 38.1 V 37.9 V 37.8 V
+Short Circuit Current (Isc) 9.27 A 9.15 A 9.02 A
+Module Efficiency 16.8% 16.5% 16.2%
+Operating Module Temperature -40 °C to +85 °C
+Maximum System Voltage 1000 V DC (IEC)
+Maximum Series Fuse Rating 20 A
+Power Tolerance 0/+5 W
+Maximum Power at NOCT (Pmax) 200.6 W 198 W 194 W
+Optimum Operating Voltage (Vmp) 28.5 V 28.4 V 28.3V
+Optimum Operating Current (Imp) 7.05 A 6.97 A 6.86 A
+Open Circuit Voltage (Voc) 34.8 V 34.9 V 34.8 V
+Short Circuit Current (Isc) 7.5 A 7.42 A 7.32 A
+
+Temperature Characteristics
+Nominal Operating Cell Temperature (NOCT) 45±2°C
+Temperature Coefficient of Pmax -0.41 %/°C
+Temperature Coefficient of Voc -0.33 %/°C
+Temperature Coefficient of Isc 0.067 %/°C
+
+Mechanical Characteristics
+Solar Cell Polycrystalline silicon 6 inches
+No. of Cells 60 (6 × 10)
+Dimensions 1650 × 992 × 35mm (64.96 × 39.1 × 1.4 inches)
+Weight 18.3 kgs (40.3 lbs.)
+Front Glass 3.2 mm (0.13 inches) tempered glass
+Frame Anodized aluminium alloy
+Junction Box IP68 rated (3 bypass diodes)
+Output Cables 4.0 mm2
+(0.006 inches2
+), symmetrical lengths (-) 1000mm (39.4
+inches) and (+) 1000 mm (39.4 inches)
+Connectors MC4 compatible
+
+Packing Configuration (Container 20’ GP 40’ HC)
+Pieces per pallet 30 30
+Pallets per container 6 28
+Pieces per container 180 840
+', 
+14441.00, 
+14441.00, 
+'suntech12.jpg', 
+'suntech12.jpg', 
+'suntech12.jpg', 
 0);
+
 
 
 
@@ -1297,7 +1379,7 @@ BEGIN
   WHERE  customer_id = inCustomerId;
 END$$
 
--- Create orders_get_fmost_recent_orders stored procedure
+-- Create orders_get_most_recent_orders stored procedure
 CREATE PROCEDURE orders_get_most_recent_orders(IN inHowMany INT)
 BEGIN
   PREPARE statement FROM
