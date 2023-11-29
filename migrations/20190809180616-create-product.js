@@ -17,6 +17,9 @@ export default {
       description: {
         type: Sequelize.STRING
       },
+      specification: {
+        type: Sequelize.STRING
+      },
       price: {
         type: Sequelize.DECIMAL
       },

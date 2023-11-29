@@ -12,6 +12,7 @@ const Product = sequelize.define(
     },
     name: Sequelize.STRING,
     description: Sequelize.STRING,
+    specification: Sequelize.STRING,
     price: Sequelize.DECIMAL,
     discounted_price: Sequelize.DECIMAL,
     image: Sequelize.STRING,
