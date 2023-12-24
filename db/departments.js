@@ -8,26 +8,18 @@ export async function findAllDepartments() {
     return departments
 }
 
-export async function countProductsById(inDepartmentId) {
-    const count = await Product.count({
-        include: [{
-            model: Category,
-            where: { department_id: inDepartmentId },
-        }]
+export async function countProductsById(department_id) {
+    const products_on_department_count = await Product.count({
+        include: [{model: Category,where: { department_id},}]
     })
-    let list = []
-    let obj = {}
-    obj.products_on_department_count = count
-    list.push(obj)
+    let obj = {products_on_department_count}
+    list=[obj]
     return list
 }
 
-export async function findProductsById(id) {
+export async function findProductsById(department_id) {
     const products = await Product.findAll({
-        include: [{
-            model: Category,
-            where: { department_id: id },
-        }],
+        include: [{model: Category,where: { department_id},}],
         offset: startItem,
         limit: productsPerPage
     })

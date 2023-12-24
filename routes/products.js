@@ -1,16 +1,7 @@
 import express from "express";
 
-import {
-  getAllProducts,
-  getAllProductsAsAdmin,
-  getByDepartmentId,
-  getByCategoryId,
-  getProductsByCategoryByPagination,
-  getProductsByDepartmentByPagination,
-  getSearchProducts,
-  setRabbitQueues,
-  addProduct,
-  updateProduct
+import {getAllProducts,getAllProductsAsAdmin,getByDepartmentId,getByCategoryId,getProductsByCategoryByPagination,
+  getProductsByDepartmentByPagination,getSearchProducts,setRabbitQueues,addProduct,updateProduct
 } from "../db/products.js";
 
 const router = express.Router();
@@ -36,21 +27,20 @@ router.get("/productsAsAdmin", async (req, res) => {
 });
 
 
-router.get("/inDepartment/:id", async (req, res) => {
-  let inDepartmentId = req.params.id;
+router.get("/inDepartment/:department_id", async (req, res) => {
+  let {department_id} = req.params;
   try {
-    const products = await getByDepartmentId(inDepartmentId);
+    const products = await getByDepartmentId(department_id);
     res.send(products);
   } catch (error) {
     res.send(error);
   }
 });
 
-router.get("/inCategory/:id", async (req, res) => {
-  let inCategorytId = req.params.id;
-  let key = `/products/inCategory/${inCategorytId}`;
+router.get("/inCategory/:category_id", async (req, res) => {
+  let {category_id} = req.params;
   try {
-    const products = await getByCategoryId(inCategorytId);
+    const products = await getByCategoryId(category_id);
     res.send(products);
   } catch (error) {
     console.log(error);
@@ -58,9 +48,8 @@ router.get("/inCategory/:id", async (req, res) => {
   }
 });
 
-router.post('/inCategory/pagination/:id', async (request, response) => {
+router.post('/inCategory/pagination/:category_id', async (request, response) => {
   let { category_id, productsPerPage, startItem } = request.body.params
-  let key = `/products/inCategory/pagination${category_id}${startItem}`
   try {
     const products = await getProductsByCategoryByPagination(category_id, productsPerPage,startItem)
     res.send(products)
@@ -72,9 +61,8 @@ router.post('/inCategory/pagination/:id', async (request, response) => {
 
 })
 
-router.post('/inDepartment/pagination/:id', async (request, response) => {
+router.post('/inDepartment/pagination/:department_id', async (request, response) => {
   let { department_id, productsPerPage, startItem } = request.body.params
-  let key = `/products/inDepartment/pagination${department_id}${startItem}`
   try {
     const products = await getProductsByDepartmentByPagination(department_id, productsPerPage, startItem)
     res.send(products)
@@ -89,8 +77,6 @@ router.post('/inDepartment/pagination/:id', async (request, response) => {
 router.post('/search*', async (request, response) => {
 
   let { inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem } = request.body.params
-  let key = `/products/search/${searchString}$`
-
   try {
     const products = await getSearchProducts(inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem)
     res.send(products)
@@ -105,7 +91,6 @@ router.post('/search*', async (request, response) => {
 
 router.get('/rabbit', async (req, res) => {
 
-  let inDepartmentId = 1
   try {
    const result = await setRabbitQueues()
    res.send(result)
@@ -131,8 +116,6 @@ router.post('/addproduct',async (req,res)=>{
 router.put('/updateproduct',async (req,res)=>{
   try {
   const {product_id, name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display}=req.body.product
-  console.log(product_id, name, description, price)
-  console.log(product_id, name)
   const product = await updateProduct(product_id, name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display)
   res.send(product)
   }

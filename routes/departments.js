@@ -14,12 +14,11 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/totalitems/:id', async (req, res) => {
-    let inDepartmentId = req.params.id
+router.get('/totalitems/:department_id', async (req, res) => {
+    const {department_id} = req.params
     try {
-        const productsCount = await countProductsById(inDepartmentId)
+        const productsCount = await countProductsById(department_id)
         res.send(productsCount)
-
     }
     catch(error){
         console.log(error)
@@ -27,11 +26,11 @@ router.get('/totalitems/:id', async (req, res) => {
     }
 })
 
-router.post('/products/:id', async (req, res) => {
+router.post('/products/:department_id', async (req, res) => {
     
-    let { id, productsPerPage, startItem } = request.body.params
+    let { department_id, productsPerPage, startItem } = request.body.params
     try {
-        const products = await findProductsById(id)
+        const products = await findProductsById(department_id)
         res.send(products)
     }
     catch(error){

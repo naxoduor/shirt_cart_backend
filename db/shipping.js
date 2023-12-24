@@ -1,11 +1,9 @@
 import {Shipping} from "../models/index.js"
 import {ShippingRegion} from '../models/index.js'
 
-export async function findShippingRegionById(inShippingRegionId) {
+export async function findShippingRegionById(shipping_region_id) {
     const shippingInfo = Shipping.findAll({
-        where: {
-            shipping_region_id: inShippingRegionId
-        }
+        where: {shipping_region_id,}
     })
     return shippingInfo
 }

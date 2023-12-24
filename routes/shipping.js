@@ -6,10 +6,8 @@ import url from 'url';
 import { findShippingRegionById, findAllShippingRegions} from '../db/shipping.js'
 
 router.get('/regions/regionId/:shipping_id', async (req, res) => {
-    let inShippingRegionId = req.params.shipping_id
-    res.send(await findShippingRegionById(inShippingRegionId))
-   
-
+    let {shipping_id} = req.params
+    res.send(await findShippingRegionById(shipping_id))
 })
 
 router.get('/regions', async (req, res) => {

@@ -4,7 +4,7 @@ export async function findOrderById(orderid) {
     const orderdetails = await Order.findOne({
         include: [
             {
-            model:customer
+            model:customer,
           },
         {
             model:order_detail

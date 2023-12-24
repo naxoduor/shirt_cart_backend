@@ -3,8 +3,8 @@ const router = express.Router()
 import { findOrderById } from '../db/orderdetails.js'
 
 
-router.get('/:id', async (req, res) => {
-const orderid=req.params.id
+router.get('/:orderid', async (req, res) => {
+const {orderid}=req.params
 try {
     const order = await findOrderById(orderid)
     return order

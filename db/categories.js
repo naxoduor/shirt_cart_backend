@@ -6,41 +6,24 @@ export async function findAllCategories() {
   return categories;
 }
 
-export async function findAllCategoriesByDepartmentId(inDepartmentId) {
+export async function findAllCategoriesByDepartmentId(department_id) {
   const categories = await Category.findAll({
-    where: {
-      department_id: inDepartmentId,
-    },
-  });
+    where: {department_id},});
   return categories;
 }
 
-export async function findTotalProductsByCategoryId(inCategoryId) {
-  const count = await Product.count({
-    include: [
-      {
-        model: Category,
-        where: { category_id: inCategoryId },
-      },
-    ],
+export async function findTotalProductsByCategoryId(category_id) {
+  const categories_count = await Product.count({
+    include: [{model: Category,where: { category_id },},],
   });
-  let list = [];
-  let obj = {};
-  obj.categories_count = count;
-  list.push(obj);
+  let obj = {categories_count};
+  let list=[obj]
   return list;
 }
 
-export async function findProductsByCategoryId(category_id, productsPerPage, startItem){
+export async function findProductsByCategoryId(category_id, limit, offset){
     const products = await Product.findAll({
-        include: [
-          {
-            model: Category,
-            where: { category_id: category_id },
-          },
-        ],
-        offset: startItem,
-        limit: productsPerPage,
-      });
+        include: [{model: Category,where: { category_id},},],
+        offset,limit,});
     return products
 }

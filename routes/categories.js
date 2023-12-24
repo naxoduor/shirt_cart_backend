@@ -2,12 +2,7 @@ import express from "express";
 const router = express.Router();
 //const cache = require('../config/cache')
 
-import {
-  findAllCategories,
-  findAllCategoriesByDepartmentId,
-  findTotalProductsByCategoryId,
-  findProductsByCategoryId
-} from "../db/categories.js";
+import {findAllCategories,findAllCategoriesByDepartmentId,findTotalProductsByCategoryId,findProductsByCategoryId} from "../db/categories.js";
 
 router.get("/", async (req, res) => {
   try {
@@ -19,10 +14,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/inDepartment/:id", async (req, res) => {
-  let inDepartmentId = req.params.id;
+router.get("/inDepartment/:department_id", async (req, res) => {
+  const {department_id} = req.params;
   try {
-    const categories = await findAllCategoriesByDepartmentId(inDepartmentId);
+    const categories = await findAllCategoriesByDepartmentId(department_id);
     res.send(categories);
   } catch (error) {
     console.log(error);
@@ -30,10 +25,10 @@ router.get("/inDepartment/:id", async (req, res) => {
   }
 });
 
-router.get("/totalitems/:id", async (req, res) => {
-  let inCategoryId = req.params.id;
+router.get("/totalitems/:category_id", async (req, res) => {
+  const {category_id} = req.params;
   try {
-    const list= findTotalProductsByCategoryId(inCategoryId)
+    const list= findTotalProductsByCategoryId(category_id)
     res.send(list);
   } catch (error) {
     console.log(error);
@@ -42,7 +37,7 @@ router.get("/totalitems/:id", async (req, res) => {
 });
 
 router.post("/products/*", async (req, res) => {
-  let { category_id, productsPerPage, startItem } = request.body.params;
+  const { category_id, productsPerPage, startItem } = request.body.params;
   try {
     const products = await findProductsByCategoryId(category_id, productsPerPage, startItem)
     res.send(products);

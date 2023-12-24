@@ -4,64 +4,52 @@ const Op = Sequelize.Op;
 
 export async function findAllCustomerOrders() {
     const customer_orders=await Customer.findAll({
-        include: {
-            model: order
-        }
+        include: {model: order}
     })
     return customer_orders
 }
 
 export async function findCustomerByEmail(email) {
     const customer =await Customer.findOne({
-        where: {
-            email: email 
-        },
+        where: {email},
     })
     return customer
 }
 
-export async function updateCustomer(username, email) {
+export async function updateCustomer(name, email) {
     const customer = await Customer.findOne({
-        where: {
-            name: username,
-        },
+        where: {name,},
     })
-    const userr = await customer.update({
-        name: username,
-        email: email
-    })
+
+    const userr = await customer.update({name,email})
     return userr
 }
 
-export async function findCustomerByUserName() {
-    const customer = await Customer.findOne({
-        where: {
-          name: data.username,
-        },
-      });
-      return customer
-}
+// export async function findCustomerByUserName() {
 
-export async function updatePassword(customer, hashedPassword) {
+//     const customer = await Customer.findOne({
+//         where: {
+//           name: data.username,
+//         },
+//       });
+//       return customer
+// }
+
+export async function updatePassword(customer, password) {
     const customerr = await customer.update({
-        name: username,
-        password: hashedPassword,
+        password,
       });
       return "password reset";
 }
 
-export async function updateNewPassword(customerr, hashedPassword) {
-    const customer = await customerr.update({
-        password: hashedPassword,
-      });
+export async function updateNewPassword(customerr, password) {
+    const customer = await customerr.update({password,});
       return "Password has been reset"
 }
 
 export async function findCustomerById(customer_id){
     const customerr = await Customer.findOne({
-        where: {
-          customer_id: customer_id,
-        },
+        where: {customer_id},
       });
       return customerr
 }
@@ -70,22 +58,15 @@ export async function findByNameOrEmail(name, email){
     const customer = Customer.findOne({
         where: {
             [Op.or]: [
-                {
-                    name,
-                },
-                { email: email },
+                {name},
+                {email},
             ],
         },
     })
     return customer
 }
 
-export async function createCustomer(name, hashedPassword, email, mobile) {
-    const user =Customer.create({
-        name,
-        password: hashedPassword,
-        email: email,
-        mob_phone: mobile,
-      })
-      return user
+export async function createCustomer(name, password, email, mobile) {
+    const user =Customer.create({name,password,email,mobile})
+    return user
 }

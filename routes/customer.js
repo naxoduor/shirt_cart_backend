@@ -40,13 +40,11 @@ router.post("/login", async (req, res, next) => {
     } else {
       req.logIn(customers, async () => {
         try {
-          const customer = await findCustomerByEmail(req.body.email);
+          const {email} = req.body
+          const customer = await findCustomerByEmail(email);
           const token = await createToken(customer)
-          console.log("log the token")
-          console.log(token)
           res.status(200).json(token);
         } catch (error) {
-          console.log(error);
           res.send(error);
         }
       });
@@ -114,8 +112,7 @@ router.post("/resetpassword", async (req, res, next) => {
   passport.authenticate("bearer", async (err, customer, info) => {
     if (err) res.status(401).send(err);
     try {
-      let customer_id = customer.customer.customer_id;
-      let password = "password";
+      let {customer_id, password} = customer.customer;
       const hashedPassword = await hashPassword(password);
       const customerr = await findCustomerById(customer_id);
       const result = await updateNewPassword(customerr, hashedPassword);

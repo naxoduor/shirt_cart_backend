@@ -10,18 +10,15 @@ router.get("/", async (req, res) => {
   res.send(orders);
 });
 
-router.get("/order_details/:id", async (req, res) => {
-  let orderId = req.params.id;
+router.get("/order_details/:orderId", async (req, res) => {
+  const {orderId} = req.params;
   res.send(await findOrderDetailById(orderId))
  
 });
 
 router.post("/", async (req, res) => {
-  let inCartId = req.body.order.cartId;
-  let inCustomerId = req.body.order.customerId;
-  let inShippingId = req.body.order.shippingId;
-  let inTaxId = req.body.order.taxId;
-  res.send(await createOrder(inCartId, inCustomerId, inShippingId, inTaxId))
+  const {cartId, customerId, shippingId, taxId} = req.body.order
+  res.send(await createOrder(cartId, customerId, shippingId, taxId))
 });
 
 export default router;
