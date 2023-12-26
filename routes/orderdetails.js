@@ -1,17 +1,8 @@
 import express from 'express'
 const router = express.Router()
-import { findOrderById } from '../db/orderdetails.js'
+import { findOrder } from '../controllers/orderdetails-controller.js'
 
 
-router.get('/:orderid', async (req, res) => {
-const {orderid}=req.params
-try {
-    const order = await findOrderById(orderid)
-    return order
-}
-catch(e){
-    console.log(e)
-}
-})
+router.get('/:orderid', findOrder)
 
 export default router

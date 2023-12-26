@@ -31,26 +31,23 @@ export async function createOrder(cart_id,customer_id,shipping_region_id,tax_id)
 
   const cart = await ProductCart.findAll({include: [{model: Product,},{model: ShoppingCart,},],where: {cart_id,},});
 
-  let total_amount = 0, totalDelivery = 0, itemsList = [];
+  let total_amount = 0, totalDelivery = 0;
 
-  cart.forEach(async (item, index) => {
+  const itemsList = cart.map((item) => {
     let good = JSON.parse(JSON.stringify(item));
     const {product, shopping_cart} = good
     let productItem = JSON.parse(JSON.stringify(product)), cartItem = JSON.parse(JSON.stringify(shopping_cart));
     const {delivery_cost, product_id, name, price} = productItem
     const {quantity, attributes} = cartItem
     let product_name = name, unit_cost=price, subtotal = quantity * price, subtotalDelivery = quantity * delivery_cost;
-
     total_amount = total_amount + subtotal, totalDelivery = totalDelivery + subtotalDelivery;
-
-    let obj ={order_id, product_id, attributes, product_name, quantity, unit_cost, delivery_cost }
-    
-    itemsList.push(obj);
-    if (!cart[index + 1]) {
-      const returneddetails = await OrderDetail.bulkCreate(itemsList)
-      const updatesOrder = await currentOrder.update({total_amount})
-    }
+    return {order_id, product_id, attributes, product_name, quantity, unit_cost, delivery_cost }
   });
+
+  if (!cart[index + 1]) {
+    const returneddetails = await OrderDetail.bulkCreate(itemsList)
+    const updatesOrder = await currentOrder.update({total_amount})
+  }
 
   const result = ProductCart.destroy({where: {cart_id}})
   return []

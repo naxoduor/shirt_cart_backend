@@ -1,15 +1,9 @@
 const express = require("express");
 const router = express.Router();
-import {findAllShippingregions,findShppingRegionById,findShppingRegionById,} from "../db/shipping-region";
+import {findShippingRegionById, findShippingRegions} from "../controllers/shipping_region_controller.js";
 
-router.get("/regions/regionid/:shipping_region_id", async (req, res) => {
-  let {shipping_region_id} = req.params;
-  const shipping = await findShppingRegionById(shipping_region_id);
-  res.send(shipping);
-});
+router.get("/regions/regionid/:shipping_region_id", findShippingRegionById);
 
-router.get("/regions", async (req, res) => {
-  res.send(await findAllShippingregions());
-});
+router.get("/regions", findShippingRegions);
 
 export default router
