@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 //const cache = require('../config/cache')
-import { findAllOrders, findOrderDetailById, createOrder } from "../controllers/orderdetails-controller.js";
+import { findAllOrders, findOrderDetailById, createOrder } from "../db/orders.js";
 
 export const findOrders = async (req, res) => {
   const orders = await findAllOrders();

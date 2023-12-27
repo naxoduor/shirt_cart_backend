@@ -1,4 +1,4 @@
-import {findAllCats,findAllCategoriesByDepartmentId,findTotalProductsByCategoryId,findProductsByCategoryId} from "../db/categories.js";
+import {findAllCategories,findAllCategoriesByDepartmentId,findTotalProductsByCategoryId,findProductsByCategoryId} from "../db/categories.js";
 
 
 export const findAllCats = async (req, res) => {

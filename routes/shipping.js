@@ -1,3 +1,6 @@
+import express from "express";
+const router = express.Router();
+
 import { findShippingRegionById, findAllShippingRegions} from '../db/shipping.js'
 
 router.get('/regions/regionId/:shipping_id', findShippingRegionById)
