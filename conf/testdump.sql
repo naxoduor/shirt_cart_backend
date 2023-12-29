@@ -65,6 +65,13 @@ CREATE TABLE `product_attribute` (
   PRIMARY KEY (`product_id`, `attribute_value_id`)
 ) ENGINE=MyISAM;
 
+CREATE TABLE `product_cart` (
+  `product_id`         INT NOT NULL,
+  `cart_id` VARCHAR(1000),
+  `item_id`     VARCHAR(1000) NOT NULL
+) ENGINE=MyISAM;
+
+
 
 -- Create shopping_cart table
 CREATE TABLE `shopping_cart` (

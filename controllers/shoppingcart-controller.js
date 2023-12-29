@@ -17,6 +17,7 @@ export const add = (req, res) => {
 
 export const addItem = async (req, res) => {
   let { cartId, productId, quantity } = req.body.params;
+  console.log("add items")
   try{
     const shopping_cart = await addItemToCart(cartId, productId, quantity);
     res.send(shopping_cart);
