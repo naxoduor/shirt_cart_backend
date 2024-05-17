@@ -13,7 +13,7 @@ services:
   mysql_db:
     # image: mysql:8.0.19
     image: mysql:8.0.19
-    command: '--default-authentication-plugin=mysql_native_password'
+    # command: '--default-authentication-plugin=mysql_native_password'
     # build: ./conf
     restart: unless-stopped
     volumes:
@@ -50,6 +50,6 @@ services:
       - mysql_db
     stdin_open: true
     tty: true
-    
+
 volumes:
    db_data:
