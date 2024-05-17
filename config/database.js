@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 
 // module.exports = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-    export default new Sequelize('energy', 'root', 'password', {
+    export default new Sequelize('energy', 'root', 'Maradona@#', {
     host: 'mysql_db',
     // host:'localhost',
     dialect: 'mysql',
