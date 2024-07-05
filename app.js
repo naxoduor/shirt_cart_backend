@@ -64,5 +64,5 @@ app.use('/orderdetails', orderdetails)
 app.use('/shipping', shipping)
 app.use('/testing', testing)
 app.use('/chapaa', chapaa)
-app.use('/protected', protect)
+// app.use('/protected', protect)
 app.listen(PORT, console.log(`Server started on port ${PORT}`));  

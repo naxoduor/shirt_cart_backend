@@ -3,9 +3,7 @@ const router = express.Router();
 import {findAllShippingregions,findShppingRegionById,findShppingRegionById,} from "../db/shipping-region";
 
 export const findShippingRegionById = async (req, res) => {
-  let {shipping_region_id} = req.params;
-  const shipping = await findShppingRegionById(shipping_region_id);
-  res.send(shipping);
+  res.send(await findShppingRegionById(req.params.shipping_region_id));
 }
 
 export const findShippingRegions = async (req, res) => {

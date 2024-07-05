@@ -4,13 +4,11 @@ const router = express.Router();
 import { findAllOrders, findOrderDetailById, createOrder } from "../db/orders.js";
 
 export const findOrders = async (req, res) => {
-  const orders = await findAllOrders();
-  res.send(orders);
+  res.send(await findAllOrders());
 }
 
 export const findOrderById = async (req, res) => {
-  const {orderId} = req.params;
-  res.send(await findOrderDetailById(orderId))
+  res.send(await findOrderDetailById(req.params.orderId))
  
 }
 

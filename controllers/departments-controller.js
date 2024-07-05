@@ -2,36 +2,28 @@ import { findAllDepartments, countProductsById, findProductsById } from '../db/d
 
 export const findDepartments= async (req, res) => {
     try {
-        const departments = await findAllDepartments()
-        res.send(departments)
+        res.send(await findAllDepartments())
     }
     catch(error){
-        console.log(error)
         res.send(error)
     }
 }
 
 export const totalItems = async (req, res) => {
-    const {department_id} = req.params
     try {
-        const productsCount = await countProductsById(department_id)
-        res.send(productsCount)
+        res.send(await countProductsById(req.params.department_id))
     }
     catch(error){
-        console.log(error)
         res.send(error)
     }
 }
 
 export const products = async (req, res) => {
     
-    let { department_id, productsPerPage, startItem } = request.body.params
     try {
-        const products = await findProductsById(department_id)
-        res.send(products)
+        res.send(await findProductsById(req.body.params.department_id))
     }
     catch(error){
-        console.log(error)
         res.send(error)
     }
 }

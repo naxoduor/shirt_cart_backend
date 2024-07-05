@@ -1,7 +1,7 @@
 import {Order} from '../models/index.js'
 
 export async function findOrderById(orderid) {
-    const orderdetails = await Order.findOne({
+    return await Order.findOne({
         include: [
             {
             model:customer,
@@ -13,7 +13,6 @@ export async function findOrderById(orderid) {
             order_id: orderid
         }
      })
-    return orderdetails;
 }
 
 export async function findOrderDetailsByOrderId() {

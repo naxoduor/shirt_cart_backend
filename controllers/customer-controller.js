@@ -8,8 +8,7 @@ import { sendTokenByEmail } from "../notification/email.js";
 
 export const findCustomerOrders = async (req, res) => {
   try {
-    const customer_orders = await findAllCustomerOrders();
-    res.send(customer_orders);
+    res.send(await findAllCustomerOrders());
   } catch (err) {
     res.send(err);
   }
@@ -31,10 +30,7 @@ export const login = async (req, res, next) => {
     } else {
       req.logIn(customers, async () => {
         try {
-          const {email} = req.body
-          const customer = await findCustomerByEmail(email);
-          const token = await createToken(customer)
-          res.status(200).json(token);
+          res.status(200).json(await createToken(await findCustomerByEmail(req.body.email)));
         } catch (error) {
           res.send(error);
         }
@@ -44,6 +40,7 @@ export const login = async (req, res, next) => {
 }
 
 export const register = async (req, res, next) => {
+  console.log("register")
   passport.authenticate("register", async (err, user, info) => {
     if (err) {
       console.log(err);
@@ -55,6 +52,7 @@ export const register = async (req, res, next) => {
       console.log("login the user");
       req.logIn(user, async () => {
         try {
+          console.log("register user")
           let { username, email } = req.body;
           res.send(await updateCustomer(username, email));
         } catch (error) {

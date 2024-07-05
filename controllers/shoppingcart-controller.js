@@ -17,34 +17,27 @@ export const add = (req, res) => {
 
 export const addItem = async (req, res) => {
   let { cartId, productId, quantity } = req.body.params;
-  console.log("add items")
   try{
-    const shopping_cart = await addItemToCart(cartId, productId, quantity);
-    res.send(shopping_cart);
+    res.send(await addItemToCart(cartId, productId, quantity));
   }
   catch(error){
-    console.log(error)
     res.send(error)
   }
 }
 
 export const findCart = async (req, res) => {
-  let {cart_id} = req.params;
-  const cartList = await  findCartById(cart_id)
-  res.send(cartList);
+  res.send(await findCartById(req.params.cart_id))
 }
 
 export const updateCart = async (req, res) => {
   let {joined_ids} = req.params, arrc = joined_ids.split("&"), item_id = arrc[0], cart_id= arrc[arrc.length - 1];
   let { quantity } = req.body.params;
-  const shopping_cart = await updateCartById(item_id,cart_id,quantity);
-  res.send(shopping_cart);
+  res.send(await updateCartById(item_id,cart_id,quantity))
 }
 
 export const removeProduct = async (req, res) => {
   let {joined_ids} = req.params;
   let arrc = joined_ids.split("&"), item_id = arrc[0], cart_id = arrc[arrc.length - 1];
-  const cart = await removeProductFromCart(item_id, cart_id)
-  res.send(cart)
+  res.send(await removeProductFromCart(item_id, cart_id))
   
 }

@@ -1,13 +1,15 @@
 import express from "express";
 
 import {getProducts,getProductsAsAdmin, getByDepId, getByCatId, getProductsByCategoryByPage, getProductsByDepartmentByPage,
-  addProd, updateProd, getSearchProds,
+  addProd, updateProd, getSearchProds, getProductById
  
 } from "../controllers/products_controller.js";
 
 const router = express.Router();
 
 router.get("/", getProducts)
+
+router.get("/:product_name/:product_id", getProductById)
 
 router.get("/productsAsAdmin", getProductsAsAdmin)
 

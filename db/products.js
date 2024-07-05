@@ -2,68 +2,65 @@ import {Category} from '../models/index.js'
 import {Product} from '../models/index.js';
 
 export async function getAllProducts()  {
-    const products=await Product.findAll({
+    return await Product.findAll({
       where: { display: 0 },
     })
-    return products
   }
-
 
   export async function getAllProductsAsAdmin()  {
-    const products=await Product.findAll({
+    return await Product.findAll({
       where: { display: 1 },
     })
-    return products
   }
+
+export async function getProductByPk(product_id) {
+  return await Product.findByPk(product_id)
+
+}
 
 
 export async function getByDepartmentId(department_id) {
-  const products= await Product.findAll({
+  return await Product.findAll({
     include: [{model: Category, where: { department_id},}],
     where: { display: 0 },
     offset: 1,
     limit: 8
   })
-  return products
 }
 
 export async function getByCategoryId(category_id) {
-  const products = await Product.findAll({
+  return await Product.findAll({
     include: [{model: Category,where: {category_id},}],
     where: { display: 0 },
     offset: 1,
     limit: 8
   })
-  return products
 }
 
 export async function getProductsByCategoryByPagination(category_id, limit, offset){
   
-    const products = await Product.findAll({
+    return await Product.findAll({
       include: [{model: Category,where: { category_id},}],
       where: { display: 0 },
       offset,
       limit
     })
-    return products
 }
 
 export async function getProductsByDepartmentByPagination(department_id, limit, offset) {
-    const products = await Product.findAll({
+    return await Product.findAll({
       include: [{model: Category, where: { department_id},}],
       where: { display: 0 },
       offset,
       limit
     })
-    return products
 }
  
 export async function getSearchProducts(searchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem) {
-  const products = await Product.findAll({
+  return await Product.findAll({
     where: Sequelize.literal('MATCH (name, description) AGAINST (:searchString)'),
     replacements: {searchString}
   })
-  return products
 }
 
 export async function setRabbitQueues() {
@@ -102,16 +99,13 @@ export async function f() {
 }
 export async function addProduct(name, description, price, discounted_price,delivery_cost,image, image_2, thumbnail, display)
  {
-  const product = Product.create({name,description,price,discounted_price,delivery_cost,image,image_2,thumbnail,display})
-  
-  return product
-}
+  return Product.create({name,description,price,discounted_price,delivery_cost,image,image_2,thumbnail,display})
+  }
 
 export async function updateProduct(product_id, name, description, price, discounted_price,delivery_cost,image, image_2, thumbnail, display) {
   
   const entry = await Product.findByPk(product_id)
 
-  const product = await entry.update({name,description,price,discounted_price,delivery_cost,image,image_2,thumbnail,display,});
+  return await entry.update({name,description,price,discounted_price,delivery_cost,image,image_2,thumbnail,display,});
   
-  return product
 }

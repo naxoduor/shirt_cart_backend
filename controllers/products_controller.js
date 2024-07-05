@@ -1,44 +1,45 @@
 import {getAllProducts,getAllProductsAsAdmin,getByDepartmentId,getByCategoryId,getProductsByCategoryByPagination,
-    getProductsByDepartmentByPagination,getSearchProducts,setRabbitQueues,addProduct,updateProduct
+    getProductsByDepartmentByPagination,getSearchProducts,setRabbitQueues,addProduct,updateProduct, getProductByPk
   } from "../db/products.js";
+
+export const getProductById = async (req, res) => {
+  const{product_name, product_id} = req.params
+  try {
+    res.send(await getProductByPk(product_id))
+  }
+  catch(error) {
+    res.send(error)
+  }
+}
 
 export const  getProducts = async (req, res) => {
     try {
-      const result = await getAllProducts();
-      res.send(result);
+      res.send(await getAllProducts());
     } catch (error) {
-      console.log("Experienced this error", error);
       res.send(error);
     }
 }
 
 export const getProductsAsAdmin = async (req, res) => {
     try {
-      const result = await getAllProductsAsAdmin();
-      res.send(result);
+      res.send(await getAllProductsAsAdmin());
     } catch (error) {
-      console.log("Experienced this error", error);
       res.send(error);
     }
 }
 
 export const getByDepId =  async (req, res) => {
-    let {department_id} = req.params;
     try {
-      const products = await getByDepartmentId(department_id);
-      res.send(products);
+      res.send(await getByDepartmentId(req.params.department_id));
     } catch (error) {
       res.send(error);
     }
 }
 
 export const getByCatId = async (req, res) => {
-    let {category_id} = req.params;
     try {
-      const products = await getByCategoryId(category_id);
-      res.send(products);
+      res.send(await getByCategoryId(req.params.category_id));
     } catch (error) {
-      console.log(error);
       res.send(error);
     }
 }
@@ -46,11 +47,9 @@ export const getByCatId = async (req, res) => {
 export const getProductsByCategoryByPage = async (request, response) => {
     let { category_id, productsPerPage, startItem } = request.body.params
     try {
-      const products = await getProductsByCategoryByPagination(category_id, productsPerPage,startItem)
-      res.send(products)
+      res.send(await getProductsByCategoryByPagination(category_id, productsPerPage,startItem))
     }
     catch(error){
-      console.log(error)
       res.send(error)
     }
 }
@@ -58,12 +57,10 @@ export const getProductsByCategoryByPage = async (request, response) => {
 export const getProductsByDepartmentByPage = async (request, response) => {
     let { department_id, productsPerPage, startItem } = request.body.params
     try {
-      const products = await getProductsByDepartmentByPagination(department_id, productsPerPage, startItem)
-      res.send(products)
+      res.send(await getProductsByDepartmentByPagination(department_id, productsPerPage, startItem))
       }
     
     catch(error){
-      console.log(error)
       res.send(error)
     }
 }
@@ -72,25 +69,22 @@ export const getSearchProds = async (request, response) => {
 
     let { inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem } = request.body.params
     try {
-      const products = await getSearchProducts(inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem)
-      res.send(products)
+      res.send(await getSearchProducts(inSearchString, inAllWords, inShortProductDescriptionLength, inProductsPerPage, inStartItem))
     }
   
     catch(error){
-      console.log(error)
       res.send(error)
     }
 }
 
 
 export const addProd = async (req,res)=>{
+  const {product_id, name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display}=req.body.product
     try {
-    const product = await addProduct(name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display)
-    res.send(product)
+    res.send(await addProduct(name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display))
     }
   
     catch(error){
-      console.log(error)
       res.send(error)
     }
 }
@@ -98,12 +92,10 @@ export const addProd = async (req,res)=>{
 export const updateProd = async (req,res)=>{
     try {
     const {product_id, name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display}=req.body.product
-    const product = await updateProduct(product_id, name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display)
-    res.send(product)
+    res.send(await updateProduct(product_id, name, description, price, discounted_price,delivery_cost,image, image2, thumbnail, display))
     }
   
     catch(error){
-      console.log(error)
       res.send(error)
     }
 }

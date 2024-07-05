@@ -4,8 +4,7 @@ import {Category} from '../models/index.js'
 const Op = Sequelize.Op;
 
 export async function findAllDepartments() {
-    const departments = await Department.findAll()
-    return departments
+    return await Department.findAll()
 }
 
 export async function countProductsById(department_id) {
@@ -18,10 +17,9 @@ export async function countProductsById(department_id) {
 }
 
 export async function findProductsById(department_id) {
-    const products = await Product.findAll({
+    return await Product.findAll({
         include: [{model: Category,where: { department_id},}],
         offset: startItem,
         limit: productsPerPage
     })
-    res.send(products)
 }

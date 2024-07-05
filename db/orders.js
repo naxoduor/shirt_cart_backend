@@ -5,18 +5,16 @@ let transporter = nodemailer.createTransport({host: "smtp.gmail.com",port: 465,s
 });
 
 export async function findAllOrders() {
-  const orders = await Order.findAll({
+  return await Order.findAll({
     include: {model: customer,attributes: ["name", "email"],},
   });
-  return orders;
 }
 
 export async function findOrderDetailById(order_id) {
-  const orderItems = await OrderDetail.findAll({
+  return await OrderDetail.findAll({
     include: {model: Order,},
     where: {order_id,},
   });
-  return orderItems;
 }
 
 export async function createOrder(cart_id,customer_id,shipping_region_id,tax_id) {

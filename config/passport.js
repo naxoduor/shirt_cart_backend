@@ -10,7 +10,6 @@ const ExtractJWT = passportJWT.ExtractJwt;
 
 import jwt from "jsonwebtoken";
 import {
-  findByNameOrEmail,
   createCustomer,
   findCustomerByEmail,
 } from "../db/customer.js";
@@ -30,14 +29,16 @@ passport.use(
 
       try {
         const { email, mobile } = req.body;
-        const customer = await findByNameOrEmail(name, email);
+        const customer = await findCustomerByEmail(email);
         if (customer != null) {
           return done(null, false, {
             message: "username or email already taken",
           });
         }
+        console.log("crete user")
         const hashedPassword = await hashPassword(password);
         const user = await createCustomer(name, hashedPassword, email, mobile);
+        console.log("user created")
         return done(null, user);
       } catch (err) {
         console.log("error found", err)
@@ -84,6 +85,7 @@ passport.use(
     jwt.verify(token, "jwt-secret", function (err, customer) {
       if (err) {
         console.log("encountered error")
+        console.log(token)
         console.log(err)
         return done(err);
       }
