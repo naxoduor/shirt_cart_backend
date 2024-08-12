@@ -14,7 +14,7 @@ import sequelize from '../config/database.js'
     customer_id: Sequelize.INTEGER,
     auth_code: Sequelize.STRING,
     reference: Sequelize.STRING,
-    shipping_region_id: Sequelize.INTEGER,
+    // shipping_region_id: Sequelize.INTEGER,
     tax_id: Sequelize.INTEGER
   }, {
     timestamps: false,

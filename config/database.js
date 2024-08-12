@@ -4,8 +4,8 @@ import Sequelize from 'sequelize'
     export default new Sequelize('energy', 'root', 'Maradona@#', {
     // export default new Sequelize('energy', 'root', 'password', {
 
-    host: 'mysql_db',
-    // host:'localhost',
+    // host: 'mysql_db',
+    host:'localhost',
     dialect: 'mysql',
     port: 3306,
     pool: {

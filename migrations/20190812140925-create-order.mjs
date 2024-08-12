@@ -35,9 +35,9 @@ export default {
       reference: {
         type: Sequelize.STRING
       },
-      shipping_region_id: {
-        type: Sequelize.INTEGER
-      },
+      // shipping_region_id: {
+      //   type: Sequelize.INTEGER
+      // },
       tax_id: {
         type: Sequelize.INTEGER
       },

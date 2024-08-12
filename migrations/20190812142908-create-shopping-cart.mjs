@@ -21,9 +21,6 @@ export default {
         type: Sequelize.STRING,
         defaultValue: "Large Size",
       },
-      // attributes: {
-      //   type: Sequelize.STRING
-      // },
       quantity: {
         type: Sequelize.INTEGER
       },

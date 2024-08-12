@@ -13,7 +13,7 @@ export const findOrderById = async (req, res) => {
 }
 
 export const createTheOrder = async (req, res) => {
-  const {cartId, customerId, shippingId, taxId} = req.body.order
-  res.send(await createOrder(cartId, customerId, shippingId, taxId))
+  const {cartId, transactionNumber} = req.body.order
+  res.send(await createOrder(cartId, transactionNumber))
 }
 

@@ -17,15 +17,33 @@ export async function findOrderDetailById(order_id) {
   });
 }
 
-export async function createOrder(cart_id,customer_id,shipping_region_id,tax_id) {
+export async function createOrder(cart_id, transactionNumber) {
 
-  let newOrder = Order.build({order_id: null, created_on: new Date(), customer_id, shipping_region_id,tax_id});
+  function getRandomInt(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+  }
+  
+
+  let txnNumber = getRandomInt(0, 10000)
+
+
+  let newOrder = Order.build({order_id: null, created_on: new Date(), customer_id:txnNumber,tax_id:null});
 
   const orderItem = await newOrder.save();
 
-  const currentOrder = await Order.findOne({where: {customer_id},order: [["created_on", "DESC"]],});
+  
+  const currentOrder = await Order.findOne({where: {customer_id:txnNumber},order: [["created_on", "DESC"]],});
+
+  console.log("log the new order")
+  console.log(currentOrder)
+
 
   let order_id = JSON.parse(JSON.stringify(currentOrder)).order_id;
+
+  console.log("log order id")
+  console.log(order_id)
 
   const cart = await ProductCart.findAll({include: [{model: Product,},{model: ShoppingCart,},],where: {cart_id,},});
 
@@ -42,11 +60,14 @@ export async function createOrder(cart_id,customer_id,shipping_region_id,tax_id)
     return {order_id, product_id, attributes, product_name, quantity, unit_cost, delivery_cost }
   });
 
-  if (!cart[index + 1]) {
-    const returneddetails = await OrderDetail.bulkCreate(itemsList)
-    const updatesOrder = await currentOrder.update({total_amount})
-  }
+  const returneddetails = await OrderDetail.bulkCreate(itemsList)
+  const updatesOrder = await currentOrder.update({total_amount})
 
-  const result = ProductCart.destroy({where: {cart_id}})
-  return []
+  // if (!cart[index + 1]) {
+  //   const returneddetails = await OrderDetail.bulkCreate(itemsList)
+  //   const updatesOrder = await currentOrder.update({total_amount})
+  // }
+
+  // const result = ProductCart.destroy({where: {cart_id}})
+  return currentOrder
 }
