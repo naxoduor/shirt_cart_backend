@@ -18,6 +18,18 @@ export async function getProductByPk(product_id) {
 
 }
 
+export async function getTotalProductsCount() {
+  return await Product.count()
+}
+
+export async function getPaginationProducts(page, pageSize){
+  let  offset=page * pageSize
+  return await Product.findAll({
+    offset,
+    limit: pageSize
+  })
+
+}
 
 export async function getByDepartmentId(department_id) {
   return await Product.findAll({
@@ -27,6 +39,12 @@ export async function getByDepartmentId(department_id) {
     limit: 8
   })
 }
+
+// const page = 1
+// const pageSize = 2
+// const offset = page * pageSize
+// const limit = offset + pageSize
+
 
 export async function getByCategoryId(category_id) {
   return await Product.findAll({

@@ -1,5 +1,6 @@
 import {getAllProducts,getAllProductsAsAdmin,getByDepartmentId,getByCategoryId,getProductsByCategoryByPagination,
-    getProductsByDepartmentByPagination,getSearchProducts,setRabbitQueues,addProduct,updateProduct, getProductByPk
+    getProductsByDepartmentByPagination,getSearchProducts,setRabbitQueues,addProduct,updateProduct, getProductByPk, getTotalProductsCount,
+    getPaginationProducts
   } from "../db/products.js";
 
 export const getProductById = async (req, res) => {
@@ -13,11 +14,15 @@ export const getProductById = async (req, res) => {
 }
 
 export const  getProducts = async (req, res) => {
-    try {
-      res.send(await getAllProducts());
-    } catch (error) {
-      res.send(error);
-    }
+  try{
+    // let { page, pageSize } = request.body.params
+    let page=0, pageSize=10
+    res.send(await getPaginationProducts(page, pageSize))
+  }
+  catch(error){
+    console.log(error)
+    res.send(error)  
+  }
 }
 
 export const getProductsAsAdmin = async (req, res) => {
@@ -36,6 +41,29 @@ export const getByDepId =  async (req, res) => {
     }
 }
 
+export const getProductCount = async(req, res) =>{
+  try{
+    res.status(400).json(await getTotalProductsCount());
+  }
+  catch(error){
+    console.log("encountered error")
+    console.log(error)
+    res.send(error)
+  }
+}
+
+export const getPageProducts = async(req, res) =>{
+  try{
+    console.log("get the page products")
+    console.log(req.body.params)
+    let { page, pageSize } = req.body.params
+    res.send(await getPaginationProducts(page, pageSize))
+  }
+  catch(error){
+    console.log(error)
+    res.send(error)  
+  }
+}
 export const getByCatId = async (req, res) => {
     try {
       res.send(await getByCategoryId(req.params.category_id));
