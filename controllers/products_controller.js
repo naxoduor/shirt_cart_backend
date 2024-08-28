@@ -1,6 +1,6 @@
 import {getAllProducts,getAllProductsAsAdmin,getByDepartmentId,getByCategoryId,getProductsByCategoryByPagination,
     getProductsByDepartmentByPagination,getSearchProducts,setRabbitQueues,addProduct,updateProduct, getProductByPk, getTotalProductsCount,
-    getPaginationProducts
+    getPaginationProducts, searchProducts
   } from "../db/products.js";
 
 export const getProductById = async (req, res) => {
@@ -126,4 +126,15 @@ export const updateProd = async (req,res)=>{
     catch(error){
       res.send(error)
     }
+}
+
+export const searchProduct = async (req, res)=>{
+  try {
+    const {searchParam}=req.body
+    res.send(await searchProducts(searchParam))
+  }
+  catch(error){
+    console.log(error)
+    res.send(error)
+  }
 }

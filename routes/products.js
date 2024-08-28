@@ -1,7 +1,7 @@
 import express from "express";
 
 import {getProducts,getProductsAsAdmin, getByDepId, getByCatId, getProductsByCategoryByPage, getProductsByDepartmentByPage,
-  addProd, updateProd, getSearchProds, getProductById, getProductCount, getPageProducts
+  addProd, updateProd, getSearchProds, getProductById, getProductCount, getPageProducts, searchProduct
  
 } from "../controllers/products_controller.js";
 
@@ -25,7 +25,7 @@ router.post('/inCategory/pagination/:category_id', getProductsByCategoryByPage)
 
 router.post('/inDepartment/pagination/:department_id',getProductsByDepartmentByPage)
 
-router.post('/search*', getSearchProds)
+router.post('/search', searchProduct)
 
 router.post('/addproduct',addProd)
 

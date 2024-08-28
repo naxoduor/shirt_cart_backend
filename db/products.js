@@ -1,5 +1,7 @@
 import {Category} from '../models/index.js'
 import {Product} from '../models/index.js';
+import { Op } from 'sequelize';
+
 
 export async function getAllProducts()  {
     return await Product.findAll({
@@ -29,6 +31,19 @@ export async function getPaginationProducts(page, pageSize){
     limit: pageSize
   })
 
+}
+
+export async function searchProducts(searchParam) {
+
+  return Product.findAll({
+    where: {
+      name: {
+        [Op.like]: `%${searchParam}%`
+      }
+    }
+  })
+  
+  
 }
 
 export async function getByDepartmentId(department_id) {
