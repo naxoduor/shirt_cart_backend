@@ -21,7 +21,7 @@ INSERT INTO `category` (`category_id`, `department_id`, `name`, `description`) V
     (19, 4, 'Cable', 'Cable'),
     (20, 5, 'Contactor', 'Contactor'),
     (21, 1, 'Cooker', 'Cooker'),
-    (22, 2, 'Heater', 'Heater'),
+    (22, 2, 'Heater', 'Heater');
 
 
 
