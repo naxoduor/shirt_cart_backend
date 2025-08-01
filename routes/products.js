@@ -19,6 +19,9 @@ router.get("/productsAsAdmin", getProductsAsAdmin)
 
 router.get("/inDepartment/:department_id",getByDepId)
 
+router.get("/category/:name",getByCategoryName)
+
+
 router.get("/inCategory/:category_id",getByCatId)
 
 router.post('/inCategory/pagination/:category_id', getProductsByCategoryByPage)

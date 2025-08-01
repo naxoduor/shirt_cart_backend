@@ -1,5 +1,5 @@
 -- Populate category table
-INSERT INTO `category` (`category_id`, `department_id`, `name`, `description`) VALUES
+INSERT INTO `category` (`department_id`, `name`, `description`) VALUES
     (1, 'Solar', 'SolarMax Solar Panels'),
     (2, 'UPS', 'UPS'),
     (3, 'Battery', 'Battery'),

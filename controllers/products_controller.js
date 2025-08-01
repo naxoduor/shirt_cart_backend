@@ -25,6 +25,17 @@ export const  getProducts = async (req, res) => {
   }
 }
 
+export const getByCategoryName = async (req, res) => {
+  const {name} = req.params
+  try {
+    res.send(await searchProducts(name))
+  }
+  catch(error){
+    console.log(error)
+    res.send(error)
+  }
+}
+
 export const getProductsAsAdmin = async (req, res) => {
     try {
       res.send(await getAllProductsAsAdmin());
