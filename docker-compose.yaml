@@ -29,8 +29,8 @@ services:
     build: .
     restart: unless-stopped
     env_file: .env
-    volumes:
-      - .:/code
+    # volumes:
+    #   - .:/code
     ports:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
     environment:
