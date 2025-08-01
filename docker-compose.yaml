@@ -39,8 +39,8 @@ services:
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
-    depends_on:
-      - mysql_db
+    # depends_on:
+    #   - mysql_db
     stdin_open: true
     tty: true
 
