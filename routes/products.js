@@ -1,7 +1,7 @@
 import express from "express";
 
 import {getProducts,getProductsAsAdmin, getByDepId, getByCatId, getProductsByCategoryByPage, getProductsByDepartmentByPage,
-  addProd, updateProd, getSearchProds, getProductById, getProductCount, getPageProducts, searchProduct
+  addProd, updateProd, getSearchProds, getProductById, getProductCount, getPageProducts, searchProduct, getByCategoryName
  
 } from "../controllers/products_controller.js";
 
