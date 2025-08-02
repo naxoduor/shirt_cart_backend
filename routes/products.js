@@ -23,14 +23,11 @@ router.get('/count', getProductCount)
 
 router.post('/page-products', getPageProducts)
 
-router.get("/:product_name/:product_id", getProductById)
-
 router.get("/productsAsAdmin", getProductsAsAdmin)
 
 router.get("/inDepartment/:department_id",getByDepId)
 
 router.get("/category/:name",getByCategoryName)
-
 
 router.get("/inCategory/:category_id",getByCatId)
 
@@ -43,5 +40,8 @@ router.post('/search', searchProduct)
 router.post('/addproduct',addProd)
 
 router.put('/updateproduct',updateProd)
+
+router.get("/:product_name/:product_id", getProductById)
+
 
 export default router;
