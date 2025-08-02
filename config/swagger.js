@@ -1,6 +1,6 @@
 // swagger.js
-const swaggerJsDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 const options = {
   definition: {
@@ -12,13 +12,15 @@ const options = {
     },
     servers: [
       {
-        url: "http://64.23.199.26:8082/", // Replace with your actual base URL
+        url: "http://64.23.199.26:8082/",
       },
     ],
   },
-  apis: ["./routes/*.js"], // Point to your route files with Swagger comments
+  apis: ["./routes/*.js"], // adjust as needed
 };
 
 const specs = swaggerJsDoc(options);
 
-module.exports = { swaggerUi, specs };
+export { swaggerUi, specs };
+
+
