@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+  description: API documentation for product-related operations
+
+servers:
+  - url: http://64.23.199.26:8082/
+
+paths:
+  /:
+    get:
+      summary: Get all products
+      responses:
+        '200':
+          description: List of all products
+
+  /count:
+    get:
+      summary: Get total product count
+      responses:
+        '200':
+          description: Product count
+
+  /page-products:
+    post:
+      summary: Get paginated products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                limit:
+                  type: integer
+      responses:
+        '200':
+          description: Paginated list of products
+
+  /{product_name}/{product_id}:
+    get:
+      summary: Get product by name and ID
+      parameters:
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+
+  /productsAsAdmin:
+    get:
+      summary: Get all products (admin view)
+      responses:
+        '200':
+          description: Admin product list
+
+  /inDepartment/{department_id}:
+    get:
+      summary: Get products by department ID
+      parameters:
+        - name: department_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Products in department
+
+  /category/{name}:
+    get:
+      summary: Get products by category name
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Products in category
+
+  /inCategory/{category_id}:
+    get:
+      summary: Get products by category ID
+      parameters:
+        - name: category_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Products by category ID
+
+  /inCategory/pagination/{category_id}:
+    post:
+      summary: Get paginated products by category
+      parameters:
+        - name: category_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                limit:
+                  type: integer
+      responses:
+        '200':
+          description: Paginated products in category
+
+  /inDepartment/pagination/{department_id}:
+    post:
+      summary: Get paginated products by department
+      parameters:
+        - name: department_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                limit:
+                  type: integer
+      responses:
+        '200':
+          description: Paginated products in department
+
+  /search:
+    post:
+      summary: Search for products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+      responses:
+        '200':
+          description: Search results
+
+  /addproduct:
+    post:
+      summary: Add a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                description:
+                  type: string
+                # Add more fields as needed
+      responses:
+        '201':
+          description: Product added
+
+  /updateproduct:
+    put:
+      summary: Update an existing product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                price:
+                  type: number
+                # Add more fields as needed
+      responses:
+        '200':
+          description: Product updated
