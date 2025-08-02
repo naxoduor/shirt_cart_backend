@@ -21,7 +21,7 @@ import orderdetails from './routes/orderdetails.js';
 import shipping from './routes/shipping.js';
 import testing from './routes/testroute.js';
 import protect from './routes/protected.js';
-import { swaggerUi, specs } from "./config/swagger.js";
+import { swaggerUi, swaggerDocument } from "./config/swagger.js";
 
 
 
@@ -49,7 +49,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // app.use(passport.initialize());
 app.get('/', (req,res) => res.send(`INDEX`));
