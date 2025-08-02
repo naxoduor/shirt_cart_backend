@@ -7,6 +7,16 @@ import {getProducts,getProductsAsAdmin, getByDepId, getByCatId, getProductsByCat
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Get all users
+ *     responses:
+ *       200:
+ *         description: A list of users
+ */
+
 router.get("/", getProducts)
 
 router.get('/count', getProductCount)

@@ -21,6 +21,10 @@ import orderdetails from './routes/orderdetails.js';
 import shipping from './routes/shipping.js';
 import testing from './routes/testroute.js';
 import protect from './routes/protected.js';
+const express = require("express");
+const { swaggerUi, specs } = require("./config/swagger.js");
+
+
 
 // app.use(function(req, res, next) {
 //   var allowedOrigins = ['http://localhost:3000/', 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', 'https://sandbox.safaricom.co.ke'];
@@ -46,6 +50,8 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
 // app.use(passport.initialize());
 app.get('/', (req,res) => res.send(`INDEX`));
 
