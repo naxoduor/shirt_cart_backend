@@ -8,21 +8,21 @@ servers:
   - url: http://64.23.199.26:8082/
 
 paths:
-  /:
+  /products:
     get:
       summary: Get all products
       responses:
         '200':
           description: List of all products
 
-  /count:
+  /products/count:
     get:
       summary: Get total product count
       responses:
         '200':
           description: Product count
 
-  /page-products:
+  /products/page-products:
     post:
       summary: Get paginated products
       requestBody:
@@ -40,7 +40,7 @@ paths:
         '200':
           description: Paginated list of products
 
-  /{product_name}/{product_id}:
+  /products/{product_name}/{product_id}:
     get:
       summary: Get product by name and ID
       parameters:
@@ -58,14 +58,14 @@ paths:
         '200':
           description: Product details
 
-  /productsAsAdmin:
+  /products/productsAsAdmin:
     get:
       summary: Get all products (admin view)
       responses:
         '200':
           description: Admin product list
 
-  /inDepartment/{department_id}:
+  /products/inDepartment/{department_id}:
     get:
       summary: Get products by department ID
       parameters:
@@ -78,7 +78,7 @@ paths:
         '200':
           description: Products in department
 
-  /category/{name}:
+  /products/category/{name}:
     get:
       summary: Get products by category name
       parameters:
@@ -91,7 +91,7 @@ paths:
         '200':
           description: Products in category
 
-  /inCategory/{category_id}:
+  /products/inCategory/{category_id}:
     get:
       summary: Get products by category ID
       parameters:
@@ -104,7 +104,7 @@ paths:
         '200':
           description: Products by category ID
 
-  /inCategory/pagination/{category_id}:
+  /products/inCategory/pagination/{category_id}:
     post:
       summary: Get paginated products by category
       parameters:
@@ -128,7 +128,7 @@ paths:
         '200':
           description: Paginated products in category
 
-  /inDepartment/pagination/{department_id}:
+  /products/inDepartment/pagination/{department_id}:
     post:
       summary: Get paginated products by department
       parameters:
@@ -152,7 +152,7 @@ paths:
         '200':
           description: Paginated products in department
 
-  /search:
+  /products/search:
     post:
       summary: Search for products
       requestBody:
@@ -168,7 +168,7 @@ paths:
         '200':
           description: Search results
 
-  /addproduct:
+  /products/addproduct:
     post:
       summary: Add a new product
       requestBody:
@@ -189,7 +189,7 @@ paths:
         '201':
           description: Product added
 
-  /updateproduct:
+  /products/updateproduct:
     put:
       summary: Update an existing product
       requestBody:
@@ -209,3 +209,4 @@ paths:
       responses:
         '200':
           description: Product updated
+#comment
