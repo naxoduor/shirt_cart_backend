@@ -21,7 +21,6 @@ import orderdetails from './routes/orderdetails.js';
 import shipping from './routes/shipping.js';
 import testing from './routes/testroute.js';
 import protect from './routes/protected.js';
-const express = require("express");
 const { swaggerUi, specs } = require("./config/swagger.js");
 
 
