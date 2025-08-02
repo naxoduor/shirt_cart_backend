@@ -1,7 +1,10 @@
 import fs from 'fs';
+import path from 'path';
 import yaml from 'js-yaml';
 import swaggerUi from 'swagger-ui-express';
 
-const swaggerDocument = yaml.load(fs.readFileSync('./swagger.yaml', 'utf8'));
+const swaggerPath = path.resolve('swagger.yaml'); // Adjust if the file is in a subfolder
+const swaggerDocument = yaml.load(fs.readFileSync(swaggerPath, 'utf8'));
+
 
 export { swaggerUi, swaggerDocument };
