@@ -26,30 +26,30 @@ services:
 
 
 
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./certs:/etc/nginx/certs
-      - /etc/nginx/vhost.d
-      - /usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+  # nginx-proxy:
+  #   image: jwilder/nginx-proxy
+  #   container_name: nginx-proxy
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./certs:/etc/nginx/certs
+  #     - /etc/nginx/vhost.d
+  #     - /usr/share/nginx/html
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
 
-  letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: nginx-proxy-le
-    restart: unless-stopped
-    volumes:
-      - ./certs:/etc/nginx/certs
-      - /etc/nginx/vhost.d
-      - /usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    depends_on:
-      - nginx-proxy
+  # letsencrypt:
+  #   image: jrcs/letsencrypt-nginx-proxy-companion
+  #   container_name: nginx-proxy-le
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./certs:/etc/nginx/certs
+  #     - /etc/nginx/vhost.d
+  #     - /usr/share/nginx/html
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+  #   depends_on:
+  #     - nginx-proxy
 
   app:
     build: .
