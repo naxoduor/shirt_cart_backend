@@ -55,10 +55,10 @@ services:
     build: .
     restart: unless-stopped
     env_file: .env
-    # ports:
-    #   - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
-    expose:
-      - "$NODE_DOCKER_PORT"
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    # expose:
+    #   - "$NODE_DOCKER_PORT"
     environment:
       - DB_HOST=mysql_db
       - DB_USER=$MYSQLDB_USER
