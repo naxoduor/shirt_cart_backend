@@ -25,24 +25,52 @@ services:
   #     - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
 
 
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certs:/etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: nginx-proxy-le
+    restart: unless-stopped
+    volumes:
+      - ./certs:/etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    depends_on:
+      - nginx-proxy
+
   app:
     build: .
     restart: unless-stopped
     env_file: .env
-    # volumes:
-    #   - .:/code
     ports:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    # expose:
+    #   - "$NODE_DOCKER_PORT"
     environment:
       - DB_HOST=mysql_db
       - DB_USER=$MYSQLDB_USER
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
-    # depends_on:
-    #   - mysql_db
+      - VIRTUAL_HOST=walocho.co.ke
+      - LETSENCRYPT_HOST=walocho.co.ke
+      - LETSENCRYPT_EMAIL=naxoduor7@gmail.com
     stdin_open: true
     tty: true
-
+    # depends_on:
+    #   - mysql_db
 volumes:
    db_data:
