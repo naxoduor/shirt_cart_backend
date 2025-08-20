@@ -55,10 +55,10 @@ services:
     build: .
     restart: unless-stopped
     env_file: .env
-    ports:
-      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
-    # expose:
-    #   - "$NODE_DOCKER_PORT"
+    # ports:
+    #   - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    expose:
+      - "$NODE_DOCKER_PORT"
     environment:
       - DB_HOST=mysql_db
       - DB_USER=$MYSQLDB_USER
@@ -68,6 +68,8 @@ services:
       - VIRTUAL_HOST=walocho.co.ke
       - LETSENCRYPT_HOST=walocho.co.ke
       - LETSENCRYPT_EMAIL=naxoduor7@gmail.com
+      - HTTPS_METHOD=redirect   # <--- Forces HTTP → HTTPS
+
     stdin_open: true
     tty: true
     # depends_on:
