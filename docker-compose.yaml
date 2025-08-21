@@ -74,6 +74,9 @@ services:
 
     stdin_open: true
     tty: true
+    networks:
+      - proxy
+
     # depends_on:
     #   - mysql_db
 volumes:
