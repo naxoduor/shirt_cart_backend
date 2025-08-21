@@ -84,10 +84,10 @@ services:
       - DB_PORT=$MYSQLDB_DOCKER_PORT
       - HTTPS_METHOD=redirect   # <--- Forces HTTP → HTTPS
       - VIRTUAL_HOST=walocho.co.ke
+      - VIRTUAL_PATH=/api
       - VIRTUAL_PORT=8082
       - LETSENCRYPT_HOST=walocho.co.ke
       - LETSENCRYPT_EMAIL=naxoduor7@gmail.com
-      - VIRTUAL_PATH=/api
 
     stdin_open: true
     tty: true
