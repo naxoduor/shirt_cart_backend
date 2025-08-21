@@ -69,4 +69,4 @@ app.use('/shipping', shipping)
 app.use('/testing', testing)
 app.use('/chapaa', chapaa)
 app.use('/protected', protect)
-app.listen(PORT, console.log(`Server started on port ${PORT}`));  
+app.listen(PORT, "0.0.0.0");  
