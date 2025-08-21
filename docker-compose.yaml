@@ -44,8 +44,6 @@ services:
       - LETSENCRYPT_HOST=walocho.co.ke
       - LETSENCRYPT_EMAIL=naxoduor7@gmail.com
 
-    stdin_open: true
-    tty: true
     networks:
       - proxy
 
