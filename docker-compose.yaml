@@ -48,8 +48,8 @@ services:
     networks:
       - proxy
 
-    # depends_on:
-    #   - mysql_db
+    depends_on:
+      - mysql_db
 volumes:
    db_data:
 
