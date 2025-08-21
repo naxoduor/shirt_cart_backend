@@ -5,52 +5,6 @@ networks:
     external: false
 
 services:
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./certs:/etc/nginx/certs
-      - ./vhost.d:/etc/nginx/vhost.d
-      - ./html:/usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro   # <-- REQUIRED
-
-    networks:
-      - proxy
-
-
-  letsencrypt:
-    image: nginxproxy/acme-companion
-    container_name: nginx-proxy-acme
-    restart: unless-stopped
-    volumes:
-      - ./certs:/etc/nginx/certs
-      - ./vhost.d:/etc/nginx/vhost.d
-      - ./html:/usr/share/nginx/html
-      - /var/run/docker.sock:/var/run/docker.sock:ro   # REQUIRED for acme
-
-
-    depends_on:
-      - nginx-proxy
-    environment:
-      - NGINX_PROXY_CONTAINER=nginx-proxy
-
-    networks:
-      - proxy
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    ports:
-      - '8080:80'
-    environment:
-      - PMA_HOST=mysql_db
-    depends_on: 
-      - mysql_db
-    networks:
-      - proxy
 
   mysql_db:
     image: mysql:8.0.19
