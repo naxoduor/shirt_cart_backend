@@ -23,8 +23,9 @@ services:
     networks:
       - proxy
 
-  app:
+  backend:
     build: .
+    container_name: backend
     restart: unless-stopped
     env_file: .env
     # ports:
@@ -37,10 +38,9 @@ services:
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
-      - HTTPS_METHOD=redirect   # <--- Forces HTTP → HTTPS
+      - HTTPS_METHOD=redirect   
       - VIRTUAL_HOST=walocho.co.ke
       - VIRTUAL_PATH=/api
-      - VIRTUAL_PORT=8082
       - LETSENCRYPT_HOST=walocho.co.ke
       - LETSENCRYPT_EMAIL=naxoduor7@gmail.com
 
