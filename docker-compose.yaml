@@ -40,7 +40,7 @@ services:
       - DB_PORT=$MYSQLDB_DOCKER_PORT
       - HTTPS_METHOD=redirect   
       - VIRTUAL_HOST=walocho.co.ke
-      - VIRTUAL_PATH=/api
+      # - VIRTUAL_PATH=/api
       - LETSENCRYPT_HOST=walocho.co.ke
       - LETSENCRYPT_EMAIL=naxoduor7@gmail.com
 
