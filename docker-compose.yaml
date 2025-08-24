@@ -28,21 +28,21 @@ services:
     container_name: backend
     restart: unless-stopped
     env_file: .env
-    # ports:
-    #   - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
-    expose:
-      - "8082"
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    # expose:
+    #   - "8082"
     environment:
       - DB_HOST=mysql_db
       - DB_USER=$MYSQLDB_USER
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
-      - HTTPS_METHOD=redirect   
-      - VIRTUAL_HOST=walocho.co.ke
+      # - HTTPS_METHOD=redirect   
+      # - VIRTUAL_HOST=walocho.co.ke
       # - VIRTUAL_PATH=/api
-      - LETSENCRYPT_HOST=walocho.co.ke
-      - LETSENCRYPT_EMAIL=naxoduor7@gmail.com
+      # - LETSENCRYPT_HOST=walocho.co.ke
+      # - LETSENCRYPT_EMAIL=naxoduor7@gmail.com
 
     networks:
       - proxy
